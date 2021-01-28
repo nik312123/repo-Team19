@@ -1,2 +1,2 @@
 # repo-Team19
-Team19 (Chawla, Fornaro, Kandikatla, Wang)
+Team19 (Nikunj Chawla, Jack Fornaro, Aaron Kandikatla)
