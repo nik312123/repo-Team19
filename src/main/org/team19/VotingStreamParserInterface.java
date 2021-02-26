@@ -35,7 +35,7 @@ public interface VotingStreamParserInterface {
      * @return True if the given object is equivalent to this {@link VotingStreamParserInterface}
      */
     @Override
-    boolean equals(Object other);
+    boolean equals(final Object other);
     
     /**
      * Returns the hashcode for this {@link VotingStreamParserInterface}

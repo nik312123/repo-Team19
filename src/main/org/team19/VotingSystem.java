@@ -31,24 +31,23 @@ public abstract class VotingSystem {
     public abstract int getHeaderSize();
     
     /**
-     * Returns a {@link Collection} of {@link Pair}s corresponding to the candidates, which should be available after {@link #parseCandidates(String, int)} has
-     * been executed successfully
+     * Returns a {@link Collection} of {@link Pair}s corresponding to the candidates, which should be available after
+     * {@link #parseCandidates(String, int)} has been executed successfully
      *
      * @return A {@link Collection} of {@link Pair}s with each pair's key corresponding to the candidate's name and value corresponding to the party
      */
     public abstract Collection<Pair<String, String>> getCandidates();
     
     /**
-     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after {@link #parseSystemHeader(String[], int)} has been
-     * executed successfully
+     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after
+     * {@link #parseSystemHeader(String[], int)} has been executed successfully
      *
      * @return The number of ballots that the {@link VotingSystem} contains
      */
     public abstract int getNumBallots();
     
     /**
-     * Parses a {@link String} corresponding to candidates
-     * and party
+     * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
      * @param candidates The {@link String} representing the list of candidates and their parties
      * @param line       The line number associated with the candidates {@link String}
@@ -57,7 +56,7 @@ public abstract class VotingSystem {
     public abstract void parseCandidates(final String candidates, final int line) throws ParseException;
     
     /**
-     * Parses the lines corresponding to the header for the voting system
+     * Parses the lines corresponding to the header for the voting system and uses them internally
      *
      * @param header The lines corresponding to the header
      * @param line   The line number associated with the first line of the header
@@ -66,7 +65,7 @@ public abstract class VotingSystem {
     public abstract void parseSystemHeader(final String[] header, final int line) throws ParseException;
     
     /**
-     * Parses a line corresponding to a ballot and returns the ballot
+     * Parses a line corresponding to a ballot and adds it internally
      *
      * @param ballot The {@link String} corresponding to a ballot
      * @param line   The line number associated with the current ballot line being read
@@ -79,8 +78,9 @@ public abstract class VotingSystem {
      *
      * @param auditOutput  The {@link OutputStream} to write detailed information about the running of the election
      * @param reportOutput The {@link OutputStream} to write a summary about the running of the election
+     * @param useRandom    True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties
      */
-    public abstract void runElection(final OutputStream auditOutput, final OutputStream reportOutput);
+    public abstract void runElection(final OutputStream auditOutput, final OutputStream reportOutput, final boolean useRandom);
     
     /**
      * Returns the string form of this {@link VotingSystem}
