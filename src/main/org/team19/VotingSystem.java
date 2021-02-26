@@ -13,10 +13,8 @@ public abstract class VotingSystem {
      * Initializes a {@link VotingSystem} given the number of candidates
      *
      * @param numCandidates The number of candidates in the election
-     * @param auditOutput   The {@link OutputStream} to write detailed information about the running of the election
-     * @param reportOutput  The {@link OutputStream} to write a summary about the running of the election
      */
-    public VotingSystem(final int numCandidates, final OutputStream auditOutput, final OutputStream reportOutput) {}
+    public VotingSystem(final int numCandidates) {}
     
     /**
      * Returns the name of this voting system
@@ -78,8 +76,11 @@ public abstract class VotingSystem {
     
     /**
      * Runs the election for the {@link VotingSystem} and determines the winner
+     *
+     * @param auditOutput  The {@link OutputStream} to write detailed information about the running of the election
+     * @param reportOutput The {@link OutputStream} to write a summary about the running of the election
      */
-    public abstract void runElection();
+    public abstract void runElection(final OutputStream auditOutput, final OutputStream reportOutput);
     
     /**
      * Returns the string form of this {@link VotingSystem}
