@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -114,14 +114,23 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">org.team19</a></div>
-<h2 title="Interface VotingStreamParser" class="title">Interface VotingStreamParser</h2>
+<h2 title="Class VotingStreamParser" class="title">Class VotingStreamParser</h2>
 </div>
 <div class="contentContainer">
+<ul class="inheritance">
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.team19.VotingStreamParser</li>
+</ul>
+</li>
+</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public interface <span class="typeNameLabel">VotingStreamParser</span></pre>
+<pre>public abstract class <span class="typeNameLabel">VotingStreamParser</span>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Parses an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
 </li>
 </ul>
@@ -129,6 +138,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.io.OutputStream,java.io.OutputStream)">VotingStreamParser</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+                  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</code></th>
+<td class="colLast">
+<div class="block">Initializes a <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a> given the audit and report streams</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -144,16 +177,42 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="VotingSystem.html" title="class in org.team19">VotingSystem</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.InputStream,java.io.OutputStream,java.io.OutputStream,java.util.Map)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
-     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
-     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput,
+<td class="colFirst"><code>abstract boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;other)</code></th>
+<td class="colLast">
+<div class="block">Returns true if the given object is equivalent to this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the hashcode for this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>abstract <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.InputStream,java.util.Map)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;&gt;&nbsp;headerSystemMap)</code></th>
 <td class="colLast">
 <div class="block">Parses an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> form of this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
 </li>
 </ul>
 </section>
@@ -163,6 +222,32 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(java.io.OutputStream,java.io.OutputStream)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>VotingStreamParser</h4>
+<pre>public&nbsp;VotingStreamParser&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</pre>
+<div class="block">Initializes a <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a> given the audit and report streams</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>auditOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
+<dd><code>reportOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
@@ -170,28 +255,74 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="parse(java.io.InputStream,java.io.OutputStream,java.io.OutputStream,java.util.Map)">
+<a id="parse(java.io.InputStream,java.util.Map)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>parse</h4>
-<pre class="methodSignature"><a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&nbsp;parse&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
-                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
-                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput,
-                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;&gt;&nbsp;headerSystemMap)
-            throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
+<pre class="methodSignature">public abstract&nbsp;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&nbsp;parse&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
+                                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;&gt;&nbsp;headerSystemMap)
+                            throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Parses an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>input</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> to parse</dd>
-<dd><code>auditOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
-<dd><code>reportOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
 <dd><code>headerSystemMap</code> - The mapping between header strings and their corresponding <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> classes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The parsed <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></code> - Thrown if there is an issue in parsing the provided <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;toString()</pre>
+<div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> form of this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> form of this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre class="methodSignature">public abstract&nbsp;boolean&nbsp;equals&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;other)</pre>
+<div class="block">Returns true if the given object is equivalent to this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - The object to compare to this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>True if the given object is equivalent to this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="hashCode()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre class="methodSignature">public abstract&nbsp;int&nbsp;hashCode()</pre>
+<div class="block">Returns the hashcode for this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The hashcode for this <a href="VotingStreamParser.html" title="class in org.team19"><code>VotingStreamParser</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -247,13 +378,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
