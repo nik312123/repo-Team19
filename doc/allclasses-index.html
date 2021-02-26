@@ -26,6 +26,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":2,"i1":2,"i2":2,"i3":2,"i4":1,"i5":2,"i6":2};
+var tabs = {65535:["t0","All Classes"],1:["t1","Interface Summary"],2:["t2","Class Summary"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "./";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -97,7 +103,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <table class="typeSummary">
-<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Classes</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Interface Summary</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Class Summary</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Class</th>
 <th class="colLast" scope="col">Description</th>
@@ -127,12 +133,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </th>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><a href="org/team19/VotingStreamParserInterface.html" title="interface in org.team19">VotingStreamParserInterface</a></td>
+<th class="colLast" scope="row">
+<div class="block">Interface for parsing an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="org/team19/VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
+</th>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><a href="org/team19/VotingSystem.html" title="class in org.team19">VotingSystem</a></td>
 <th class="colLast" scope="row">
 <div class="block">Represents a voting system</div>
 </th>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><a href="org/team19/VotingSystemRunner.html" title="class in org.team19">VotingSystemRunner</a></td>
 <th class="colLast" scope="row">
 <div class="block">Runs the election for a <a href="org/team19/VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given a path to a file, which can be absolute or relative to the current working directory</div>
