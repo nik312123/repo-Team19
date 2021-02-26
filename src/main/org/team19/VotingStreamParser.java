@@ -22,4 +22,29 @@ public interface VotingStreamParser {
      */
     VotingSystem parse(final InputStream input, final OutputStream auditOutput, final OutputStream reportOutput,
         final Map<String, Class<? extends VotingSystem>> headerSystemMap) throws ParseException;
+    
+    /**
+     * Returns the {@link String} form of this {@link VotingStreamParser}
+     *
+     * @return The {@link String} form of this {@link VotingStreamParser}
+     */
+    @Override
+    String toString();
+    
+    /**
+     * Returns true if the given object is equivalent to this {@link VotingStreamParser}
+     *
+     * @param other The object to compare to this {@link VotingStreamParser}
+     * @return True if the given object is equivalent to this {@link VotingStreamParser}
+     */
+    @Override
+    boolean equals(Object other);
+    
+    /**
+     * Returns the hashcode for this {@link VotingStreamParser}
+     *
+     * @return The hashcode for this {@link VotingStreamParser}
+     */
+    @Override
+    int hashCode();
 }
