@@ -31,7 +31,7 @@ public abstract class VotingSystem {
     public abstract int getHeaderSize();
     
     /**
-     * Returns a {@link Collection} of {@link Pair}s corresponding to the candidates, which should be available after {@link #parseCandidates} has
+     * Returns a {@link Collection} of {@link Pair}s corresponding to the candidates, which should be available after {@link #parseCandidates(String, int)} has
      * been executed successfully
      *
      * @return A {@link Collection} of {@link Pair}s with each pair's key corresponding to the candidate's name and value corresponding to the party
@@ -39,7 +39,7 @@ public abstract class VotingSystem {
     public abstract Collection<Pair<String, String>> getCandidates();
     
     /**
-     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after {@link #parseSystemHeader} has been
+     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after {@link #parseSystemHeader(String[], int)} has been
      * executed successfully
      *
      * @return The number of ballots that the {@link VotingSystem} contains
