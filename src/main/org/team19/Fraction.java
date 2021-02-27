@@ -7,7 +7,7 @@ import java.util.Objects;
  * <p></p>
  * This class does not account for long overflows
  */
-public final class Fraction {
+public class Fraction {
     
     /**
      * The numerator of this {@link Fraction}
