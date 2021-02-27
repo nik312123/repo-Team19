@@ -4,6 +4,8 @@ import java.util.Objects;
 
 /**
  * Represents a rational number in the form of a simplified fraction
+ * <p></p>
+ * This class does not account for long overflows
  */
 public final class Fraction {
     
