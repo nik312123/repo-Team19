@@ -22,7 +22,11 @@ public final class VotingSystemRunner {
      */
     public static void main(final String[] args) {
         if(args.length != 1) {
-            System.out.println("org.team19.VotingSystemRunner requires one and only one command-line argument, which can be the filename on which to run the ");
+            System.err.println(
+                "CompuVote requires exactly one command-line argument, which is an absolute file path or file path relative to repo-Team19 to the "
+                    + "election file to parse"
+            );
+            System.exit(2);
         }
     }
     
