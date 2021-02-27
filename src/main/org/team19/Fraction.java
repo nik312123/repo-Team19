@@ -234,10 +234,20 @@ public final class Fraction {
     }
     
     /**
-     * Returns true if the other object is a {@link Fraction} and has the same numerator and denominator as this {@link Fraction}
+     * Returns the string form of this fraction
+     *
+     * @return the string form of this fraction in the format "[numerator] / [denominator]", replacing [numerator] and [denominator] accordingly
+     */
+    @Override
+    public String toString() {
+        return String.format("%d / %d", numerator, denominator);
+    }
+    
+    /**
+     * Returns true if the other object is a {@link Fraction} and has the same numerator and denominator
      *
      * @param other The object to compare to this {@link Fraction}
-     * @return True if the other object is a {@link Fraction} and has the same numerator and denominator as this {@link Fraction}
+     * @return True if the other object is a {@link Fraction} and has the same numerator and denominator
      */
     @Override
     public boolean equals(final Object other) {
@@ -259,15 +269,5 @@ public final class Fraction {
     @Override
     public int hashCode() {
         return Objects.hash(numerator, denominator);
-    }
-    
-    /**
-     * Returns the String form of this fraction
-     *
-     * @return the String form of this fraction in the format "[numerator] / [denominator]", replacing [numerator] and [denominator] accordingly
-     */
-    @Override
-    public String toString() {
-        return String.format("%d / %d", numerator, denominator);
     }
 }

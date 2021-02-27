@@ -3,11 +3,7 @@ package org.team19;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Executable;
-import java.util.Random;
-import java.util.stream.Stream;
-
-public final class FractionTest {
+final class FractionTest {
     
     private FractionTest() {}
     
@@ -77,7 +73,7 @@ public final class FractionTest {
             //Testing the case where one of n1 and n2 is 0
             () -> Assertions.assertEquals(5, Fraction.gcd(5, 0)),
             () -> Assertions.assertEquals(5, Fraction.gcd(0, 5)),
-    
+            
             //Testing the case where one of n1 and n2 is 1
             () -> Assertions.assertEquals(1, Fraction.gcd(5, 1)),
             () -> Assertions.assertEquals(1, Fraction.gcd(1, 5)),
@@ -86,7 +82,7 @@ public final class FractionTest {
             () -> Assertions.assertEquals(Fraction.gcd(Math.abs(121 - 37), Math.min(121, 37)), Fraction.gcd(121, 37)),
             () -> Assertions.assertEquals(Fraction.gcd(Math.abs(133 - 77), Math.min(133, 77)), Fraction.gcd(133, 77)),
             () -> Assertions.assertEquals(Fraction.gcd(Math.abs(17 - 45), Math.min(17, 45)), Fraction.gcd(17, 45)),
-    
+            
             //Testing a few instances of the property gcd(n1, n2) = 2 * gcd(n1/2, n2/2) when n1 and n2 are even
             () -> Assertions.assertEquals(2 * Fraction.gcd(46, 2), Fraction.gcd(2 * 46, 2 * 2)),
             () -> Assertions.assertEquals(2 * Fraction.gcd(46, 47), Fraction.gcd(2 * 46, 2 * 47)),
@@ -96,7 +92,7 @@ public final class FractionTest {
             () -> Assertions.assertEquals(Fraction.gcd(2 * 177, 159), Fraction.gcd(177, 159)),
             () -> Assertions.assertEquals(Fraction.gcd(2 * 142, 1), Fraction.gcd(142, 1)),
             () -> Assertions.assertEquals(Fraction.gcd(2 * 167, 79), Fraction.gcd(167, 79)),
-    
+            
             //Testing a few instances of the property gcd(n1, n2) = gcd(n1, n2/2) when n1 is odd and n2 is even
             () -> Assertions.assertEquals(Fraction.gcd(2 * 193, 123), Fraction.gcd(193, 123)),
             () -> Assertions.assertEquals(Fraction.gcd(2 * 125, 195), Fraction.gcd(125, 195)),
@@ -106,7 +102,6 @@ public final class FractionTest {
     
     @Test
     void testReciprocal() {
-        //Testing the reciprocals of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -114,18 +109,19 @@ public final class FractionTest {
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
         
+        //Testing the reciprocals of the above fractions
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(9, 2), twoNinths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(4, 5), fiveFourths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSixSevenths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSevenSixths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(1, 1), one.reciprocal()),
+            //Special case: the reciprocal of 0 will result in an exception being thrown
             () -> Assertions.assertThrows(ArithmeticException.class, zero::reciprocal)
         );
     }
     
     void testGetWholePart() {
-        //Testing the whole parts of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -133,6 +129,7 @@ public final class FractionTest {
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
         
+        //Testing the whole parts of the above fractions
         Assertions.assertAll(
             () -> Assertions.assertEquals(0, twoNinths.getWholePart()),
             () -> Assertions.assertEquals(1, fiveFourths.getWholePart()),
@@ -144,7 +141,6 @@ public final class FractionTest {
     }
     
     void testGetFractionalPart() {
-        //Testing the fractional parts of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -152,6 +148,7 @@ public final class FractionTest {
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
         
+        //Testing the fractional parts of the above fractions
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(2, 8), twoNinths.getFractionalPart()),
             () -> Assertions.assertEquals(new Fraction(1, 4), fiveFourths.getFractionalPart()),
@@ -164,7 +161,6 @@ public final class FractionTest {
     
     @Test
     void testAdd() {
-        //Testing the sums of all combinations of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -174,7 +170,7 @@ public final class FractionTest {
         
         /*
          * Checking sums of all combinations of the above fractions, using Python's Fraction class as a method to generate the sums of all
-         * combinations of the above
+         * combinations of the above, with zero being included as the identity for addition
          */
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(4, 9), twoNinths.add(twoNinths)),
@@ -218,7 +214,6 @@ public final class FractionTest {
     
     @Test
     void testSubtract() {
-        //Testing the sums of all differences of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -228,7 +223,7 @@ public final class FractionTest {
         
         /*
          * Checking sums of all combinations of the above fractions, using Python's Fraction class as a method to generate the differences of all
-         * combinations of the above
+         * combinations of the above, with zero being included as the identity for subtraction
          */
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(0, 1), twoNinths.subtract(twoNinths)),
@@ -272,7 +267,6 @@ public final class FractionTest {
     
     @Test
     void testMultiply() {
-        //Testing the products of all combinations of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -282,7 +276,7 @@ public final class FractionTest {
         
         /*
          * Checking sums of all combinations of the above fractions, using Python's Fraction class as a method to generate the products of all
-         * combinations of the above
+         * combinations of the above, with one being included as the identity for multiplication
          */
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(4, 81), twoNinths.multiply(twoNinths)),
@@ -326,7 +320,6 @@ public final class FractionTest {
     
     @Test
     void testDivide() {
-        //Testing the quotients of all combinations of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -336,7 +329,8 @@ public final class FractionTest {
         
         /*
          * Checking sums of all combinations of the above fractions, using Python's Fraction class as a method to generate the quotients of all
-         * combinations of the above
+         * combinations of the above, with one being included as the identity for subtraction and zero being included as a special case as division
+         * by zero results in an exception
          */
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Fraction(1, 1), twoNinths.divide(twoNinths)),
@@ -344,36 +338,42 @@ public final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(-7, 27), twoNinths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-4, 21), twoNinths.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> twoNinths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(45, 8), fiveFourths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(1, 1), fiveFourths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-35, 24), fiveFourths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-15, 14), fiveFourths.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(5, 4), fiveFourths.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> fiveFourths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(-27, 7), negativeSixSevenths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-24, 35), negativeSixSevenths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(1, 1), negativeSixSevenths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(36, 49), negativeSixSevenths.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> negativeSixSevenths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(-21, 4), negativeSevenSixths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-14, 15), negativeSevenSixths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(49, 36), negativeSevenSixths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(1, 1), negativeSevenSixths.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSevenSixths.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> negativeSevenSixths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(9, 2), one.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(4, 5), one.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-7, 6), one.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-6, 7), one.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(1, 1), one.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> one.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(one)),
+            //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> zero.divide(zero))
         );
     }
@@ -423,7 +423,6 @@ public final class FractionTest {
     
     @Test
     void testToString() {
-        //Testing the strings of all combinations of the below fractions
         final Fraction twoNinths = new Fraction(2, 9);
         final Fraction fiveFourths = new Fraction(5, 4);
         final Fraction negativeSixSevenths = new Fraction(-6, 7);
@@ -431,6 +430,7 @@ public final class FractionTest {
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
         
+        //Testing the strings of all combinations of the above fractions
         Assertions.assertAll(
             () -> Assertions.assertEquals("2 / 9", twoNinths.toString()),
             () -> Assertions.assertEquals("5 / 4", fiveFourths.toString()),
