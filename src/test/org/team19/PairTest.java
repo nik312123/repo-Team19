@@ -8,13 +8,15 @@ import java.util.Random;
 
 class PairTest {
     
+    private PairTest() {}
+    
     @Test
     void testGetKey() {
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Pair<>(5, 3).getKey(), 5),
-            () -> Assertions.assertNull(new Pair<>(null, 3).getKey()),
-            () -> Assertions.assertEquals(new Pair<>("Hello", 3).getKey(), "Hello"),
-            () -> Assertions.assertEquals(new Pair<>('c', "Hello").getKey(), 'c')
+            () -> Assertions.assertEquals(5, new Pair<>(5, 3).getKey()),
+            () -> Assertions.assertEquals("Hello", new Pair<>("Hello", 3).getKey()),
+            () -> Assertions.assertEquals('c', new Pair<>('c', "Hello").getKey()),
+            () -> Assertions.assertNull(new Pair<>(null, 3).getKey())
         );
         
         /*
@@ -38,7 +40,7 @@ class PairTest {
         for(int i = 0; i < randomObjsLen; ++i) {
             final int finalI = i;
             randTests[i] = () ->
-                Assertions.assertEquals(new Pair<>(randomObjs[finalI], randomObjs[rand.nextInt(randomObjsLen)]).getKey(), randomObjs[finalI]);
+                Assertions.assertEquals(randomObjs[finalI], new Pair<>(randomObjs[finalI], randomObjs[rand.nextInt(randomObjsLen)]).getKey());
         }
         
         //Runs the random tests
@@ -48,10 +50,10 @@ class PairTest {
     @Test
     void testGetValue() {
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Pair<>(3, 5).getValue(), 5),
+            () -> Assertions.assertEquals(5, new Pair<>(3, 5).getValue()),
             () -> Assertions.assertNull(new Pair<>(3, null).getValue()),
-            () -> Assertions.assertEquals(new Pair<>(3, "Hello").getValue(), "Hello"),
-            () -> Assertions.assertEquals(new Pair<>("Hello", 'c').getValue(), 'c')
+            () -> Assertions.assertEquals("Hello", new Pair<>(3, "Hello").getValue()),
+            () -> Assertions.assertEquals('c', new Pair<>("Hello", 'c').getValue())
         );
         
         /*
@@ -75,9 +77,9 @@ class PairTest {
         for(int i = 0; i < randomObjsLen; ++i) {
             final int finalI = i;
             randTests[i] = () ->
-                Assertions.assertEquals(new Pair<>(randomObjs[rand.nextInt(randomObjsLen)], randomObjs[finalI]).getValue(), randomObjs[finalI]);
+                Assertions.assertEquals(randomObjs[finalI], new Pair<>(randomObjs[rand.nextInt(randomObjsLen)], randomObjs[finalI]).getValue());
         }
-    
+        
         //Runs the random tests
         Assertions.assertAll(randTests);
     }
@@ -85,12 +87,12 @@ class PairTest {
     @Test
     void testToString() {
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Pair<>(3, 5).toString(), "Pair{3, 5}"),
-            () -> Assertions.assertEquals(new Pair<>(3, null).toString(), "Pair{3, null}"),
-            () -> Assertions.assertEquals(new Pair<>(3, "Hello").toString(), "Pair{3, Hello}"),
-            () -> Assertions.assertEquals(new Pair<>("Hello", 'c').toString(), "Pair{Hello, c}")
+            () -> Assertions.assertEquals("Pair{3, 5}", new Pair<>(3, 5).toString()),
+            () -> Assertions.assertEquals("Pair{3, null}", new Pair<>(3, null).toString()),
+            () -> Assertions.assertEquals("Pair{3, Hello}", new Pair<>(3, "Hello").toString()),
+            () -> Assertions.assertEquals("Pair{Hello, c}", new Pair<>("Hello", 'c').toString())
         );
-    
+        
         /*
          * Creates 33 random objects consisting of null, the two booleans (true and false), 10 random integers, 10 random doubles, and 10 random
          * characters
@@ -106,7 +108,7 @@ class PairTest {
             randomObjs[i + 10] = rand.nextDouble();
             randomObjs[i + 20] = (char) rand.nextInt(Character.MAX_VALUE + 1);
         }
-    
+        
         //Compiles each random object and a randomly chosen value from the random objects into a list of tests
         final Executable[] randTests = new Executable[randomObjsLen * randomObjsLen];
         for(int i = 0; i < randomObjsLen; ++i) {
@@ -114,11 +116,13 @@ class PairTest {
                 final int finalI = i;
                 final int finalJ = j;
                 randTests[i * randomObjsLen + j] = () ->
-                    Assertions.assertEquals(new Pair<>(randomObjs[finalI], randomObjs[finalJ]).toString(), String.format("Pair{%s, %s}",
-                        randomObjs[finalI], randomObjs[finalJ]));
+                    Assertions.assertEquals(String.format(
+                        "Pair{%s, %s}",
+                        randomObjs[finalI], randomObjs[finalJ]), new Pair<>(randomObjs[finalI], randomObjs[finalJ]).toString()
+                    );
             }
         }
-    
+        
         //Runs the random tests
         Assertions.assertAll(randTests);
     }
@@ -128,8 +132,8 @@ class PairTest {
         Assertions.assertAll(
             () -> Assertions.assertEquals(new Pair<>(3, 5), new Pair<>(3, 5)),
             () -> Assertions.assertNotEquals(new Pair<>(3, 5), new Pair<>(3, 4)),
-            () -> Assertions.assertEquals(new Pair<>(3, (Number) 10), new Pair<>(3, 10)),
-            () -> Assertions.assertEquals(new Pair<>((Object) 5, 3), new Pair<>(5, 3)),
+            () -> Assertions.assertEquals(new Pair<>(3, 10), new Pair<>(3, (Number) 10)),
+            () -> Assertions.assertEquals(new Pair<>(5, 3), new Pair<>((Object) 5, 3)),
             () -> Assertions.assertEquals(new Pair<>(null, 4), new Pair<>(null, 4)),
             () -> Assertions.assertNotEquals(new Pair<>(new Pair<>(3, 5), null), new Pair<>(new Pair<>(3, 4), null))
         );

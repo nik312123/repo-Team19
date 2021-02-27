@@ -13,8 +13,10 @@ public abstract class VotingSystem {
      * Initializes a {@link VotingSystem} given the number of candidates
      *
      * @param numCandidates The number of candidates in the election
+     * @param auditOutput   The {@link OutputStream} to write detailed information about the running of the election
+     * @param reportOutput  The {@link OutputStream} to write a summary about the running of the election
      */
-    public VotingSystem(final int numCandidates) {}
+    public VotingSystem(final int numCandidates, final OutputStream auditOutput, final OutputStream reportOutput) {}
     
     /**
      * Returns the name of this voting system
@@ -76,11 +78,9 @@ public abstract class VotingSystem {
     /**
      * Runs the election for the {@link VotingSystem} and determines the winner
      *
-     * @param auditOutput  The {@link OutputStream} to write detailed information about the running of the election
-     * @param reportOutput The {@link OutputStream} to write a summary about the running of the election
-     * @param useRandom    True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties
+     * @param useRandom True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties
      */
-    public abstract void runElection(final OutputStream auditOutput, final OutputStream reportOutput, final boolean useRandom);
+    public abstract void runElection(final boolean useRandom);
     
     /**
      * Returns the string form of this {@link VotingSystem}
