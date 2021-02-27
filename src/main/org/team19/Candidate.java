@@ -22,6 +22,7 @@ public class Candidate {
      *
      * @param name  The name of the election candidate
      * @param party The name of the candidate's party
+     * @throws NullPointerException Thrown if the provided name or party is null
      */
     public Candidate(final String name, final String party) {
         this.name = Objects.requireNonNull(name);
