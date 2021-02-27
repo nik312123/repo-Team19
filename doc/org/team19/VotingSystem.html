@@ -152,7 +152,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int)">VotingSystem</a></span>&#8203;(int&nbsp;numCandidates)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,java.io.OutputStream,java.io.OutputStream)">VotingSystem</a></span>&#8203;(int&nbsp;numCandidates,
+            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</code></th>
 <td class="colLast">
 <div class="block">Initializes a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given the number of candidates</div>
 </td>
@@ -238,9 +240,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runElection(java.io.OutputStream,java.io.OutputStream,boolean)">runElection</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
-           <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput,
-           boolean&nbsp;useRandom)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runElection(boolean)">runElection</a></span>&#8203;(boolean&nbsp;useRandom)</code></th>
 <td class="colLast">
 <div class="block">Runs the election for the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> and determines the winner</div>
 </td>
@@ -283,17 +283,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int)">
+<a id="&lt;init&gt;(int,java.io.OutputStream,java.io.OutputStream)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VotingSystem</h4>
-<pre>public&nbsp;VotingSystem&#8203;(int&nbsp;numCandidates)</pre>
+<pre>public&nbsp;VotingSystem&#8203;(int&nbsp;numCandidates,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</pre>
 <div class="block">Initializes a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given the number of candidates</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>numCandidates</code> - The number of candidates in the election</dd>
+<dd><code>auditOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
+<dd><code>reportOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
 </dl>
 </li>
 </ul>
@@ -422,20 +426,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="runElection(java.io.OutputStream,java.io.OutputStream,boolean)">
+<a id="runElection(boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>runElection</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;runElection&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
-                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput,
-                                 boolean&nbsp;useRandom)</pre>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;runElection&#8203;(boolean&nbsp;useRandom)</pre>
 <div class="block">Runs the election for the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> and determines the winner</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>auditOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
-<dd><code>reportOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
 <dd><code>useRandom</code> - True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties</dd>
 </dl>
 </li>
