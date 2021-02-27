@@ -129,7 +129,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public final class <span class="typeNameLabel">Fraction</span>
+<pre>public class <span class="typeNameLabel">Fraction</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Represents a rational number in the form of a simplified fraction
  <p></p>
@@ -252,7 +252,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;other)</code></th>
 <td class="colLast">
-<div class="block">Returns true if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator as this <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a></div>
+<div class="block">Returns true if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -331,7 +331,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the String form of this fraction</div>
+<div class="block">Returns the string form of this fraction</div>
 </td>
 </tr>
 </table>
@@ -616,6 +616,22 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;toString()</pre>
+<div class="block">Returns the string form of this fraction</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the string form of this fraction in the format "[numerator] / [denominator]", replacing [numerator] and [denominator] accordingly</dd>
+</dl>
+</li>
+</ul>
 <a id="equals(java.lang.Object)">
 <!--   -->
 </a>
@@ -623,21 +639,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>equals</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;other)</pre>
-<div class="block">Returns true if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator as this <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a></div>
+<div class="block">Returns true if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>other</code> - The object to compare to this <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>True if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator as this <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a></dd>
+<dd>True if the other object is a <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a> and has the same numerator and denominator</dd>
 </dl>
 </li>
 </ul>
 <a id="hashCode()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
@@ -647,22 +663,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The hashcode for this <a href="Fraction.html" title="class in org.team19"><code>Fraction</code></a></dd>
-</dl>
-</li>
-</ul>
-<a id="toString()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>toString</h4>
-<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;toString()</pre>
-<div class="block">Returns the String form of this fraction</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the String form of this fraction in the format "[numerator] / [denominator]", replacing [numerator] and [denominator] accordingly</dd>
 </dl>
 </li>
 </ul>
