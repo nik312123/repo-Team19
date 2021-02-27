@@ -76,6 +76,13 @@ public abstract class VotingSystem {
     public abstract String getName();
     
     /**
+     * Returns the short name for the voting system; that is, the name that appears at the top of an election file
+     *
+     * @return The short name for the voting system
+     */
+    public abstract String getShortName();
+    
+    /**
      * Returns the number of candidates that the {@link VotingSystem} contains, which should be available after
      * {@link #parseCandidatesHeader(String[], int)} has been executed successfully
      *
