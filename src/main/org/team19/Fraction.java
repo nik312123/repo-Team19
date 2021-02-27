@@ -58,25 +58,22 @@ public class Fraction {
      * <p></p>
      * Credit to <a href="https://tinyurl.com/ysf3pmzu" target="_blank">uutils/coreutils</a> for the basis of this iterative binary GCD algorithm
      *
-     * @param n1Final The first of two numbers of which to find the gcd
-     * @param n2Final The second of two numbers of which to find the gcd
+     * @param n1 The first of two numbers of which to find the gcd
+     * @param n2 The second of two numbers of which to find the gcd
      * @return The gcd of the given two nonnegative numbers
      */
-    public static long gcd(final long n1Final, final long n2Final) {
-        if(n1Final == 0) {
-            return n2Final;
+    public static long gcd(long n1, long n2) {
+        if(n1 == 0) {
+            return n2;
         }
-        else if(n2Final == 0) {
-            return n1Final;
+        else if(n2 == 0) {
+            return n1;
         }
-        
-        long n1 = n1Final;
-        long n2 = n2Final;
-        
+    
         //Get the number of trailing zeroes on the binary forms of each long
         final int n1TrailingZeroes = Long.numberOfTrailingZeros(n1);
         final int n2TrailingZeroes = Long.numberOfTrailingZeros(n2);
-        
+    
         //Divide each number by the largest power of 2 by which it is divisible
         n1 >>= n1TrailingZeroes;
         n2 >>= n2TrailingZeroes;
