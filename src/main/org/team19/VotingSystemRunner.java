@@ -1,5 +1,7 @@
 package org.team19;
 
+import java.io.File;
+
 /**
  * Runs the election for a {@link VotingSystem} given a path to a file, which can be absolute or relative to the current working directory
  * <p></p>
@@ -27,6 +29,10 @@ public final class VotingSystemRunner {
                     + "election file to parse"
             );
             System.exit(2);
+        }
+        String filePath = args[0];
+        if(filePath.startsWith("~" + File.separator)) {
+            filePath = System.getProperty("user.home") + filePath.substring(1);
         }
     }
     
