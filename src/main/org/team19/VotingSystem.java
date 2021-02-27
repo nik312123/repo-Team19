@@ -10,7 +10,7 @@ import java.util.Collection;
 public abstract class VotingSystem {
     
     /**
-     * Initializes a {@link VotingSystem} given the number of candidates
+     * Initializes a {@link VotingSystem}
      *
      * @param numCandidates The number of candidates in the election
      * @param auditOutput   The {@link OutputStream} to write detailed information about the running of the election
@@ -19,34 +19,27 @@ public abstract class VotingSystem {
     public VotingSystem(final int numCandidates, final OutputStream auditOutput, final OutputStream reportOutput) {}
     
     /**
-     * Returns the name of this voting system
+     * Returns the number of lines that makes up the header for the candidates
      *
-     * @return The name of this voting system
+     * @return The number of lines that makes up the header for the candidates
      */
-    public abstract String votingSystemName();
+    public abstract int getCandidateHeaderSize();
     
     /**
-     * Returns the number of lines that makes up the header
+     * Returns the number of lines that makes up the header for the ballots
      *
-     * @return The number of lines that makes up the header
+     * @return The number of lines that makes up the header for the ballots
      */
-    public abstract int getHeaderSize();
+    public abstract int getBallotHeaderSize();
     
     /**
-     * Returns a {@link Collection} of {@link Pair}s corresponding to the candidates, which should be available after
-     * {@link #parseCandidates(String, int)} has been executed successfully
+     * Parses the lines corresponding to the header for the candidates
      *
-     * @return A {@link Collection} of {@link Pair}s with each pair's key corresponding to the candidate's name and value corresponding to the party
+     * @param header The lines corresponding to the header
+     * @param line   The line number associated with the first line of the header
+     * @throws ParseException Thrown if there is an issue in parsing the header
      */
-    public abstract Collection<Pair<String, String>> getCandidates();
-    
-    /**
-     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after
-     * {@link #parseSystemHeader(String[], int)} has been executed successfully
-     *
-     * @return The number of ballots that the {@link VotingSystem} contains
-     */
-    public abstract int getNumBallots();
+    public abstract void parseCandidatesHeader(final String[] header, final int line) throws ParseException;
     
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
@@ -58,13 +51,13 @@ public abstract class VotingSystem {
     public abstract void parseCandidates(final String candidates, final int line) throws ParseException;
     
     /**
-     * Parses the lines corresponding to the header for the voting system and uses them internally
+     * Parses the lines corresponding to the header for the ballots
      *
      * @param header The lines corresponding to the header
      * @param line   The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
-    public abstract void parseSystemHeader(final String[] header, final int line) throws ParseException;
+    public abstract void parseBallotHeader(final String[] header, final int line) throws ParseException;
     
     /**
      * Parses a line corresponding to a ballot and adds it internally
@@ -74,6 +67,37 @@ public abstract class VotingSystem {
      * @throws ParseException Thrown if there is an issue in parsing the current ballot
      */
     public abstract void parseBallot(final String ballot, final int line) throws ParseException;
+    
+    /**
+     * Returns the name of this voting system
+     *
+     * @return The name of this voting system
+     */
+    public abstract String getName();
+    
+    /**
+     * Returns the number of candidates that the {@link VotingSystem} contains, which should be available after
+     * {@link #parseCandidatesHeader(String[], int)} has been executed successfully
+     *
+     * @return The number of candidates that the {@link VotingSystem} contains
+     */
+    public abstract int getNumCandidates();
+    
+    /**
+     * Returns the {@link Collection} of {@link Candidate}s for this {@link VotingSystem}, which should be available after
+     * {@link #parseCandidates(String, int)} has been executed successfully
+     *
+     * @return The {@link Collection} of {@link Candidate}s for this {@link VotingSystem}
+     */
+    public abstract Collection<Candidate> getCandidates();
+    
+    /**
+     * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after
+     * {@link #parseBallotHeader(String[], int)} has been executed successfully
+     *
+     * @return The number of ballots that the {@link VotingSystem} contains
+     */
+    public abstract int getNumBallots();
     
     /**
      * Runs the election for the {@link VotingSystem} and determines the winner
