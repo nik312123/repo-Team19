@@ -23,7 +23,7 @@ public class Fraction implements Comparable<Fraction> {
      * The floor of this {@link Fraction}, which is assigned upon the first usage of {@link #getWholePart()} and then returned for any subsequent
      * usage
      */
-    protected Long wholePart;
+    protected Fraction wholePart;
     
     /**
      * This {@link Fraction} minus its floor, which is assigned upon the first usage of {@link #getFractionalPart()} and then returned for any
@@ -62,18 +62,18 @@ public class Fraction implements Comparable<Fraction> {
      * @param n2 The second of two numbers of which to find the gcd
      * @return The gcd of the given two nonnegative numbers
      */
-    public static long gcd(long n1, long n2) {
+    protected static long gcd(long n1, long n2) {
         if(n1 == 0) {
             return n2;
         }
         else if(n2 == 0) {
             return n1;
         }
-    
+        
         //Get the number of trailing zeroes on the binary forms of each long
         final int n1TrailingZeroes = Long.numberOfTrailingZeros(n1);
         final int n2TrailingZeroes = Long.numberOfTrailingZeros(n2);
-    
+        
         //Divide each number by the largest power of 2 by which it is divisible
         n1 >>= n1TrailingZeroes;
         n2 >>= n2TrailingZeroes;
@@ -149,9 +149,9 @@ public class Fraction implements Comparable<Fraction> {
      */
     public long getWholePart() {
         if(wholePart == null) {
-            wholePart = numerator / denominator;
+            wholePart = new Fraction(numerator / denominator, 1);
         }
-        return wholePart;
+        return wholePart.getNumerator();
     }
     
     /**
@@ -161,7 +161,10 @@ public class Fraction implements Comparable<Fraction> {
      */
     public Fraction getFractionalPart() {
         if(fractionalPart == null) {
-            fractionalPart = subtract(new Fraction(getWholePart(), 1));
+            if(wholePart == null) {
+                getWholePart();
+            }
+            fractionalPart = subtract(wholePart);
         }
         return fractionalPart;
     }
@@ -234,7 +237,7 @@ public class Fraction implements Comparable<Fraction> {
      * Returns the result of comparing two {@link Fraction}s numerically
      *
      * @param other The other fraction to compare to this fraction
-     * @return 0 if this = other, -1 if this < other, and 1 if this > other
+     * @return 0 if this is equal to other, -1 if this is less than other, and 1 if this is greater than other
      */
     public int compareTo(final Fraction other) {
         final long n1 = numerator, d1 = denominator;
