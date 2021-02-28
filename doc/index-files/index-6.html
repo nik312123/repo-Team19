@@ -90,7 +90,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 </header>
 <main role="main">
-<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">M</a>&nbsp;<a href="index-10.html">O</a>&nbsp;<a href="index-11.html">P</a>&nbsp;<a href="index-12.html">R</a>&nbsp;<a href="index-13.html">S</a>&nbsp;<a href="index-14.html">T</a>&nbsp;<a href="index-15.html">V</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:G">
+<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">K</a>&nbsp;<a href="index-10.html">L</a>&nbsp;<a href="index-11.html">M</a>&nbsp;<a href="index-12.html">N</a>&nbsp;<a href="index-13.html">O</a>&nbsp;<a href="index-14.html">P</a>&nbsp;<a href="index-15.html">R</a>&nbsp;<a href="index-16.html">S</a>&nbsp;<a href="index-17.html">T</a>&nbsp;<a href="index-18.html">V</a>&nbsp;<a href="index-19.html">W</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:G">
 <!--   -->
 </a>
 <h2 class="title">G</h2>
@@ -109,16 +109,39 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/VotingSystem.html#getCandidates()">getCandidates()</a></span> - Method in class org.team19.<a href="../org/team19/VotingSystem.html" title="class in org.team19">VotingSystem</a></dt>
 <dd>
-<div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> of <a href="../org/team19/Candidate.html" title="class in org.team19"><code>Candidate</code></a>s for this <a href="../org/team19/VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a>, which should be available after
- <a href="../org/team19/VotingSystem.html#parseCandidates(java.lang.String,int)"><code>VotingSystem.parseCandidates(String, int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="../org/team19/VotingSystem.html#addCandidates(java.lang.String,int)"><code>VotingSystem.addCandidates(String, int)</code></a> has been executed successfully</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/TableFormatter.html#getColumnLengths(java.util.List,int)">getColumnLengths(List&lt;List&lt;String&gt;&gt;, int)</a></span> - Method in class org.team19.<a href="../org/team19/TableFormatter.html" title="class in org.team19">TableFormatter</a></dt>
+<dd>
+<div class="block">Given the string form of the table, returns the maximum lengths of the strings in each column</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/Fraction.html#getDenominator()">getDenominator()</a></span> - Method in class org.team19.<a href="../org/team19/Fraction.html" title="class in org.team19">Fraction</a></dt>
 <dd>
 <div class="block">Returns the denominator of this <a href="../org/team19/Fraction.html" title="class in org.team19"><code>Fraction</code></a></div>
 </dd>
+<dt><span class="memberNameLink"><a href="../org/team19/Fraction.html#getDoubleValue()">getDoubleValue()</a></span> - Method in class org.team19.<a href="../org/team19/Fraction.html" title="class in org.team19">Fraction</a></dt>
+<dd>
+<div class="block">Returns the value represented by the fraction as a double</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/VotingSystemRunner.html#getFile(java.lang.String)">getFile(String)</a></span> - Static method in class org.team19.<a href="../org/team19/VotingSystemRunner.html" title="class in org.team19">VotingSystemRunner</a></dt>
+<dd>
+<div class="block">Retrieves the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileInputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>FileInputStream</code></a> for the file at the provided canonical file path, exiting with a nonzero status if it cannot be opened</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/Pair.html#getFirst()">getFirst()</a></span> - Method in class org.team19.<a href="../org/team19/Pair.html" title="class in org.team19">Pair</a></dt>
+<dd>
+<div class="block">Returns the key or first element of the <a href="../org/team19/Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</dd>
 <dt><span class="memberNameLink"><a href="../org/team19/Fraction.html#getFractionalPart()">getFractionalPart()</a></span> - Method in class org.team19.<a href="../org/team19/Fraction.html" title="class in org.team19">Fraction</a></dt>
 <dd>
 <div class="block">Returns this <a href="../org/team19/Fraction.html" title="class in org.team19"><code>Fraction</code></a> minus its floor</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/VotingSystemRunner.html#getFullFilePath(java.lang.String)">getFullFilePath(String)</a></span> - Static method in class org.team19.<a href="../org/team19/VotingSystemRunner.html" title="class in org.team19">VotingSystemRunner</a></dt>
+<dd>
+<div class="block">Returns the full, unique canonical form of the provided file path, exiting with a nonzero status if it cannot be resolved</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/TableFormatter.html#getHorizontalDivider(int%5B%5D,int,java.lang.String)">getHorizontalDivider(int[], int, String)</a></span> - Method in class org.team19.<a href="../org/team19/TableFormatter.html" title="class in org.team19">TableFormatter</a></dt>
+<dd>
+<div class="block">Returns a horizontal separator for the table</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/Pair.html#getKey()">getKey()</a></span> - Method in class org.team19.<a href="../org/team19/Pair.html" title="class in org.team19">Pair</a></dt>
 <dd>
@@ -134,13 +157,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/VotingSystem.html#getNumBallots()">getNumBallots()</a></span> - Method in class org.team19.<a href="../org/team19/VotingSystem.html" title="class in org.team19">VotingSystem</a></dt>
 <dd>
-<div class="block">Returns the number of ballots that the <a href="../org/team19/VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="../org/team19/VotingSystem.html#parseBallotHeader(java.lang.String%5B%5D,int)"><code>VotingSystem.parseBallotHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="../org/team19/VotingSystem.html#importBallotsHeader(java.lang.String%5B%5D,int)"><code>VotingSystem.importBallotsHeader(String[], int)</code></a> has been executed successfully</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/VotingSystem.html#getNumCandidates()">getNumCandidates()</a></span> - Method in class org.team19.<a href="../org/team19/VotingSystem.html" title="class in org.team19">VotingSystem</a></dt>
 <dd>
-<div class="block">Returns the number of candidates that the <a href="../org/team19/VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="../org/team19/VotingSystem.html#parseCandidatesHeader(java.lang.String%5B%5D,int)"><code>VotingSystem.parseCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="../org/team19/VotingSystem.html#importCandidatesHeader(java.lang.String%5B%5D,int)"><code>VotingSystem.importCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/Fraction.html#getNumerator()">getNumerator()</a></span> - Method in class org.team19.<a href="../org/team19/Fraction.html" title="class in org.team19">Fraction</a></dt>
 <dd>
@@ -149,6 +170,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../org/team19/Candidate.html#getParty()">getParty()</a></span> - Method in class org.team19.<a href="../org/team19/Candidate.html" title="class in org.team19">Candidate</a></dt>
 <dd>
 <div class="block">Returns the name of thee candidate's party</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/Pair.html#getSecond()">getSecond()</a></span> - Method in class org.team19.<a href="../org/team19/Pair.html" title="class in org.team19">Pair</a></dt>
+<dd>
+<div class="block">Returns the value or second element of the <a href="../org/team19/Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/VotingSystem.html#getShortName()">getShortName()</a></span> - Method in class org.team19.<a href="../org/team19/VotingSystem.html" title="class in org.team19">VotingSystem</a></dt>
+<dd>
+<div class="block">Returns the short name for the voting system; that is, the name that appears at the top of an election file</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../org/team19/TableFormatter.html#getTableFormat(java.util.List,int%5B%5D,int)">getTableFormat(List&lt;TableFormatter.Alignment&gt;, int[], int)</a></span> - Method in class org.team19.<a href="../org/team19/TableFormatter.html" title="class in org.team19">TableFormatter</a></dt>
+<dd>
+<div class="block">Returns the formatting string for a row of data in the table</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../org/team19/Pair.html#getValue()">getValue()</a></span> - Method in class org.team19.<a href="../org/team19/Pair.html" title="class in org.team19">Pair</a></dt>
 <dd>
@@ -159,7 +192,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns the floor of this <a href="../org/team19/Fraction.html" title="class in org.team19"><code>Fraction</code></a></div>
 </dd>
 </dl>
-<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">M</a>&nbsp;<a href="index-10.html">O</a>&nbsp;<a href="index-11.html">P</a>&nbsp;<a href="index-12.html">R</a>&nbsp;<a href="index-13.html">S</a>&nbsp;<a href="index-14.html">T</a>&nbsp;<a href="index-15.html">V</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a></div>
+<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">C</a>&nbsp;<a href="index-3.html">D</a>&nbsp;<a href="index-4.html">E</a>&nbsp;<a href="index-5.html">F</a>&nbsp;<a href="index-6.html">G</a>&nbsp;<a href="index-7.html">H</a>&nbsp;<a href="index-8.html">I</a>&nbsp;<a href="index-9.html">K</a>&nbsp;<a href="index-10.html">L</a>&nbsp;<a href="index-11.html">M</a>&nbsp;<a href="index-12.html">N</a>&nbsp;<a href="index-13.html">O</a>&nbsp;<a href="index-14.html">P</a>&nbsp;<a href="index-15.html">R</a>&nbsp;<a href="index-16.html">S</a>&nbsp;<a href="index-17.html">T</a>&nbsp;<a href="index-18.html">V</a>&nbsp;<a href="index-19.html">W</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a></div>
 </main>
 <footer role="contentinfo">
 <nav role="navigation">

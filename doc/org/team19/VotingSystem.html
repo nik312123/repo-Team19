@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -152,8 +152,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,java.io.OutputStream,java.io.OutputStream)">VotingSystem</a></span>&#8203;(int&nbsp;numCandidates,
-            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.io.OutputStream,java.io.OutputStream)">VotingSystem</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</code></th>
 <td class="colLast">
 <div class="block">Initializes a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
@@ -178,104 +177,109 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addBallot(int,java.lang.String,int)">addBallot</a></span>&#8203;(int&nbsp;ballotNumber,
+         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ballot,
+         int&nbsp;line)</code></th>
+<td class="colLast">
+<div class="block">Parses a line corresponding to a ballot and adds it internally</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addCandidates(java.lang.String,int)">addCandidates</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;candidates,
+             int&nbsp;line)</code></th>
+<td class="colLast">
+<div class="block">Parses a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> corresponding to candidates and party and adds them internally</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;other)</code></th>
 <td class="colLast">
 <div class="block">Returns true if the given object is equivalent to this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBallotHeaderSize()">getBallotHeaderSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the number of lines that makes up the header for the ballots</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCandidateHeaderSize()">getCandidateHeaderSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the number of lines that makes up the header for the candidates</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCandidates()">getCandidates</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s for this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a>, which should be available after
- <a href="#parseCandidates(java.lang.String,int)"><code>parseCandidates(String, int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#addCandidates(java.lang.String,int)"><code>addCandidates(String, int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getName()">getName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the name of this voting system</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumBallots()">getNumBallots</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the number of ballots that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="#parseBallotHeader(java.lang.String%5B%5D,int)"><code>parseBallotHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#importBallotsHeader(java.lang.String%5B%5D,int)"><code>importBallotsHeader(String[], int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumCandidates()">getNumCandidates</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the number of candidates that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="#parseCandidatesHeader(java.lang.String%5B%5D,int)"><code>parseCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#importCandidatesHeader(java.lang.String%5B%5D,int)"><code>importCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShortName()">getShortName</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the short name for the voting system; that is, the name that appears at the top of an election file</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the hashcode for this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseBallot(java.lang.String,int)">parseBallot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ballot,
-           int&nbsp;line)</code></th>
-<td class="colLast">
-<div class="block">Parses a line corresponding to a ballot and adds it internally</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseBallotHeader(java.lang.String%5B%5D,int)">parseBallotHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
-                 int&nbsp;line)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#importBallotsHeader(java.lang.String%5B%5D,int)">importBallotsHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
+                   int&nbsp;line)</code></th>
 <td class="colLast">
 <div class="block">Parses the lines corresponding to the header for the ballots</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseCandidates(java.lang.String,int)">parseCandidates</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;candidates,
-               int&nbsp;line)</code></th>
-<td class="colLast">
-<div class="block">Parses a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> corresponding to candidates and party and adds them internally</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseCandidatesHeader(java.lang.String%5B%5D,int)">parseCandidatesHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
-                     int&nbsp;line)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#importCandidatesHeader(java.lang.String%5B%5D,int)">importCandidatesHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
+                      int&nbsp;line)</code></th>
 <td class="colLast">
 <div class="block">Parses the lines corresponding to the header for the candidates</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runElection(boolean)">runElection</a></span>&#8203;(boolean&nbsp;useRandom)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runElection()">runElection</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Runs the election for the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> and determines the winner</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
@@ -306,21 +310,22 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int,java.io.OutputStream,java.io.OutputStream)">
+<a id="&lt;init&gt;(java.io.OutputStream,java.io.OutputStream)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VotingSystem</h4>
-<pre>public&nbsp;VotingSystem&#8203;(int&nbsp;numCandidates,
-                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
-                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)</pre>
+<pre>public&nbsp;VotingSystem&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditOutput,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportOutput)
+             throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></pre>
 <div class="block">Initializes a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>numCandidates</code> - The number of candidates in the election</dd>
 <dd><code>auditOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
 <dd><code>reportOutput</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - Thrown if either auditOutput or reportOutput is null</dd>
 </dl>
 </li>
 </ul>
@@ -362,15 +367,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="parseCandidatesHeader(java.lang.String[],int)">
+<a id="importCandidatesHeader(java.lang.String[],int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>parseCandidatesHeader</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;parseCandidatesHeader&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
-                                           int&nbsp;line)
-                                    throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
+<h4>importCandidatesHeader</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;importCandidatesHeader&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
+                                            int&nbsp;line)
+                                     throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Parses the lines corresponding to the header for the candidates</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -381,15 +386,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="parseCandidates(java.lang.String,int)">
+<a id="addCandidates(java.lang.String,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>parseCandidates</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;parseCandidates&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;candidates,
-                                     int&nbsp;line)
-                              throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
+<h4>addCandidates</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;addCandidates&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;candidates,
+                                   int&nbsp;line)
+                            throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Parses a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> corresponding to candidates and party and adds them internally</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -400,15 +405,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="parseBallotHeader(java.lang.String[],int)">
+<a id="importBallotsHeader(java.lang.String[],int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>parseBallotHeader</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;parseBallotHeader&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
-                                       int&nbsp;line)
-                                throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
+<h4>importBallotsHeader</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;importBallotsHeader&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
+                                         int&nbsp;line)
+                                  throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Parses the lines corresponding to the header for the ballots</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -419,18 +424,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="parseBallot(java.lang.String,int)">
+<a id="addBallot(int,java.lang.String,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>parseBallot</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;parseBallot&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ballot,
-                                 int&nbsp;line)
-                          throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
+<h4>addBallot</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;addBallot&#8203;(int&nbsp;ballotNumber,
+                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ballot,
+                               int&nbsp;line)
+                        throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Parses a line corresponding to a ballot and adds it internally</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ballotNumber</code> - The number corresponding to the current ballot</dd>
 <dd><code>ballot</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> corresponding to a ballot</dd>
 <dd><code>line</code> - The line number associated with the current ballot line being read</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -452,6 +459,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="getShortName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShortName</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getShortName()</pre>
+<div class="block">Returns the short name for the voting system; that is, the name that appears at the top of an election file</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The short name for the voting system</dd>
+</dl>
+</li>
+</ul>
 <a id="getNumCandidates()">
 <!--   -->
 </a>
@@ -459,8 +480,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getNumCandidates</h4>
 <pre class="methodSignature">public abstract&nbsp;int&nbsp;getNumCandidates()</pre>
-<div class="block">Returns the number of candidates that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="#parseCandidatesHeader(java.lang.String%5B%5D,int)"><code>parseCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#importCandidatesHeader(java.lang.String%5B%5D,int)"><code>importCandidatesHeader(String[], int)</code></a> has been executed successfully
+ <p></p>
+ Returns the number of candidates that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The number of candidates that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains</dd>
@@ -474,8 +496,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getCandidates</h4>
 <pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>&gt;&nbsp;getCandidates()</pre>
-<div class="block">Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s for this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a>, which should be available after
- <a href="#parseCandidates(java.lang.String,int)"><code>parseCandidates(String, int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#addCandidates(java.lang.String,int)"><code>addCandidates(String, int)</code></a> has been executed successfully
+ <p></p>
+ Returns the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s for this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s for this <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></dd>
@@ -489,26 +512,23 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getNumBallots</h4>
 <pre class="methodSignature">public abstract&nbsp;int&nbsp;getNumBallots()</pre>
-<div class="block">Returns the number of ballots that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after
- <a href="#parseBallotHeader(java.lang.String%5B%5D,int)"><code>parseBallotHeader(String[], int)</code></a> has been executed successfully</div>
+<div class="block">Precondition: <a href="#importBallotsHeader(java.lang.String%5B%5D,int)"><code>importBallotsHeader(String[], int)</code></a> has been executed successfully
+ <p></p>
+ Returns the number of ballots that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains, which should be available after</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The number of ballots that the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> contains</dd>
 </dl>
 </li>
 </ul>
-<a id="runElection(boolean)">
+<a id="runElection()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>runElection</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;runElection&#8203;(boolean&nbsp;useRandom)</pre>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;runElection()</pre>
 <div class="block">Runs the election for the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> and determines the winner</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>useRandom</code> - True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties</dd>
-</dl>
 </li>
 </ul>
 <a id="toString()">

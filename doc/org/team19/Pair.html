@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,13 +87,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -134,7 +134,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>V</code> - The type corresponding to the value or second element</dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">Pair&lt;K,&#8203;V&gt;</span>
+<pre>public final class <span class="typeNameLabel">Pair&lt;K,&#8203;V&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Represents a key and its corresponding value or, alternatively, a pair of elements</div>
 </li>
@@ -143,6 +143,38 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>private <a href="Pair.html" title="type parameter in Pair">K</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#key">key</a></span></code></th>
+<td class="colLast">
+<div class="block">The key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>private <a href="Pair.html" title="type parameter in Pair">V</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#value">value</a></span></code></th>
+<td class="colLast">
+<div class="block">The value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -190,26 +222,40 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="Pair.html" title="type parameter in Pair">K</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKey()">getKey</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFirst()">getFirst</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="Pair.html" title="type parameter in Pair">K</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKey()">getKey</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="Pair.html" title="type parameter in Pair">V</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSecond()">getSecond</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Pair.html" title="type parameter in Pair">V</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValue()">getValue</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the hashcode for this <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
@@ -233,6 +279,36 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="key">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>key</h4>
+<pre>private final&nbsp;<a href="Pair.html" title="type parameter in Pair">K</a> key</pre>
+<div class="block">The key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</li>
+</ul>
+<a id="value">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>value</h4>
+<pre>private final&nbsp;<a href="Pair.html" title="type parameter in Pair">V</a> value</pre>
+<div class="block">The value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -282,6 +358,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="getFirst()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFirst</h4>
+<pre class="methodSignature">public&nbsp;<a href="Pair.html" title="type parameter in Pair">K</a>&nbsp;getFirst()</pre>
+<div class="block">Returns the key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The key or first element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></dd>
+</dl>
+</li>
+</ul>
 <a id="getValue()">
 <!--   -->
 </a>
@@ -289,6 +379,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getValue</h4>
 <pre class="methodSignature">public&nbsp;<a href="Pair.html" title="type parameter in Pair">V</a>&nbsp;getValue()</pre>
+<div class="block">Returns the value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getSecond()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSecond</h4>
+<pre class="methodSignature">public&nbsp;<a href="Pair.html" title="type parameter in Pair">V</a>&nbsp;getSecond()</pre>
 <div class="block">Returns the value or second element of the <a href="Pair.html" title="class in org.team19"><code>Pair</code></a></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -397,13 +501,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
