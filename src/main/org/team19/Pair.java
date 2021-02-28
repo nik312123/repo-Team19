@@ -8,7 +8,7 @@ import java.util.Objects;
  * @param <K> The type corresponding to the key or first element
  * @param <V> The type corresponding to the value or second element
  */
-public class Pair<K, V> {
+public final class Pair<K, V> {
     
     /**
      * The key or first element of the {@link Pair}
@@ -41,12 +41,30 @@ public class Pair<K, V> {
     }
     
     /**
+     * Returns the key or first element of the {@link Pair}
+     *
+     * @return The key or first element of the {@link Pair}
+     */
+    public K getFirst() {
+        return getKey();
+    }
+    
+    /**
      * Returns the value or second element of the {@link Pair}
      *
      * @return The value or second element of the {@link Pair}
      */
     public V getValue() {
         return value;
+    }
+    
+    /**
+     * Returns the value or second element of the {@link Pair}
+     *
+     * @return The value or second element of the {@link Pair}
+     */
+    public V getSecond() {
+        return getValue();
     }
     
     /**
