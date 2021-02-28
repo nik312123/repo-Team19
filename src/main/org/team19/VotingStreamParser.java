@@ -8,7 +8,12 @@ import java.util.Map;
 /**
  * Parses an {@link InputStream} and returns a {@link VotingSystem}
  */
-public class VotingStreamParser {
+public final class VotingStreamParser {
+    
+    /**
+     * A private constructor for the utility class {@link VotingStreamParser} to prevent instantiation
+     */
+    private VotingStreamParser() {}
     
     /**
      * Parses an {@link InputStream} and returns a {@link VotingSystem} constructed from the given stream
@@ -21,40 +26,9 @@ public class VotingStreamParser {
      * @throws NullPointerException Thrown if any of the given streams or if the headerSystemMap is null
      * @throws ParseException       Thrown if there is an issue in parsing the provided {@link InputStream}
      */
-    public VotingSystem parse(final InputStream input, final OutputStream auditStream, final OutputStream reportStream,
+    public static VotingSystem parse(final InputStream input, final OutputStream auditStream, final OutputStream reportStream,
         final Map<String, Class<? extends VotingSystem>> headerSystemMap) throws ParseException, NullPointerException {
         return null;
-    }
-    
-    /**
-     * Returns the {@link String} form of this {@link VotingStreamParser}
-     *
-     * @return The {@link String} form of this {@link VotingStreamParser}
-     */
-    @Override
-    public String toString() {
-        return null;
-    }
-    
-    /**
-     * Returns true if the given object is equivalent to this {@link VotingStreamParser}
-     *
-     * @param other The object to compare to this {@link VotingStreamParser}
-     * @return True if the given object is equivalent to this {@link VotingStreamParser}
-     */
-    @Override
-    public boolean equals(final Object other) {
-        return false;
-    }
-    
-    /**
-     * Returns the hashcode for this {@link VotingStreamParser}
-     *
-     * @return The hashcode for this {@link VotingStreamParser}
-     */
-    @Override
-    public int hashCode() {
-        return 0;
     }
     
 }
