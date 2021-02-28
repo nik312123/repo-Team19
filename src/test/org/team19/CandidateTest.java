@@ -65,10 +65,10 @@ final class CandidateTest {
          * are replaced by the candidates' actual name and party, respectively
          */
         Assertions.assertAll(
-            () -> Assertions.assertEquals("Candidate{name=Obama, party=Democrat}", obama.toString()),
-            () -> Assertions.assertEquals("Candidate{name=Romney, party=Republican}", romney.toString()),
-            () -> Assertions.assertEquals("Candidate{name=Obama, party=Republican}", alternateUniverseObama.toString()),
-            () -> Assertions.assertEquals("Candidate{name=Romney, party=Democrat}", alternateUniverseRomney.toString())
+            () -> Assertions.assertEquals("Obama (Democrat)", obama.toString()),
+            () -> Assertions.assertEquals("Romney (Republican)", romney.toString()),
+            () -> Assertions.assertEquals("Obama (Republican)", alternateUniverseObama.toString()),
+            () -> Assertions.assertEquals("Romney (Democrat)", alternateUniverseRomney.toString())
         );
     }
     

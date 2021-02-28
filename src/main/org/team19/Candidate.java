@@ -10,12 +10,12 @@ public class Candidate {
     /**
      * The name of the election candidate
      */
-    private final String name;
+    protected final String name;
     
     /**
      * The name of thee candidate's party
      */
-    private final String party;
+    protected final String party;
     
     /**
      * Initializes a {@link Candidate}
@@ -55,7 +55,7 @@ public class Candidate {
      */
     @Override
     public String toString() {
-        return String.format("Candidate{name=%s, party=%s}", name, party);
+        return String.format("%s (%s)", name, party);
     }
     
     /**
