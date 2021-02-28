@@ -170,6 +170,15 @@ public class Fraction implements Comparable<Fraction> {
     }
     
     /**
+     * Returns the value represented by the fraction as a double
+     *
+     * @return The value represented by the fraction as a double
+     */
+    public double getDoubleValue() {
+        return (double) numerator / denominator;
+    }
+    
+    /**
      * Returns the reciprocal of this {@link Fraction}
      *
      * @return The reciprocal of this {@link Fraction}
