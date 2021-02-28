@@ -243,9 +243,10 @@ public class Fraction implements Comparable<Fraction> {
     }
     
     /**
-     * Returns the string form of this fraction
+     * Returns the string form of this {@link Fraction}
      *
-     * @return the string form of this fraction in the format "[numerator] / [denominator]", replacing [numerator] and [denominator] accordingly
+     * @return the string form of this {@link Fraction} in the format "[numerator] / [denominator]", replacing [numerator] and [denominator]
+     * accordingly
      */
     @Override
     public String toString() {

@@ -32,6 +32,7 @@ public final class VotingSystemRunner {
     
         //If there are no arguments provided, then assume standard input is being used
         if(args.length == 0) {
+            System.out.println("Reading from standard input");
             input = System.in;
         }
         //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
@@ -53,6 +54,7 @@ public final class VotingSystemRunner {
         
             //Attempt to retrieve the file at the given file path
             try {
+                System.out.println("Reading from " + filePath);
                 input = new FileInputStream(filePath);
             }
             catch(FileNotFoundException e) {
