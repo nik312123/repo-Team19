@@ -379,6 +379,65 @@ final class FractionTest {
     }
     
     @Test
+    void testCompare() {
+        final Fraction twoNinths = new Fraction(2, 9);
+        final Fraction fiveFourths = new Fraction(5, 4);
+        final Fraction negativeSixSevenths = new Fraction(-6, 7);
+        final Fraction negativeSevenSixths = new Fraction(-7, 6);
+        final Fraction one = new Fraction(1, 1);
+        final Fraction zero = new Fraction(0, 1);
+        
+        /*
+         * Checking comparisons of all combinations of the above fractions, using Python's Fraction class as a method to generate the quotients of all
+         * combinations of the above with each fraction being compared to itself for the equality (0) case
+         */
+        Assertions.assertAll(
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, twoNinths.compareTo(twoNinths)),
+            () -> Assertions.assertEquals(-1, twoNinths.compareTo(fiveFourths)),
+            () -> Assertions.assertEquals(1, twoNinths.compareTo(negativeSixSevenths)),
+            () -> Assertions.assertEquals(1, twoNinths.compareTo(negativeSevenSixths)),
+            () -> Assertions.assertEquals(-1, twoNinths.compareTo(one)),
+            () -> Assertions.assertEquals(1, twoNinths.compareTo(zero)),
+            () -> Assertions.assertEquals(1, fiveFourths.compareTo(twoNinths)),
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, fiveFourths.compareTo(fiveFourths)),
+            () -> Assertions.assertEquals(1, fiveFourths.compareTo(negativeSixSevenths)),
+            () -> Assertions.assertEquals(1, fiveFourths.compareTo(negativeSevenSixths)),
+            () -> Assertions.assertEquals(1, fiveFourths.compareTo(one)),
+            () -> Assertions.assertEquals(1, fiveFourths.compareTo(zero)),
+            () -> Assertions.assertEquals(-1, negativeSixSevenths.compareTo(twoNinths)),
+            () -> Assertions.assertEquals(-1, negativeSixSevenths.compareTo(fiveFourths)),
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, negativeSixSevenths.compareTo(negativeSixSevenths)),
+            () -> Assertions.assertEquals(1, negativeSixSevenths.compareTo(negativeSevenSixths)),
+            () -> Assertions.assertEquals(-1, negativeSixSevenths.compareTo(one)),
+            () -> Assertions.assertEquals(-1, negativeSixSevenths.compareTo(zero)),
+            () -> Assertions.assertEquals(-1, negativeSevenSixths.compareTo(twoNinths)),
+            () -> Assertions.assertEquals(-1, negativeSevenSixths.compareTo(fiveFourths)),
+            () -> Assertions.assertEquals(-1, negativeSevenSixths.compareTo(negativeSixSevenths)),
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, negativeSevenSixths.compareTo(negativeSevenSixths)),
+            () -> Assertions.assertEquals(-1, negativeSevenSixths.compareTo(one)),
+            () -> Assertions.assertEquals(-1, negativeSevenSixths.compareTo(zero)),
+            () -> Assertions.assertEquals(1, one.compareTo(twoNinths)),
+            () -> Assertions.assertEquals(-1, one.compareTo(fiveFourths)),
+            () -> Assertions.assertEquals(1, one.compareTo(negativeSixSevenths)),
+            () -> Assertions.assertEquals(1, one.compareTo(negativeSevenSixths)),
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, one.compareTo(one)),
+            () -> Assertions.assertEquals(1, one.compareTo(zero)),
+            () -> Assertions.assertEquals(-1, zero.compareTo(twoNinths)),
+            () -> Assertions.assertEquals(-1, zero.compareTo(fiveFourths)),
+            () -> Assertions.assertEquals(1, zero.compareTo(negativeSixSevenths)),
+            () -> Assertions.assertEquals(1, zero.compareTo(negativeSevenSixths)),
+            () -> Assertions.assertEquals(-1, zero.compareTo(one)),
+            //Special case: comparison against oneself
+            () -> Assertions.assertEquals(0, zero.compareTo(zero))
+        );
+    }
+    
+    @Test
     void testEquals() {
         Assertions.assertAll(
             //Testing the identity with 1/2

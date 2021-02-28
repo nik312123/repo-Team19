@@ -7,35 +7,35 @@ import java.util.Objects;
  * <p></p>
  * This class does not account for long overflows
  */
-public class Fraction {
+public class Fraction implements Comparable<Fraction> {
     
     /**
      * The numerator of this {@link Fraction}
      */
-    private long numerator;
+    protected long numerator;
     
     /**
      * The denominator of this {@link Fraction}
      */
-    private long denominator;
+    protected long denominator;
     
     /**
      * The floor of this {@link Fraction}, which is assigned upon the first usage of {@link #getWholePart()} and then returned for any subsequent
      * usage
      */
-    private Long wholePart;
+    protected Long wholePart;
     
     /**
      * This {@link Fraction} minus its floor, which is assigned upon the first usage of {@link #getFractionalPart()} and then returned for any
      * subsequent usage
      */
-    private Fraction fractionalPart;
+    protected Fraction fractionalPart;
     
     /**
      * The reciprocal of this {@link Fraction}, which is assigned upon the first usage of {@link #reciprocal()} and then returned for any
      * subsequent usage
      */
-    private Fraction reciprocal;
+    protected Fraction reciprocal;
     
     /**
      * Initializes a {@link Fraction} given a numerator and denominator in the form of a simplified fraction
@@ -228,6 +228,18 @@ public class Fraction {
         final long n1 = numerator, d1 = denominator;
         final long n2 = other.numerator, d2 = other.denominator;
         return new Fraction(n1 * d2, d1 * n2);
+    }
+    
+    /**
+     * Returns the result of comparing two {@link Fraction}s numerically
+     *
+     * @param other The other fraction to compare to this fraction
+     * @return 0 if this = other, -1 if this < other, and 1 if this > other
+     */
+    public int compareTo(final Fraction other) {
+        final long n1 = numerator, d1 = denominator;
+        final long n2 = other.numerator, d2 = other.denominator;
+        return Long.compare(n1 * d2, n2 * d1);
     }
     
     /**
