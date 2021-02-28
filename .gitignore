@@ -41,6 +41,7 @@ tasks.xml
 uiDesigner.xml
 
 # Project-specific files and directories #
+out/
 lib/
 audits/
 reports/

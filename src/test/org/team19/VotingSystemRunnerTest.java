@@ -98,10 +98,6 @@ final class VotingSystemRunnerTest {
                         VotingSystem.class,
                         getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/")
                     )
-                ),
-                //Testing valid file path but to unreadable file
-                () -> Assertions.assertThrows(InvocationTargetException.class, () ->
-                    getFile.invoke(VotingSystem.class, "test-resources/votingSystemRunnerTest/unreadable.txt")
                 )
             );
         }
