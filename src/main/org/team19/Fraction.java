@@ -105,13 +105,13 @@ public class Fraction implements Comparable<Fraction> {
      * Simplifies this {@link Fraction} by dividing the numerator and denominator by their gcf and also dividing them by -1 if the denominator is
      * negative
      */
-    private void simplify() {
+    protected void simplify() {
         //If the numerator is 0, then we can make the fraction 0/1
         if(numerator == 0) {
             denominator = 1;
             return;
         }
-        
+    
         /*
          * Otherwise, we can divide both the numerator and denominator by their greatest common factor to simplify it
          *
@@ -119,9 +119,9 @@ public class Fraction implements Comparable<Fraction> {
          * where a and b are positive integers
          */
         final int gcdMultiplier = denominator < 0 ? -1 : 1;
-        final long sigNumDenomGcd = gcdMultiplier * gcd(Math.abs(numerator), Math.abs(denominator));
-        numerator /= sigNumDenomGcd;
-        denominator /= sigNumDenomGcd;
+        final long signedNumDenomGcd = gcdMultiplier * gcd(Math.abs(numerator), Math.abs(denominator));
+        numerator /= signedNumDenomGcd;
+        denominator /= signedNumDenomGcd;
     }
     
     /**
