@@ -86,18 +86,24 @@ final class VotingSystemRunnerTest {
                     )
                 ),
                 //Testing invalid file path
-                () -> Assertions.assertThrows(InvocationTargetException.class, () ->
-                    getFile.invoke(
-                        VotingSystem.class,
-                        getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/b.txt")
-                    )
+                () -> Assertions.assertEquals(
+                    FileNotFoundException.class,
+                    Assertions.assertThrows(InvocationTargetException.class, () ->
+                        getFile.invoke(
+                            VotingSystem.class,
+                            getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/b.txt")
+                        )
+                    ).getCause().getClass()
                 ),
                 //Testing valid path but to directory
-                () -> Assertions.assertThrows(InvocationTargetException.class, () ->
-                    getFile.invoke(
-                        VotingSystem.class,
-                        getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/")
-                    )
+                () -> Assertions.assertEquals(
+                    FileNotFoundException.class,
+                    Assertions.assertThrows(InvocationTargetException.class, () ->
+                        getFile.invoke(
+                            VotingSystem.class,
+                            getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/")
+                        )
+                    ).getCause().getClass()
                 )
             );
         }
