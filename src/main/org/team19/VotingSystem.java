@@ -84,24 +84,27 @@ public abstract class VotingSystem {
     public abstract String getShortName();
     
     /**
-     * Returns the number of candidates that the {@link VotingSystem} contains, which should be available after
-     * {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * <p></p>
+     * Returns the number of candidates that the {@link VotingSystem} contains
      *
      * @return The number of candidates that the {@link VotingSystem} contains
      */
     public abstract int getNumCandidates();
     
     /**
-     * Returns the {@link Collection} of {@link Candidate}s for this {@link VotingSystem}, which should be available after
-     * {@link #addCandidates(String, int)} has been executed successfully
+     * Precondition: {@link #addCandidates(String, int)} has been executed successfully
+     * <p></p>
+     * Returns the {@link Collection} of {@link Candidate}s for this {@link VotingSystem}
      *
      * @return The {@link Collection} of {@link Candidate}s for this {@link VotingSystem}
      */
     public abstract Collection<Candidate> getCandidates();
     
     /**
+     * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
+     * <p></p>
      * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after
-     * {@link #importBallotsHeader(String[], int)} has been executed successfully
      *
      * @return The number of ballots that the {@link VotingSystem} contains
      */
@@ -109,10 +112,8 @@ public abstract class VotingSystem {
     
     /**
      * Runs the election for the {@link VotingSystem} and determines the winner
-     *
-     * @param useRandom True if randomization should be used in breaking ties and false if the first item should be chosen in the event of ties
      */
-    public abstract void runElection(final boolean useRandom);
+    public abstract void runElection();
     
     /**
      * Returns the string form of this {@link VotingSystem}

@@ -38,12 +38,12 @@ public final class VotingSystemRunner {
         //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
         else if(args.length == 1) {
             String filePath = args[0];
-        
+    
             //If it starts with ~ plus the file separator, replace it with the home directory
             if(filePath.startsWith("~" + File.separator)) {
                 filePath = System.getProperty("user.home") + filePath.substring(1);
             }
-        
+    
             //Attempt to resolve the path name to a valid file path (system dependent)
             try {
                 filePath = new File(filePath).getCanonicalPath();
@@ -51,7 +51,7 @@ public final class VotingSystemRunner {
             catch(IOException e) {
                 System.err.println("The provided file path could not be resolved: " + e.getMessage());
             }
-        
+    
             //Attempt to retrieve the file at the given file path
             try {
                 System.out.println("Reading from " + filePath);
@@ -67,7 +67,6 @@ public final class VotingSystemRunner {
             System.err.println("CompuVote can have 0 command-line arguments for standard input or 1 for a path to an election CSV file");
             System.exit(2);
         }
-    
     }
     
 }
