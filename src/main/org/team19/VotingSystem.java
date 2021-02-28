@@ -122,21 +122,4 @@ public abstract class VotingSystem {
      */
     @Override
     public abstract String toString();
-    
-    /**
-     * Returns true if the given object is equivalent to this {@link VotingSystem}
-     *
-     * @param other The object to compare to this {@link VotingSystem}
-     * @return True if the given object is equivalent to this {@link VotingSystem}
-     */
-    @Override
-    public abstract boolean equals(final Object other);
-    
-    /**
-     * Returns the hashcode for this {@link VotingSystem}
-     *
-     * @return The hashcode for this {@link VotingSystem}
-     */
-    @Override
-    public abstract int hashCode();
 }
