@@ -159,6 +159,31 @@ final class FractionTest {
         );
     }
     
+    private boolean doubleEqualsEpsilon(final double d1, final double d2, final double epsilon) {
+        return Math.abs(d2 - d1) <= epsilon;
+    }
+    
+    @Test
+    void testGetDoubleValue() {
+        final Fraction twoNinths = new Fraction(2, 9);
+        final Fraction fiveFourths = new Fraction(5, 4);
+        final Fraction negativeSixSevenths = new Fraction(-6, 7);
+        final Fraction negativeSevenSixths = new Fraction(-7, 6);
+        final Fraction one = new Fraction(1, 1);
+        final Fraction zero = new Fraction(0, 1);
+        
+        final double epsilon = 1E-6;
+        
+        Assertions.assertAll(
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(twoNinths.getDoubleValue(), 2.0 / 9, epsilon)),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(fiveFourths.getDoubleValue(), 5.0 / 4, epsilon)),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSixSevenths.getDoubleValue(), -6.0 / 7, epsilon)),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSevenSixths.getDoubleValue(), -7.0 / 6, epsilon)),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(one.getDoubleValue(), 1, epsilon)),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(zero.getDoubleValue(), 0, epsilon))
+        );
+    }
+    
     @Test
     void testAdd() {
         final Fraction twoNinths = new Fraction(2, 9);
