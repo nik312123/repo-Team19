@@ -25,23 +25,16 @@ public final class VotingSystemRunner {
      *
      * @param filePath The provided file path command-line argument
      * @return The full, unique canonical form of the provided file path
+     * @throws IOException Thrown if the provided file path cannot be resolved
      */
-    private static String getFullFilePath(String filePath) {
+    private static String getFullFilePath(String filePath) throws IOException {
         //If it starts with ~ plus the file separator, replace it with the home directory
         if(filePath.startsWith("~" + File.separator)) {
             filePath = System.getProperty("user.home") + filePath.substring(1);
         }
-        
+    
         //Attempt to resolve the path name to a valid file path (system dependent)
-        try {
-            filePath = new File(filePath).getCanonicalPath();
-        }
-        catch(IOException e) {
-            System.err.println("The provided file path could not be resolved: " + e.getMessage());
-            System.exit(2);
-        }
-        
-        return filePath;
+        return new File(filePath).getCanonicalPath();
     }
     
     /**
@@ -49,19 +42,10 @@ public final class VotingSystemRunner {
      *
      * @param canonicalPath The canonical path from which to retrieve an input stream
      * @return The {@link FileInputStream} for the file at the provided canonical file path
+     * @throws FileNotFoundException Thrown if a file cannot be found or opened from the provided file path
      */
-    private static FileInputStream getFile(final String canonicalPath) {
-        FileInputStream input = null;
-        
-        //Attempt to retrieve the file at the given file path
-        try {
-            input = new FileInputStream(canonicalPath);
-        }
-        catch(FileNotFoundException e) {
-            System.err.println("The provided file could not be opened: " + e.getMessage());
-            System.exit(2);
-        }
-        return input;
+    private static FileInputStream getFile(final String canonicalPath) throws FileNotFoundException {
+        return new FileInputStream(canonicalPath);
     }
     
     /**
@@ -81,9 +65,19 @@ public final class VotingSystemRunner {
         }
         //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
         else if(args.length == 1) {
-            final String fullFilePath = getFullFilePath(args[0]);
-            System.out.println("Reading from " + fullFilePath);
-            input = getFile(fullFilePath);
+            try {
+                final String fullFilePath = getFullFilePath(args[0]);
+                System.out.println("Reading from " + fullFilePath);
+                input = getFile(fullFilePath);
+            }
+            catch(FileNotFoundException e) {
+                System.err.println("The provided file could not be found or opened: " + e.getMessage());
+                System.exit(2);
+            }
+            catch(IOException e) {
+                System.err.println("The provided file's path could not be resolved: " + e.getMessage());
+                System.exit(2);
+            }
         }
         //If there are more than one command-line arguments given, then print an error and exit with a nonzero status
         else {

@@ -174,6 +174,7 @@ final class FractionTest {
         
         final double epsilon = 1E-6;
         
+        //Testing the double values of the above fraction
         Assertions.assertAll(
             () -> Assertions.assertTrue(doubleEqualsEpsilon(twoNinths.getDoubleValue(), 2.0 / 9, epsilon)),
             () -> Assertions.assertTrue(doubleEqualsEpsilon(fiveFourths.getDoubleValue(), 5.0 / 4, epsilon)),
