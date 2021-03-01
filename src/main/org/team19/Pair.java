@@ -18,7 +18,7 @@ public final class Pair<K, V> {
     /**
      * The value or second element of the {@link Pair}
      */
-    private final V value;
+    private V value;
     
     /**
      * Initializes a {@link Pair} with the given key-value pair or pair of elements
@@ -65,6 +65,24 @@ public final class Pair<K, V> {
      */
     public V getSecond() {
         return getValue();
+    }
+    
+    /**
+     * Sets the value or second element of this {@link Pair} to the provided value
+     *
+     * @param value The value to set for this {@link Pair}
+     */
+    public void setValue(final V value) {
+        this.value = value;
+    }
+    
+    /**
+     * Sets the value or second element of this {@link Pair} to the provided value
+     *
+     * @param value The value to set for this {@link Pair}
+     */
+    public void setSecond(final V value) {
+        setValue(value);
     }
     
     /**
