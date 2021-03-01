@@ -32,12 +32,12 @@ public final class TableFormatter {
      */
     public enum Alignment {
         /**
-         * Represents the left-alignment for a column
+         * Represents the left alignment for a column
          */
         LEFT,
-        
+    
         /**
-         * Represents the left-alignment for a column
+         * Represents the right alignment for a column
          */
         RIGHT
     }
