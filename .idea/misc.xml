@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/doc" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/docs" />
     <option name="OPTION_SCOPE" value="private" />
     <option name="OTHER_OPTIONS" value="-notimestamp -link https://docs.oracle.com/en/java/javase/11/docs/api/" />
   </component>
