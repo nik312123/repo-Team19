@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,13 +87,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -164,45 +164,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </li>
 </ul>
 </section>
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="memberSummary">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#horizontalDivider">horizontalDivider</a></span></code></th>
-<td class="colLast">
-<div class="block">The string form of the character to use where two rows intersect</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intersection">intersection</a></span></code></th>
-<td class="colLast">
-<div class="block">The string form of the character to use in table corners or where both rows and columns intersect</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verticalDivider">verticalDivider</a></span></code></th>
-<td class="colLast">
-<div class="block">The string form of the character to use where two columns intersect</div>
-</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -260,51 +221,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected int[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColumnLengths(java.util.List,int)">getColumnLengths</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;strRowTable,
-                int&nbsp;numCols)</code></th>
-<td class="colLast">
-<div class="block">Given the string form of the table, returns the maximum lengths of the strings in each column</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHorizontalDivider(int%5B%5D,int,java.lang.String)">getHorizontalDivider</a></span>&#8203;(int[]&nbsp;columnLengths,
-                    int&nbsp;numCols,
-                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;terminalCharStr)</code></th>
-<td class="colLast">
-<div class="block">Returns a horizontal separator for the table</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTableFormat(java.util.List,int%5B%5D,int)">getTableFormat</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="TableFormatter.Alignment.html" title="enum in org.team19">TableFormatter.Alignment</a>&gt;&nbsp;alignments,
-              int[]&nbsp;columnLengths,
-              int&nbsp;numCols)</code></th>
-<td class="colLast">
-<div class="block">Returns the formatting string for a row of data in the table</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the hashcode for this <a href="TableFormatter.html" title="class in org.team19"><code>TableFormatter</code></a></div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#objColTableToStrRowTable(java.util.List,java.util.List,int,int)">objColTableToStrRowTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;headers,
-                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt;&nbsp;colTable,
-                        int&nbsp;numRows,
-                        int&nbsp;numCols)</code></th>
-<td class="colLast">
-<div class="block">Given a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> of string column headers and a table of objects with each <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> in the table representing a column, returns a
- table that includes the string column headers and the string forms of the aforementioned objects; however, each list composing the returned
- table represents a rows instead of a column</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
@@ -317,7 +240,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -328,46 +251,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a id="intersection">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>intersection</h4>
-<pre>protected final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> intersection</pre>
-<div class="block">The string form of the character to use in table corners or where both rows and columns intersect</div>
-</li>
-</ul>
-<a id="horizontalDivider">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>horizontalDivider</h4>
-<pre>protected final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> horizontalDivider</pre>
-<div class="block">The string form of the character to use where two rows intersect</div>
-</li>
-</ul>
-<a id="verticalDivider">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>verticalDivider</h4>
-<pre>protected final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> verticalDivider</pre>
-<div class="block">The string form of the character to use where two columns intersect</div>
-</li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -403,88 +286,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="objColTableToStrRowTable(java.util.List,java.util.List,int,int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>objColTableToStrRowTable</h4>
-<pre class="methodSignature">protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;objColTableToStrRowTable&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;headers,
-                                                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt;&nbsp;colTable,
-                                                      int&nbsp;numRows,
-                                                      int&nbsp;numCols)</pre>
-<div class="block">Given a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> of string column headers and a table of objects with each <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> in the table representing a column, returns a
- table that includes the string column headers and the string forms of the aforementioned objects; however, each list composing the returned
- table represents a rows instead of a column</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>headers</code> - The list of column headers</dd>
-<dd><code>colTable</code> - The headerless table of objects with each list representing a column</dd>
-<dd><code>numRows</code> - The number of rows in the table, including the headers as a row</dd>
-<dd><code>numCols</code> - The number of columns in the table</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The provided table but all objects are in string form, the column headers are added, and the table is returned as a list of rows</dd>
-</dl>
-</li>
-</ul>
-<a id="getColumnLengths(java.util.List,int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getColumnLengths</h4>
-<pre class="methodSignature">protected&nbsp;int[]&nbsp;getColumnLengths&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;strRowTable,
-                                 int&nbsp;numCols)</pre>
-<div class="block">Given the string form of the table, returns the maximum lengths of the strings in each column</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>strRowTable</code> - The string row list representation of the object column list table</dd>
-<dd><code>numCols</code> - The number of columns the table contains</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The maximum lengths of the strings in each column of the given table</dd>
-</dl>
-</li>
-</ul>
-<a id="getTableFormat(java.util.List,int[],int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTableFormat</h4>
-<pre class="methodSignature">protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getTableFormat&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="TableFormatter.Alignment.html" title="enum in org.team19">TableFormatter.Alignment</a>&gt;&nbsp;alignments,
-                                int[]&nbsp;columnLengths,
-                                int&nbsp;numCols)</pre>
-<div class="block">Returns the formatting string for a row of data in the table</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>alignments</code> - The list of alignments corresponding to each column</dd>
-<dd><code>columnLengths</code> - The array consisting of the lengths of the longest strings in each column</dd>
-<dd><code>numCols</code> - The number of columns in the table</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The formatting string for a row of data in the table</dd>
-</dl>
-</li>
-</ul>
-<a id="getHorizontalDivider(int[],int,java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getHorizontalDivider</h4>
-<pre class="methodSignature">protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getHorizontalDivider&#8203;(int[]&nbsp;columnLengths,
-                                      int&nbsp;numCols,
-                                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;terminalCharStr)</pre>
-<div class="block">Returns a horizontal separator for the table</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>columnLengths</code> - The array consisting of the lengths of the longest strings in each column</dd>
-<dd><code>numCols</code> - The number of columns in the table</dd>
-<dd><code>terminalCharStr</code> - The string form of the character to use on the beginning and end of the separator</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A horizontal divider for the table</dd>
-</dl>
-</li>
-</ul>
 <a id="formatAsTable(java.util.List,java.util.List,java.util.List)">
 <!--   -->
 </a>
@@ -616,13 +417,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
