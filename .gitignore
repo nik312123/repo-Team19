@@ -41,4 +41,11 @@ tasks.xml
 uiDesigner.xml
 
 # Project-specific files and directories #
+out/
 lib/
+audits/
+reports/
+
+# Ignore csv files placed in root directory for testing purposes
+/*.txt
+/*.csv
