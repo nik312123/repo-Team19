@@ -9,3 +9,6 @@
 
 # CheckStyle configuration
 checkstyle-idea.xml
+
+# CSV Plugin configuration
+csv-plugin.xml
