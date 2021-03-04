@@ -3,8 +3,6 @@ package org.team19;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Supplier;
-
 final class PairTest {
     
     private PairTest() {}
@@ -19,7 +17,7 @@ final class PairTest {
         final Pair<String, String> nullDemocrat = new Pair<>(null, "Democrat");
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
         
-        //Testing that keys are equivalennt to what was put into the constructor for the key
+        //Testing that keys are equivalent to what was put into the constructor for the key
         Assertions.assertAll(
             () -> Assertions.assertEquals(2, twoFour.getKey()),
             () -> Assertions.assertEquals('c', cFalse.getKey()),

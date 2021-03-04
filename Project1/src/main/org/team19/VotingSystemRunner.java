@@ -3,8 +3,10 @@ package org.team19;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 
 /**
  * Runs the election for a {@link VotingSystem} given a path to a file, which can be absolute or relative to the current working directory
@@ -21,7 +23,7 @@ public final class VotingSystemRunner {
     private VotingSystemRunner() {}
     
     /**
-     * Returns the full, unique canonical form of the provided file path, exiting with a nonzero status if it cannot be resolved
+     * Returns the full, unique canonical form of the provided file path
      *
      * @param filePath The provided file path command-line argument
      * @return The full, unique canonical form of the provided file path
@@ -38,14 +40,51 @@ public final class VotingSystemRunner {
     }
     
     /**
-     * Retrieves the {@link FileInputStream} for the file at the provided canonical file path, exiting with a nonzero status if it cannot be opened
+     * Retrieves the {@link FileInputStream} for the file at the provided canonical file path
      *
      * @param canonicalPath The canonical path from which to retrieve an input stream
      * @return The {@link FileInputStream} for the file at the provided canonical file path
      * @throws FileNotFoundException Thrown if a file cannot be found or opened from the provided file path
      */
-    private static FileInputStream getFile(final String canonicalPath) throws FileNotFoundException {
+    private static FileInputStream getFileInputStream(final String canonicalPath) throws FileNotFoundException {
         return new FileInputStream(canonicalPath);
+    }
+    
+    /**
+     * Returns a timestamped file name using the given prefix and timestamp
+     * variable and the other items are replaced with the temporal information from currentTimeStamp
+     *
+     * @param prefix           The prefix for the timestamped file name
+     * @param currentTimestamp The timestamp to use for the file name
+     * @return A file name in the form "[prefix]_[year]-[month]-[day]_[hours]-[minutes]-[seconds].txt" where [prefix] is replaced with the provided
+     * variable and the other items are replaced with the temporal information from currentTimeStamp
+     */
+    private static String generateTimestampedFileName(final String prefix, final LocalDateTime currentTimestamp) {
+        return String.format(
+            "%s_%d-%02d-%02d_%02d-%02d-%02d.txt",
+            prefix,
+            currentTimestamp.getYear(),
+            currentTimestamp.getMonth().getValue(),
+            currentTimestamp.getDayOfMonth(),
+            currentTimestamp.getHour(),
+            currentTimestamp.getMinute(),
+            currentTimestamp.getSecond()
+        );
+    }
+    
+    /**
+     * Retrieves the {@link FileOutputStream} for the file at the provided file path, creating parent directories as needed
+     *
+     * @param path The path at which the file should be written
+     * @return The {@link FileOutputStream} for the file at the provided file path
+     * @throws FileNotFoundException Thrown if the file cannot be created or written to at the provided file path
+     */
+    private static FileOutputStream getFileOutputStream(final String path) throws FileNotFoundException {
+        final File outputFile = new File(path);
+        
+        //noinspection ResultOfMethodCallIgnored
+        outputFile.getParentFile().mkdirs();
+        return new FileOutputStream(outputFile);
     }
     
     /**
@@ -68,7 +107,7 @@ public final class VotingSystemRunner {
             try {
                 final String fullFilePath = getFullFilePath(args[0]);
                 System.out.println("Reading from " + fullFilePath);
-                input = getFile(fullFilePath);
+                input = getFileInputStream(fullFilePath);
             }
             catch(FileNotFoundException e) {
                 System.err.println("The provided file could not be found or opened: " + e.getMessage());
@@ -82,6 +121,29 @@ public final class VotingSystemRunner {
         //If there are more than one command-line arguments given, then print an error and exit with a nonzero status
         else {
             System.err.println("CompuVote can have 0 command-line arguments for standard input or 1 for a path to an election CSV file");
+            System.exit(2);
+        }
+        
+        //Get the current date/time
+        final LocalDateTime currentTimestamp = LocalDateTime.now();
+        
+        //Retrieves the output streams for the audit and report files
+        final FileOutputStream auditOutput;
+        final FileOutputStream reportOutput;
+        
+        try {
+            auditOutput = getFileOutputStream("audits" + File.separator + generateTimestampedFileName("audit", currentTimestamp));
+        }
+        catch(FileNotFoundException e) {
+            System.err.println("The audit file could not be created");
+            System.exit(2);
+        }
+        
+        try {
+            reportOutput = getFileOutputStream("reports" + File.separator + generateTimestampedFileName("report", currentTimestamp));
+        }
+        catch(FileNotFoundException e) {
+            System.err.println("The report file could not be created");
             System.exit(2);
         }
     }
