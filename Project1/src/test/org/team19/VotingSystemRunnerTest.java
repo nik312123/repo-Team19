@@ -221,6 +221,7 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to retrieve the getFile method from VotingSystemRunner");
         }
         finally {
+            //Remove the created test files after the test is completed to reset to the initial state of files
             //noinspection ResultOfMethodCallIgnored
             new File(String.format("test-resources%svotingSystemRunnerTest%srandomDirectory%sb.txt", File.separator, File.separator,
                 File.separator)).delete();

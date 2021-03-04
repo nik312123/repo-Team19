@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Runs the election for a {@link VotingSystem} given a path to a file, which can be absolute or relative to the current working directory
@@ -29,12 +31,12 @@ public final class VotingSystemRunner {
      * @return The full, unique canonical form of the provided file path
      * @throws IOException Thrown if the provided file path cannot be resolved
      */
-    private static String getFullFilePath(String filePath) throws IOException {
+    private static String getFullFilePath(@SuppressWarnings("CheckStyle") String filePath) throws IOException {
         //If it starts with ~ plus the file separator, replace it with the home directory
         if(filePath.startsWith("~" + File.separator)) {
             filePath = System.getProperty("user.home") + filePath.substring(1);
         }
-    
+        
         //Attempt to resolve the path name to a valid file path (system dependent)
         return new File(filePath).getCanonicalPath();
     }
@@ -95,7 +97,7 @@ public final class VotingSystemRunner {
      */
     public static void main(final String[] args) {
         //The input stream from which to read input
-        final InputStream input;
+        InputStream input = null;
         
         //If there are no arguments provided, then assume standard input is being used
         if(args.length == 0) {
@@ -123,14 +125,15 @@ public final class VotingSystemRunner {
             System.err.println("CompuVote can have 0 command-line arguments for standard input or 1 for a path to an election CSV file");
             System.exit(2);
         }
-        
+    
         //Get the current date/time
         final LocalDateTime currentTimestamp = LocalDateTime.now();
-        
+    
+        //Streams for the audit and report files
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+    
         //Retrieves the output streams for the audit and report files
-        final FileOutputStream auditOutput;
-        final FileOutputStream reportOutput;
-        
         try {
             auditOutput = getFileOutputStream("audits" + File.separator + generateTimestampedFileName("audit", currentTimestamp));
         }
@@ -138,13 +141,34 @@ public final class VotingSystemRunner {
             System.err.println("The audit file could not be created");
             System.exit(2);
         }
-        
         try {
             reportOutput = getFileOutputStream("reports" + File.separator + generateTimestampedFileName("report", currentTimestamp));
         }
         catch(FileNotFoundException e) {
             System.err.println("The report file could not be created");
             System.exit(2);
+        }
+    
+        //Mapping of header strings to corresponding VotingSystem classes
+        final Map<String, Class<? extends VotingSystem>> headerSystemMap = Map.of(
+            "IR", InstantRunoffSystem.class,
+            "OPL", OpenPartyListSystem.class
+        );
+    
+        //Attempt to retrieve a voting system from parsing and run its election
+        try {
+            final VotingSystem votingSystem = VotingStreamParser.parse(input, auditOutput, reportOutput, headerSystemMap);
+            if(votingSystem == null) {
+                System.err.println("Unable to retrieve election system from parsing file");
+                System.exit(2);
+            }
+            votingSystem.runElection();
+        }
+        //If there is an issue in parsing the election file
+        catch(ParseException e) {
+            System.err.println(e.getMessage());
+            final int dataFormattingExitCode = 65;
+            System.exit(dataFormattingExitCode);
         }
     }
     
