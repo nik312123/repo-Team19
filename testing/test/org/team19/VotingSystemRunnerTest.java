@@ -76,13 +76,13 @@ final class VotingSystemRunnerTest {
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFile.invoke(
                         VotingSystem.class,
-                        getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/test.txt")
+                        getFullFilePath.invoke(VotingSystemRunner.class, "testing/test-resources/votingSystemRunnerTest/test.txt")
                     )
                 ),
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFile.invoke(
                         VotingSystem.class,
-                        getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/randomDirectory/a.txt")
+                        getFullFilePath.invoke(VotingSystemRunner.class, "testing/test-resources/votingSystemRunnerTest/randomDirectory/a.txt")
                     )
                 ),
                 //Testing invalid file path
@@ -91,7 +91,7 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFile.invoke(
                             VotingSystem.class,
-                            getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/b.txt")
+                            getFullFilePath.invoke(VotingSystemRunner.class, "testing/test-resources/votingSystemRunnerTest/b.txt")
                         )
                     ).getCause().getClass()
                 ),
@@ -101,7 +101,7 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFile.invoke(
                             VotingSystem.class,
-                            getFullFilePath.invoke(VotingSystemRunner.class, "test-resources/votingSystemRunnerTest/")
+                            getFullFilePath.invoke(VotingSystemRunner.class, "testing/test-resources/votingSystemRunnerTest/")
                         )
                     ).getCause().getClass()
                 )
