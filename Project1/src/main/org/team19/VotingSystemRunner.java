@@ -144,14 +144,14 @@ public final class VotingSystemRunner {
             System.err.println("CompuVote can have 0 command-line arguments for standard input or 1 for a path to an election CSV file");
             System.exit(2);
         }
-    
+        
         //Get the current date/time
         final LocalDateTime currentTimestamp = LocalDateTime.now();
-    
+        
         //Streams for the audit and report files
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
-    
+        
         //Retrieves the output streams for the audit and report files
         try {
             auditOutput = getFileOutputStream("audits" + File.separator + generateTimestampedFileName("audit", currentTimestamp));
@@ -167,13 +167,13 @@ public final class VotingSystemRunner {
             System.err.println("The report file could not be created");
             System.exit(2);
         }
-    
+        
         //Mapping of header strings to corresponding VotingSystem classes
         final Map<String, Class<? extends VotingSystem>> headerSystemMap = Map.of(
             "IR", InstantRunoffSystem.class,
             "OPL", OpenPartyListSystem.class
         );
-    
+        
         //Attempt to retrieve a voting system from parsing and run its election
         try {
             final VotingSystem votingSystem = VotingStreamParser.parse(input, auditOutput, reportOutput, headerSystemMap);
