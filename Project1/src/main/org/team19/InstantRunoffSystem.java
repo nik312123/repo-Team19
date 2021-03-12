@@ -1,10 +1,16 @@
 package org.team19;
 
+import com.sun.jdi.Value;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -150,25 +156,46 @@ public class InstantRunoffSystem extends VotingSystem {
         }
     }
     
+    protected String printFirstChoiceBallotsAudit(TableFormatter t, Map m){
+        //objColTableToStrRowTable(final List<String> headers, final List<List<Object>> colTable, final int numRows,
+        //final int numCols)
+        List<Candidate> list = new ArrayList<Candidate>(m.values());
+        ArrayList<Integer> intList = new ArrayList<Integer>();
+        for(Candidate c : list){
+            ArrayDeque<Ballot> ballots = (ArrayDeque<Ballot>)(m.get(c));
+            intList.add(ballots.size());
+        }
+        String toStream = tableFormatter.formatAsTable(
+            Arrays.asList("Candidate", "Ballots"),
+            Arrays.asList(list, intList),
+            Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
+        );
+        return toStream;
+    }
+    
     @Override
     public void runElection() {
-        //auditOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap)
+        try (PrintWriter p = new PrintWriter(auditOutput)) {
+            p.println(printFirstChoiceBallotsAudit(tableFormatter, candidateBallotsMap));
+        }
+        //auditOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap);
         //reportOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap)
         //summaryOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap)
-        while(true){
+        while(true) {
             int candidateBallotsMapLen = candidateBallotsMap.size();
             //if candidateBallotsMapLen == 1:
-                //Map.Entry<Candidate, ArrayDeque<Ballot>>  = candidateBallotsMap.entrySet().iterator().next();
-                //auditOutput.displayWinnerInfo()
-            if(candidateBallotsMapLen == 2){
+            //Map.Entry<Candidate, ArrayDeque<Ballot>>  = candidateBallotsMap.entrySet().iterator().next();
+            //auditOutput.displayWinnerInfo()
+            if(candidateBallotsMapLen == 2) {
                 Candidate winner;
                 boolean randomSelectionRequired = false;
                 Map.Entry<Candidate, ArrayDeque<Ballot>>[] candidateBallotsArr = candidateBallotsMap.entrySet().toArray(new Map.Entry[0]);
-                int firstSecondCandidateComparison = Integer.compare(candidateBallotsArr[0].getValue().size(), candidateBallotsArr[1].getValue().size());
-                if (firstSecondCandidateComparison > 0){
+                int firstSecondCandidateComparison =
+                    Integer.compare(candidateBallotsArr[0].getValue().size(), candidateBallotsArr[1].getValue().size());
+                if(firstSecondCandidateComparison > 0) {
                     winner = candidateBallotsArr[0].getKey();
                 }
-                else if (firstSecondCandidateComparison < 0){
+                else if(firstSecondCandidateComparison < 0) {
                     winner = candidateBallotsArr[1].getKey();
                 }
                 else {
@@ -181,18 +208,19 @@ public class InstantRunoffSystem extends VotingSystem {
             else {
                 Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> lowestHighestCandidates = getLowestHighestCandidates();
                 Pair highestCandidateBallots = lowestHighestCandidates.getSecond();
-                if(highestCandidateBallots.getKey() > numBallots / 2){
+                if(highestCandidateBallots.getKey() > numBallots / 2) {
                     Candidate winner = highestCandidateBallots.getValue();
                     //auditOutput.displayWinnerInfo(winner, false, numBallots, tableFormatter, candidateBallotsMap);
-                //}
-                Pair lowestCandidateBallots = lowestHighestCandidates.getFirst();
-                int rando = rand.nextInt(lowestCandidateBallots.getValue().size());
-                Candidate lowest = lowestCandidateBallots.getValue().get(rando);
-                //auditOutput.printCandidateToEliminate(lowest)
-                eliminateLowest(lowest);
-                //auditOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
-                //reportOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
-                //summaryOutput..printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
+                    //}
+                    Pair lowestCandidateBallots = lowestHighestCandidates.getFirst();
+                    int rando = rand.nextInt(lowestCandidateBallots.getValue().size());
+                    Candidate lowest = lowestCandidateBallots.getValue().get(rando);
+                    //auditOutput.printCandidateToEliminate(lowest)
+                    eliminateLowest(lowest);
+                    //auditOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
+                    //reportOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
+                    //summaryOutput..printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
+                }
             }
         }
     }

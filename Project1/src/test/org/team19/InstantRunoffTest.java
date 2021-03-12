@@ -182,7 +182,7 @@ final class InstantRunoffTest {
          * Pair(Pair(1, lowestCandidates), Pair(3, Candidate 1))
          */
         
-        /* Test 3: All Candidates have the same number of ballots.
+        /* Test 4: All Candidates have the same number of ballots.
          *
          * Candidate 1:
          *  Ballot 1:
@@ -409,7 +409,7 @@ final class InstantRunoffTest {
          * or Candidate 2 will win.
          */
         
-        /* Test 3: 3 candidates exist and a majority is found
+        /* Test 3: 3 or more candidates exist and a majority is found
          * candidates = [Candidate 1, Candidate 2, Candidate 3]
          * Candidate 1:
          *  Ballot 1:
