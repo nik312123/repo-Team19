@@ -66,7 +66,7 @@ public final class TableFormatter {
      * @param numCols  The number of columns in the table
      * @return The provided table but all objects are in string form, the column headers are added, and the table is returned as a list of rows
      */
-    protected List<List<String>> objColTableToStrRowTable(final List<String> headers, final List<List<Object>> colTable, final int numRows,
+    protected List<List<String>> objColTableToStrRowTable(final List<String> headers, final List<List<?>> colTable, final int numRows,
         final int numCols) {
         //Creates the table of strings rows
         final List<List<String>> strRowTable = IntStream.range(0, numRows)
@@ -79,7 +79,7 @@ public final class TableFormatter {
         }
         
         //Adds the object columns to the table as string rows
-        for(final List<Object> col : colTable) {
+        for(final List<?> col : colTable) {
             for(int rowIndex = 1; rowIndex < numRows; rowIndex++) {
                 strRowTable.get(rowIndex).add(col.get(rowIndex - 1).toString());
             }
@@ -175,7 +175,7 @@ public final class TableFormatter {
      * @throws IllegalArgumentException Thrown if the number of columns in provided either does not match the length of the column headers or the
      *                                  length of the alignments
      */
-    public String formatAsTable(final List<String> headers, final List<List<Object>> colTableData, final List<Alignment> alignments)
+    public String formatAsTable(final List<String> headers, final List<List<?>> colTableData, final List<Alignment> alignments)
         throws NullPointerException, IllegalArgumentException {
         //Throw a NullPointerException if any of the lists provided are null
         Objects.requireNonNull(headers);

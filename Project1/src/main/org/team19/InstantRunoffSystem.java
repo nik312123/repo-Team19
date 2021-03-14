@@ -48,8 +48,8 @@ public class InstantRunoffSystem extends VotingSystem {
     protected int numBallots;
     protected Candidate[] candidates;
     protected Map<Candidate, ArrayDeque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
-    protected OutputStream auditOutput;
-    protected OutputStream reportOutput;
+    protected PrintWriter auditWriter;
+    protected PrintWriter reportWriter;
     protected TableFormatter tableFormatter;
     protected static final Random rand = new SecureRandom();
     
@@ -120,77 +120,98 @@ public class InstantRunoffSystem extends VotingSystem {
         return 0;
     }
     
-    protected Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> getLowestHighestCandidates(){
+    protected Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> getLowestHighestCandidates() {
         int highestBallots = -1;
-        Candidate highestCandidate = new Candidate("null", "null");
+        Candidate highestCandidate;
+        highestCandidate = null;
         int lowestBallots = Integer.MAX_VALUE;
-        ArrayList<Candidate> lowestCandidates = new ArrayList<>();
+        final ArrayList<Candidate> lowestCandidates = new ArrayList<>();
         for(int i = 0; i < candidates.length; i++){
-            int numBallots = candidateBallotsMap.get(i).size();
-            if(numBallots > highestBallots){
-                highestBallots = numBallots;
+            final int numCurrBallots = candidateBallotsMap.get(i).size();
+            if(numCurrBallots > highestBallots){
+                highestBallots = numCurrBallots;
                 highestCandidate = candidates[i];
             }
-            if(numBallots < lowestBallots){
-                lowestBallots = numBallots;
+            if(numCurrBallots < lowestBallots){
+                lowestBallots = numCurrBallots;
                 lowestCandidates.clear();
                 lowestCandidates.add(candidates[i]);
             }
-            else if(numBallots == lowestBallots){
+            else if(numCurrBallots == lowestBallots){
                 lowestCandidates.add(candidates[i]);
             }
         }
-        Pair lowestPair = new Pair(lowestBallots, lowestCandidates);
-        Pair highestPair = new Pair(highestBallots, highestCandidate);
-        return new Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>>(lowestPair, highestPair);
+        final Pair<Integer, List<Candidate>> lowestPair = new Pair<>(lowestBallots, lowestCandidates);
+        final Pair <Integer, Candidate> highestPair = new Pair<>(highestBallots, highestCandidate);
+        return new Pair<>(lowestPair, highestPair);
     }
     
-    protected void eliminateLowest(Candidate lowest){
-        ArrayDeque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
-        for(int i = 0; i < ballotsToRedistribute.size(); i++){
-            Candidate nextCandidate = ballotsToRedistribute.getNextCandidate();
-            //if(nextCandidate != UNDEFINED){
-                //candidateBallotsMap.get(nextCandidate).addBallot();
-            //}
-            //auditOutput.printBallotRedistribution(ballot, nextCandidate)
+    protected void eliminateLowest(final Candidate lowest){
+        final ArrayDeque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
+        for(final Ballot ballot : ballotsToRedistribute){
+            Candidate nextCandidate = ballot.getNextCandidate();
+            while(nextCandidate != null){
+                if()
+                candidateBallotsMap.get(nextCandidate).add(ballot);
+                nextCandidate = ballot.getNextCandidate();
+                auditWriter.println(ballot);
+                auditWriter.println(" has their next choice as candidate ");
+                auditWriter.println(nextCandidate);
+                auditWriter.println(". The ballot will be redistributed to ");
+                auditWriter.println(nextCandidate);
+                auditWriter.println(".");
+            }
+            auditWriter.println(ballot);
+            auditWriter.println(" associated with candidate ");
+            auditWriter.println(lowest);
+            auditWriter.println(" has their next choice as candidate ");
+            auditWriter.println(nextCandidate);
+            auditWriter.println(". But ");
+            auditWriter.println(nextCandidate);
+            auditWriter.println(" was already eliminated.  Trying the next choice.");
+    
+            auditWriter.println(ballot);
+            auditWriter.println(" did not have any other candidates ranked.  As such, their ballot will not be distributed.");
         }
     }
     
-    protected String printFirstChoiceBallotsAudit(TableFormatter t, Map m){
-        //objColTableToStrRowTable(final List<String> headers, final List<List<Object>> colTable, final int numRows,
-        //final int numCols)
-        List<Candidate> list = new ArrayList<Candidate>(m.values());
-        ArrayList<Integer> intList = new ArrayList<Integer>();
-        for(Candidate c : list){
-            ArrayDeque<Ballot> ballots = (ArrayDeque<Ballot>)(m.get(c));
+    private String getFirstChoiceBallots(){
+        final List<Candidate> list = new ArrayList<>(candidateBallotsMap.keySet());
+        final ArrayList<Integer> intList = new ArrayList<>();
+        for(final Candidate candidate : list){
+            final ArrayDeque<Ballot> ballots = candidateBallotsMap.get(candidate);
             intList.add(ballots.size());
         }
-        String toStream = tableFormatter.formatAsTable(
+        return tableFormatter.formatAsTable(
             Arrays.asList("Candidate", "Ballots"),
             Arrays.asList(list, intList),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
         );
-        return toStream;
     }
     
     @Override
     public void runElection() {
-        try (PrintWriter p = new PrintWriter(auditOutput)) {
-            p.println(printFirstChoiceBallotsAudit(tableFormatter, candidateBallotsMap));
-        }
-        //auditOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap);
-        //reportOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap)
-        //summaryOutput.printFirstChoiceBallots(tableFormatter, candidateBallotsMap)
+        final String firstChoiceBallots;
+        firstChoiceBallots = getFirstChoiceBallots();
+        auditWriter.println(firstChoiceBallots);
+        reportWriter.println(firstChoiceBallots);
+        System.out.println(firstChoiceBallots);
         while(true) {
-            int candidateBallotsMapLen = candidateBallotsMap.size();
-            //if candidateBallotsMapLen == 1:
-            //Map.Entry<Candidate, ArrayDeque<Ballot>>  = candidateBallotsMap.entrySet().iterator().next();
-            //auditOutput.displayWinnerInfo()
+            final int candidateBallotsMapLen = candidateBallotsMap.size();
+            if(candidateBallotsMapLen == 1){
+                final Map.Entry<Candidate, ArrayDeque<Ballot>> candidateBallotsWinner = candidateBallotsMap.entrySet().iterator().next();
+                auditWriter.print(candidateBallotsWinner.getKey());
+                auditWriter.print(" has received ");
+                auditWriter.print(candidateBallotsWinner.getValue());
+                auditWriter.print("/");
+                auditWriter.print(numBallots);
+                auditWriter.println("votes giving them a majority.  They have therefore won");
+            }
             if(candidateBallotsMapLen == 2) {
-                Candidate winner;
-                boolean randomSelectionRequired = false;
-                Map.Entry<Candidate, ArrayDeque<Ballot>>[] candidateBallotsArr = candidateBallotsMap.entrySet().toArray(new Map.Entry[0]);
-                int firstSecondCandidateComparison =
+                final Candidate winner;
+                final int randomCandidate = rand.nextInt(2);
+                final Map.Entry<Candidate, ArrayDeque<Ballot>>[] candidateBallotsArr = candidateBallotsMap.entrySet().toArray(new Map.Entry[0]);
+                final int firstSecondCandidateComparison =
                     Integer.compare(candidateBallotsArr[0].getValue().size(), candidateBallotsArr[1].getValue().size());
                 if(firstSecondCandidateComparison > 0) {
                     winner = candidateBallotsArr[0].getKey();
@@ -199,28 +220,39 @@ public class InstantRunoffSystem extends VotingSystem {
                     winner = candidateBallotsArr[1].getKey();
                 }
                 else {
-                    randomSelectionRequired = true;
-                    int randomCandidate = rand.nextInt(2);
                     winner = candidateBallotsArr[randomCandidate].getKey();
-                    //auditOutput.displayWinnerInfo(winner, randomSelectionRequired, numBallots, tableFormatter, candidateBallotsMap
                 }
+                auditWriter.print(winner);
+                auditWriter.print(" has received ");
+                auditWriter.print(candidateBallotsArr[randomCandidate].getValue());
+                auditWriter.print("/");
+                auditWriter.print(numBallots);
+                auditWriter.println("votes giving them a majority.  They have therefore won");
             }
             else {
-                Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> lowestHighestCandidates = getLowestHighestCandidates();
-                Pair highestCandidateBallots = lowestHighestCandidates.getSecond();
+                final Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> lowestHighestCandidates = getLowestHighestCandidates();
+                final Pair<Integer, Candidate> highestCandidateBallots = lowestHighestCandidates.getSecond();
                 if(highestCandidateBallots.getKey() > numBallots / 2) {
-                    Candidate winner = highestCandidateBallots.getValue();
-                    //auditOutput.displayWinnerInfo(winner, false, numBallots, tableFormatter, candidateBallotsMap);
-                    //}
-                    Pair lowestCandidateBallots = lowestHighestCandidates.getFirst();
-                    int rando = rand.nextInt(lowestCandidateBallots.getValue().size());
-                    Candidate lowest = lowestCandidateBallots.getValue().get(rando);
-                    //auditOutput.printCandidateToEliminate(lowest)
-                    eliminateLowest(lowest);
-                    //auditOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
-                    //reportOutput.printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
-                    //summaryOutput..printCandidatesAfterElimination(lowest, tableFormatter, candidateBallotsMap)
+                    final Candidate winner = highestCandidateBallots.getValue();
+                    auditWriter.print(winner);
+                    auditWriter.print(" has received ");
+                    auditWriter.print(highestCandidateBallots.getValue());
+                    auditWriter.print("/");
+                    auditWriter.print(numBallots);
+                    auditWriter.println("votes giving them a majority.  They have therefore won");
                 }
+                final Pair<Integer, List<Candidate>> lowestCandidateBallots = lowestHighestCandidates.getFirst();
+                final int rando = rand.nextInt(lowestCandidateBallots.getValue().size());
+                final Candidate lowest = lowestCandidateBallots.getValue().get(rando);
+                auditWriter.print("No candidate has a majority.  Eliminating the candidate with the lowest ballots: ");
+                auditWriter.print(lowest);
+                auditWriter.print(".");
+                eliminateLowest(lowest);
+                final String ballotsAfterElimination;
+                ballotsAfterElimination = getFirstChoiceBallots();
+                auditWriter.println(ballotsAfterElimination);
+                reportWriter.println(ballotsAfterElimination);
+                System.out.println(ballotsAfterElimination);
             }
         }
     }
