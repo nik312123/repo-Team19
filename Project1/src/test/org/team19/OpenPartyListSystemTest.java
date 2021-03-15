@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * OpenPartyListSystemTest.java
+ *
+ * Author:
+ * Nikunj Chawla and Aaron Kandikatla
+ *
+ * Purpose:
+ * Tests the OpenPartyListSystem class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
@@ -49,11 +60,11 @@ final class OpenPartyListSystemTest {
     @Test
     void testImportCandidatesHeader() {
         final OpenPartyListSystem openPartyListSystem = createOplNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             Assertions.assertAll(
                 //Test that a nonpositive candidate header results in an exception being thrown
@@ -79,15 +90,15 @@ final class OpenPartyListSystemTest {
     @Test
     void testAddCandidates() {
         final OpenPartyListSystem openPartyListSystem = createOplNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             //Test example candidates array
             final Candidate[] c0c1 = new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")};
-        
+            
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of brackets
                 () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0], C1 P1", 3)),
@@ -111,11 +122,11 @@ final class OpenPartyListSystemTest {
     @Test
     void testImportBallotsHeader() {
         final OpenPartyListSystem openPartyListSystem = createOplNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             Assertions.assertAll(
                 //Test that a negative number of ballots results in an exception being thrown
@@ -151,11 +162,11 @@ final class OpenPartyListSystemTest {
     @Test
     void testAddBallot() {
         final OpenPartyListSystem openPartyListSystem = createOplNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             Method parseBallotTmp = null;
             try {
@@ -166,7 +177,7 @@ final class OpenPartyListSystemTest {
                 Assertions.fail("Unable to retrieve parseBallot from OpenPartyListSystem");
             }
             final Method parseBallot = parseBallotTmp;
-        
+            
             try {
                 openPartyListSystem.importCandidatesHeader(new String[] {"5"}, 2);
                 openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", 3);
@@ -174,7 +185,7 @@ final class OpenPartyListSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-        
+            
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
                 () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",1,,", 5)),
@@ -216,11 +227,11 @@ final class OpenPartyListSystemTest {
     @Test
     void testToString() {
         final OpenPartyListSystem openPartyListSystem = createOplNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             //Put required sample data
             try {
@@ -230,7 +241,7 @@ final class OpenPartyListSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-        
+            
             /*
              * Test that InstantRunoffSystem's toString produces output like "InstantRunoffSystem{candidates=[candidates], numBallots=<numBallots>}"
              * where [candidates] is replaced by the string form of the candidates array and [numBallots] is replaced by the number of ballots

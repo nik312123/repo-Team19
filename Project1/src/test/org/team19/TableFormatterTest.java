@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * TableFormatterTest.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Tests the TableFormatter class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +51,7 @@ final class TableFormatterTest {
             final Method objColTableToStrRowTable = TableFormatter.class.getDeclaredMethod("objColTableToStrRowTable", List.class, List.class,
                 int.class, int.class);
             objColTableToStrRowTable.setAccessible(true);
-    
+            
             //Creating arbitrary data table for testing
             final double avogadrosConstant = 6.02214 * Math.pow(10, 23);
             final double speedOfLight = 299792458;
@@ -54,7 +65,7 @@ final class TableFormatterTest {
                 List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
                 List.of(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
             );
-    
+            
             Assertions.assertAll(
                 //Testing for empty table
                 () -> Assertions.assertEquals(
@@ -308,7 +319,7 @@ final class TableFormatterTest {
             ),
             List.of(Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT)
         );
-    
+        
         //Creating arbitrary data table for testing
         final double avogadrosConstant = 6.02214 * Math.pow(10, 23);
         final double speedOfLight = 299792458;
@@ -322,21 +333,21 @@ final class TableFormatterTest {
             List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
             List.of(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
         );
-    
+        
         //Testing left alignment with arbitrary data
         final Supplier<String> allLeft = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
             List.of(Alignment.LEFT, Alignment.LEFT, Alignment.LEFT, Alignment.LEFT)
         );
-    
+        
         //Testing right alignment with arbitrary data
         final Supplier<String> allRight = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
             List.of(Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT)
         );
-    
+        
         //Testing left and right alignments with arbitrary data
         final Supplier<String> alternatingLeftRight = () -> tableFormatter.formatAsTable(
             randomTopics,
@@ -438,7 +449,7 @@ final class TableFormatterTest {
                     + "+---------+------------+--------+-------------------+",
                 allRight.get()
             ),
-    
+            
             //Testing left and right alignment with arbitrary data
             () -> Assertions.assertEquals(
                 "+---------+------------+--------+-------------------+\n"

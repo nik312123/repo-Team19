@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * CandidateTest.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Tests the Candidate class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;

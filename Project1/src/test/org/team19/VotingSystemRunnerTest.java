@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * VotingSystemRunnerTest.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Tests the VotingSystemRunner class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +33,7 @@ final class VotingSystemRunnerTest {
             
             final Method getFullFilePath = VotingSystemRunner.class.getDeclaredMethod("getFullFilePath", String.class);
             getFullFilePath.setAccessible(true);
-    
+            
             final char fileSep = File.separatorChar;
             
             Assertions.assertAll(
@@ -56,12 +67,12 @@ final class VotingSystemRunnerTest {
         try {
             getFileInputStream = VotingSystemRunner.class.getDeclaredMethod("getFileInputStream", String.class);
             getFileInputStream.setAccessible(true);
-    
+            
             final Method getFullFilePath = VotingSystemRunner.class.getDeclaredMethod("getFullFilePath", String.class);
             getFullFilePath.setAccessible(true);
-    
+            
             final char fileSep = File.separatorChar;
-    
+            
             Assertions.assertAll(
                 //Testing valid file path
                 () -> Assertions.assertDoesNotThrow(() ->
@@ -150,14 +161,14 @@ final class VotingSystemRunnerTest {
     @Test
     void testGetFileOutputStream() {
         final Method getFileOutputStream;
-    
+        
         final char fileSep = File.separatorChar;
-    
+        
         try {
             //Retrieve getFileOutputStream using reflection due to it being private, and use reflection to make it accessible
             getFileOutputStream = VotingSystemRunner.class.getDeclaredMethod("getFileOutputStream", String.class);
             getFileOutputStream.setAccessible(true);
-        
+            
             Assertions.assertAll(
                 //Testing existing file path
                 () -> Assertions.assertDoesNotThrow(() ->

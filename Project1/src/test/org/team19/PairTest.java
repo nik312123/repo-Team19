@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * PairTest.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Tests the Pair class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +42,7 @@ final class PairTest {
         final Pair<Integer, Integer> twoFour = new Pair<>(2, 4);
         final Pair<Object, Integer> objFour = new Pair<>(objInstance, 4);
         final Pair<String, String> nullDemocrat = new Pair<>(null, "Democrat");
-    
+        
         //Testing that keys are equivalent to what was put into the constructor for the key
         Assertions.assertAll(
             //Testing that a key is equal to what is put into the constructor
@@ -49,7 +60,7 @@ final class PairTest {
         final Pair<Integer, Integer> twoFour = new Pair<>(2, 4);
         final Pair<Object, Object> cObj = new Pair<>('c', objInstance);
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
-    
+        
         //Testing that values are equivalent to what was put into the constructor for the value
         Assertions.assertAll(
             //Testing that a value is equal to what is put into the constructor
@@ -67,7 +78,7 @@ final class PairTest {
         final Pair<Integer, Integer> twoFour = new Pair<>(2, 4);
         final Pair<Object, Object> cObj = new Pair<>('c', objInstance);
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
-    
+        
         //Testing that values are equivalent to what was put into the constructor for the value
         Assertions.assertAll(
             //Testing that a value is equal to what is put into the constructor
@@ -106,17 +117,17 @@ final class PairTest {
         final Pair<Integer, Integer> twoFour = new Pair<>(2, 4);
         final Pair<String, String> nullDemocrat = new Pair<>(null, "Democrat");
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
-    
+        
         //Testing that setting the values of pairs actually changes the values
         Assertions.assertEquals(4, twoFour.getSecond());
         twoFour.setSecond(2);
         Assertions.assertEquals(2, twoFour.getSecond());
-    
+        
         //Special case: Assigning to null
         Assertions.assertEquals("Democrat", nullDemocrat.getSecond());
         nullDemocrat.setSecond(null);
         Assertions.assertNull(nullDemocrat.getSecond());
-    
+        
         //Special case: Assigning from null
         Assertions.assertNull(obamaNull.getSecond());
         obamaNull.setSecond(59);
@@ -148,7 +159,7 @@ final class PairTest {
         final Pair<Object, Object> objObj = new Pair<>(objInstance, objInstance);
         final Pair<String, String> nullDemocrat = new Pair<>(null, "Democrat");
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
-    
+        
         Assertions.assertAll(
             //Testing pairs equivalent to the above variables (same input)
             () -> Assertions.assertEquals(new Pair<>(2, 4), twoFour),
@@ -158,10 +169,10 @@ final class PairTest {
             () -> Assertions.assertEquals(new Pair<>(null, "Democrat"), nullDemocrat),
             //Special case: null value
             () -> Assertions.assertEquals(new Pair<>("Obama", null), obamaNull),
-        
+            
             //Testing that having equivalent keys but differing values does not result in equal pairs
             () -> Assertions.assertNotEquals(twoSix, twoFour),
-        
+            
             //Testing that having equivalent values but differing keys does not result in equal pairs
             () -> Assertions.assertNotEquals(cSix, twoSix)
         );

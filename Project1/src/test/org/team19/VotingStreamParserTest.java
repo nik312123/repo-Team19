@@ -6,7 +6,7 @@
  * Nikunj Chawla
  *
  * Purpose:
- * Parses an InputStream and returns a VotingSystem
+ * Tests the VotingSystemParserTest class
  */
 
 package org.team19;

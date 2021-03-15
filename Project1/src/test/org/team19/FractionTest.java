@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * FractionTest.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Tests the Fraction class
+ */
+
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
@@ -51,35 +62,35 @@ final class FractionTest {
         Assertions.assertAll(
             //Testing general case
             () -> Assertions.assertEquals(120, Fraction.gcd(1080, 1920)),
-    
+            
             //Testing n1 = n2
             () -> Assertions.assertEquals(13, Fraction.gcd(13, 13)),
-    
+            
             //Testing n1 or n2 is prime
             () -> Assertions.assertEquals(1, Fraction.gcd(29, 900)),
             () -> Assertions.assertEquals(1, Fraction.gcd(900, 29)),
-    
+            
             //Testing n1 or n2 is a multiple of the other
             () -> Assertions.assertEquals(20, Fraction.gcd(100, 20)),
             () -> Assertions.assertEquals(20, Fraction.gcd(20, 100)),
-    
+            
             //Testing the case where one of n1 and n2 is 0
             () -> Assertions.assertEquals(5, Fraction.gcd(5, 0)),
             () -> Assertions.assertEquals(5, Fraction.gcd(0, 5)),
-    
+            
             //Testing the case where one of n1 and n2 is 1
             () -> Assertions.assertEquals(1, Fraction.gcd(5, 1)),
             () -> Assertions.assertEquals(1, Fraction.gcd(1, 5)),
-    
+            
             //Testing the property gcd(n1, n2) = gcd(|n1 - n2|, min(n1, n2)) when n1 and n2 are odd
             () -> Assertions.assertEquals(Fraction.gcd(Math.abs(121 - 37), Math.min(121, 37)), Fraction.gcd(121, 37)),
-    
+            
             //Testing the property gcd(n1, n2) = 2 * gcd(n1/2, n2/2) when n1 and n2 are even
             () -> Assertions.assertEquals(2 * Fraction.gcd(19, 164), Fraction.gcd(2 * 19, 2 * 164)),
-    
+            
             //Testing the property gcd(n1, n2) = gcd(n1/2, n2) when n1 is even and n2 is odd
             () -> Assertions.assertEquals(Fraction.gcd(2 * 177, 159), Fraction.gcd(177, 159)),
-    
+            
             //Testing the property gcd(n1, n2) = gcd(n1, n2/2) when n1 is odd and n2 is even
             () -> Assertions.assertEquals(Fraction.gcd(193, 2 * 123), Fraction.gcd(193, 123))
         );
@@ -159,7 +170,7 @@ final class FractionTest {
         final Fraction negativeSevenSixths = new Fraction(-7, 6);
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
-    
+        
         //Epsilon used to determine that two doubles are essentially equal (within epsilon)
         final double epsilon = 1E-6;
         
@@ -465,12 +476,12 @@ final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(-2, 9), new Fraction(-2, 9)),
             //Testing the identity with -9/4
             () -> Assertions.assertEquals(new Fraction(-9, 4), new Fraction(-9, 4)),
-    
+            
             //Testing that two fractions with the same numerators but different denominators are not equal
             () -> Assertions.assertNotEquals(new Fraction(2, 3), new Fraction(2, 9)),
             //Testing that two fractions with the same denominators but different numerators are not equal
             () -> Assertions.assertNotEquals(new Fraction(3, 2), new Fraction(9, 2)),
-    
+            
             //Confirms the inequality of a fraction and its negative form
             () -> Assertions.assertNotEquals(new Fraction(2, 9), new Fraction(-2, 9))
         );

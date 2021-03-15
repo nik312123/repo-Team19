@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * InstantRunoffSystemTest.java
+ *
+ * Author:
+ * Nikunj Chawla and Jack Fornaro
+ *
+ * Purpose:
+ * Tests the InstantRunoffSystem class
+ */
+
 package org.team19;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -68,11 +79,11 @@ final class InstantRunoffSystemTest {
     @Test
     void testImportCandidatesHeader() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             Assertions.assertAll(
                 //Test that a nonpositive candidate header results in an exception being thrown
@@ -98,15 +109,15 @@ final class InstantRunoffSystemTest {
     @Test
     void testAddCandidates() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             //Test example candidates array
             final Candidate[] c0c1 = new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")};
-        
+            
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of parentheses
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0), C1 P1", 3)),
@@ -130,11 +141,11 @@ final class InstantRunoffSystemTest {
     @Test
     void testImportBallotsHeader() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             Assertions.assertAll(
                 //Test that a negative ballots header results in an exception being thrown
@@ -164,17 +175,17 @@ final class InstantRunoffSystemTest {
     @Test
     void testAddBallot() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             //Retrieve the Ballot class using reflection, retrieve its constructor, and make it accessible for testing
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+            
             Method parseBallotTmp = null;
             try {
                 parseBallotTmp = InstantRunoffSystem.class.getDeclaredMethod("parseBallot", int.class, String.class, int.class);
@@ -184,7 +195,7 @@ final class InstantRunoffSystemTest {
                 Assertions.fail("Unable to retrieve parseBallot from InstantRunoffSystem");
             }
             final Method parseBallot = parseBallotTmp;
-        
+            
             try {
                 instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, 2);
                 instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
@@ -192,7 +203,7 @@ final class InstantRunoffSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-        
+            
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,3,4", 5)),
@@ -259,11 +270,11 @@ final class InstantRunoffSystemTest {
     @Test
     void testToString() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-    
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-    
+        
         try {
             //Put required sample data
             try {
@@ -273,7 +284,7 @@ final class InstantRunoffSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-        
+            
             /*
              * Test that InstantRunoffSystem's toString produces output like "InstantRunoffSystem{candidates=[candidates], numBallots=<numBallots>}"
              * where [candidates] is replaced by the string form of the candidates array and [numBallots] is replaced by the number of ballots
