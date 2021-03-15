@@ -751,7 +751,7 @@ public class InstantRunoffSystem extends VotingSystem {
                     final int winnerBallotCount = candidateBallotsMap.get(winner).size();
                     
                     strToWriteToAll = String.format(
-                        "%s has received %d/%d ballots, votes giving them the greatest popularity with %s%% of the ballots",
+                        "%s has received %d/%d ballots, giving them the greatest popularity with %s%% of the ballots",
                         winner,
                         winnerBallotCount,
                         numBallots,
