@@ -154,14 +154,20 @@ public final class VotingSystemRunner {
         
         //Retrieves the output streams for the audit and report files
         try {
-            auditOutput = getFileOutputStream("audits" + File.separator + generateTimestampedFileName("audit", currentTimestamp));
+            auditOutput = getFileOutputStream(
+                "Project1/audits/".replace('/', File.separatorChar)
+                    + generateTimestampedFileName("audit", currentTimestamp)
+            );
         }
         catch(FileNotFoundException e) {
             System.err.println("The audit file could not be created");
             System.exit(2);
         }
         try {
-            reportOutput = getFileOutputStream("reports" + File.separator + generateTimestampedFileName("report", currentTimestamp));
+            reportOutput = getFileOutputStream(
+                "Project1/reports/".replace('/', File.separatorChar)
+                    + generateTimestampedFileName("report", currentTimestamp)
+            );
         }
         catch(FileNotFoundException e) {
             System.err.println("The report file could not be created");
