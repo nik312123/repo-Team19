@@ -391,16 +391,136 @@ final class OpenPartyListSystemTest {
         
         // General test case with standard conditions
         // There should be only one seat remaining after initial allocation
-        assertEquals(1 + " seat(s) remaining", returnValue.getKey() + " seat(s) remaining");
+        assertEquals(1 + " seat remaining", returnValue.getKey() + " seat remaining");
         // All 3 parties should still have enough candidates for more potential seats
         assertEquals(new HashSet<>(Arrays.asList("D", "R", "I")), returnValue.getValue());
+        
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit1.txt".replace('/', FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsReport1.txt".replace('/', FILE_SEP)).delete();
+    }
+    
+    @Test
+    void testAllocateInitialSeatsTypicalOutput(){
+    
+        Class<?> partyInformation = null;
+        try {
+            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        
+        }
+        catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    
+        assert partyInformation != null;
+    
+        Constructor<?> partyInformationConstructor = null;
+        try {
+            partyInformationConstructor = partyInformation.getDeclaredConstructor();
+        }
+        catch(NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        assert partyInformationConstructor != null;
+        partyInformationConstructor.setAccessible(true);
+    
+        OpenPartyListSystem.PartyInformation partyD = null;
+        OpenPartyListSystem.PartyInformation partyR = null;
+        OpenPartyListSystem.PartyInformation partyI = null;
+    
+        try {
+            try {
+                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            }
+            catch(IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+        
+        }
+        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    
+        Candidate foster_d = new Candidate("Foster", "D");
+        Candidate pike_d = new Candidate("Pike", "D");
+    
+        Candidate deutsch_r = new Candidate("Deutsch", "R");
+        Candidate jones_r = new Candidate("Jones", "R");
+        Candidate borg_r = new Candidate("Borg", "R");
+    
+        Candidate smith_i = new Candidate("Smith", "I");
+    
+        assert partyD != null;
+    
+        partyD.numCandidates = 2;
+        partyD.numBallots = 5;
+    
+        partyD.orderedCandidateBallots = new ArrayList<>();
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
+    
+        assert partyR != null;
+    
+        partyR.numCandidates = 3;
+        partyR.numBallots = 3;
+    
+        partyR.orderedCandidateBallots = new ArrayList<>();
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
+    
+        assert partyI != null;
+    
+        partyI.numCandidates = 1;
+        partyI.numBallots = 1;
+    
+        partyI.orderedCandidateBallots = new ArrayList<>();
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+    
+        OpenPartyListSystem opl = null;
+        try {
+            opl = new OpenPartyListSystem(
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit1.txt"),
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsReport1.txt")
+            );
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert opl != null;
+        opl.numSeats = 3;
+        opl.numBallots = 9;
+    
+        opl.partiesToPartyInformation = new LinkedHashMap<>();
+        opl.partiesToPartyInformation.put("D", partyD);
+        opl.partiesToPartyInformation.put("R", partyR);
+        opl.partiesToPartyInformation.put("I", partyI);
+    
+        opl.partyToCandidateCounts = new LinkedHashMap<>();
+    
+        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
+        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+    
+        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
+        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+    
+        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+    
+        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsTypical.txt"),
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit1.txt"))
         );
-        
+    
         //noinspection ResultOfMethodCallIgnored
         new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit1.txt".replace('/', FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
@@ -520,18 +640,143 @@ final class OpenPartyListSystemTest {
         
         Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
+        // Test to ensure partyI only receives 1 seat b/c it only has one candidate
+        // despite receiving all the votes
+        assertEquals(1,partyI.numSeats);
+        
         // General test case with standard conditions
         // There should be only three seat remaining after initial allocation
-        assertEquals(3 + " seat(s) remaining", returnValue.getKey() + " seat(s) remaining");
+        assertEquals(3 + " seats remaining", returnValue.getKey() + " seats remaining");
         // Only 2 parties should have additional candidates after initial allocation.
         assertEquals(new HashSet<>(Arrays.asList("D", "R")), returnValue.getValue());
+        
+        
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit2.txt".replace('/',
+            FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsReport2.txt".replace('/', FILE_SEP)).delete();
+    }
+    
+    @Test
+    void testAllocateInitialSeatsSingleCandidateHasAllVotesOutput(){
+        Class<?> partyInformation = null;
+        try {
+            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        
+        }
+        catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    
+        assert partyInformation != null;
+    
+        Constructor<?> partyInformationConstructor = null;
+        try {
+            partyInformationConstructor = partyInformation.getDeclaredConstructor();
+        }
+        catch(NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        assert partyInformationConstructor != null;
+        partyInformationConstructor.setAccessible(true);
+    
+        OpenPartyListSystem.PartyInformation partyD = null;
+        OpenPartyListSystem.PartyInformation partyR = null;
+        OpenPartyListSystem.PartyInformation partyI = null;
+    
+        try {
+            try {
+                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            }
+            catch(IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+        
+        }
+        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    
+        Candidate foster_d = new Candidate("Foster", "D");
+        Candidate pike_d = new Candidate("Pike", "D");
+    
+        Candidate deutsch_r = new Candidate("Deutsch", "R");
+        Candidate jones_r = new Candidate("Jones", "R");
+        Candidate borg_r = new Candidate("Borg", "R");
+    
+        Candidate smith_i = new Candidate("Smith", "I");
+    
+        assert partyD != null;
+    
+        partyD.numCandidates = 2;
+        partyD.numBallots = 0;
+    
+        partyD.orderedCandidateBallots = new ArrayList<>();
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 0));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 0));
+    
+        assert partyR != null;
+    
+        partyR.numCandidates = 3;
+        partyR.numBallots = 0;
+    
+        partyR.orderedCandidateBallots = new ArrayList<>();
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 0));
+    
+        assert partyI != null;
+    
+        partyI.numCandidates = 1;
+        partyI.numBallots = 100;
+    
+        partyI.orderedCandidateBallots = new ArrayList<>();
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 100));
+    
+        OpenPartyListSystem opl = null;
+        try {
+            opl = new OpenPartyListSystem(
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit2.txt"),
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsReport2.txt")
+            );
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert opl != null;
+        opl.numSeats = 4;
+        opl.numBallots = 100;
+    
+        opl.partiesToPartyInformation = new LinkedHashMap<>();
+        opl.partiesToPartyInformation.put("D", partyD);
+        opl.partiesToPartyInformation.put("R", partyR);
+        opl.partiesToPartyInformation.put("I", partyI);
+    
+        opl.partyToCandidateCounts = new LinkedHashMap<>();
+    
+        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("D").put(foster_d, 0);
+        opl.partyToCandidateCounts.get("D").put(pike_d, 0);
+    
+        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+        opl.partyToCandidateCounts.get("R").put(jones_r, 0);
+        opl.partyToCandidateCounts.get("R").put(borg_r, 0);
+    
+        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("I").put(smith_i, 100);
+    
+        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsSingleCandidateHasAllVotes.txt"),
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit2.txt"))
         );
-        
+    
         //noinspection ResultOfMethodCallIgnored
         new File("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit2.txt".replace('/',
             FILE_SEP)).delete();
@@ -652,11 +897,6 @@ final class OpenPartyListSystemTest {
         
         Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        // General test case with standard conditions
-        // There should be only 1 seat remaining after initial allocation
-        assertEquals(1 + " seat(s) remaining", returnValue.getKey() + " seat(s) remaining");
-        // Only 2 parties should have additional candidates after initial allocation.
-        assertEquals(new HashSet<>(Arrays.asList("D", "R")), returnValue.getValue());
         
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
@@ -936,7 +1176,7 @@ final class OpenPartyListSystemTest {
     }
     
     @Test
-    void testAllocateRemainingSeatsMoreSeatsThenCandidates() {
+    void testAllocateRemainingSeatsMoreSeatsThanCandidates() {
         
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1057,12 +1297,6 @@ final class OpenPartyListSystemTest {
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
-        // Comparing expected output vs actual output.
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsMoreSeatsThenCandidates.txt"),
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt"))
-        );
-        
         // Tests to check that every candidate has a seat
         assertEquals(partyR.numSeats, partyR.numCandidates);
         assertEquals(partyD.numSeats, partyD.numCandidates);
@@ -1073,6 +1307,141 @@ final class OpenPartyListSystemTest {
         //noinspection ResultOfMethodCallIgnored
         new File("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP)).delete();
         
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void allocateRemainingSeatsMoreSeatsThanCandidatesOutput(){
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+    
+        Class<?> partyInformation = null;
+        try {
+            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        
+        }
+        catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    
+        assert partyInformation != null;
+    
+        Constructor<?> partyInformationConstructor = null;
+        try {
+            partyInformationConstructor = partyInformation.getDeclaredConstructor();
+        }
+        catch(NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        assert partyInformationConstructor != null;
+        partyInformationConstructor.setAccessible(true);
+    
+        OpenPartyListSystem.PartyInformation partyD = null;
+        OpenPartyListSystem.PartyInformation partyR = null;
+        OpenPartyListSystem.PartyInformation partyI = null;
+    
+        try {
+            try {
+                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            }
+            catch(IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
+        
+        }
+        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    
+        Candidate foster_d = new Candidate("Foster", "D");
+        Candidate pike_d = new Candidate("Pike", "D");
+    
+        Candidate deutsch_r = new Candidate("Deutsch", "R");
+        Candidate jones_r = new Candidate("Jones", "R");
+        Candidate borg_r = new Candidate("Borg", "R");
+    
+        Candidate smith_i = new Candidate("Smith", "I");
+    
+        assert partyD != null;
+    
+        partyD.numCandidates = 2;
+        partyD.numBallots = 5;
+    
+        partyD.orderedCandidateBallots = new ArrayList<>();
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
+    
+        assert partyR != null;
+    
+        partyR.numCandidates = 3;
+        partyR.numBallots = 3;
+    
+        partyR.orderedCandidateBallots = new ArrayList<>();
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
+    
+        assert partyI != null;
+    
+        partyI.numCandidates = 1;
+        partyI.numBallots = 1;
+    
+        partyI.orderedCandidateBallots = new ArrayList<>();
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+    
+        OpenPartyListSystem opl = null;
+        try {
+            opl = new OpenPartyListSystem(
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt"),
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt")
+            );
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert opl != null;
+        opl.numSeats = 10;
+        opl.numBallots = 9;
+    
+        opl.partiesToPartyInformation = new LinkedHashMap<>();
+        opl.partiesToPartyInformation.put("D", partyD);
+        opl.partiesToPartyInformation.put("R", partyR);
+        opl.partiesToPartyInformation.put("I", partyI);
+    
+        opl.partyToCandidateCounts = new LinkedHashMap<>();
+    
+        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
+        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+    
+        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
+        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+    
+        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+    
+        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+    
+        Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        Set<String> remainingParties = initialAllocationResults.getSecond();
+    
+        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+    
+        // Comparing expected output vs actual output.
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsMoreSeatsThanCandidates.txt"),
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt"))
+        );
+    
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP)).delete();
+    
         System.setOut(originalSystemOut);
     }
     
@@ -1329,10 +1698,10 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts.get("D").put(pike_d, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+        opl.partyToCandidateCounts.get("R").put(borg_r, 1);
         opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
-        
+        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+    
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
         opl.partyToCandidateCounts.get("I").put(smith_i, 1);
         
@@ -1354,9 +1723,10 @@ final class OpenPartyListSystemTest {
             .equals("[Pike (D), Foster (D), Borg (R)]"));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesAudit1.txt".replace('/', FILE_SEP)).delete();
+        new File("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksAudit1.txt".replace('/',
+            FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesReport1.txt".replace('/', FILE_SEP))
+        new File("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksReport1.txt".replace('/', FILE_SEP))
             .delete();
         
         System.setOut(originalSystemOut);
