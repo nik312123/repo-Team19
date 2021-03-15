@@ -55,21 +55,6 @@ final class TableFormatterTest {
                 Arrays.asList(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
             );
             
-            //Creating random candidate table for testing
-            final List<String> randomCandidateHeader = Arrays.asList("Name", "Party", "Age", "Sex", "DOB");
-            final List<List<Object>> randomCandidateData = Arrays.asList(
-                Arrays.asList("Joseph Biden", "Kamala Harris", "Donald Trump", "Michael Pence"),
-                Arrays.asList("Democrat", "Democrat", "Republican", "Republican"),
-                Arrays.asList(78, 56, 74, 61),
-                Arrays.asList('M', 'F', 'M', 'M'),
-                Arrays.asList(
-                    new Date(1942, 11, 20),
-                    new Date(1964, 10, 20),
-                    new Date(1946, 6, 14),
-                    new Date(1959, 6, 7)
-                )
-            );
-            
             Assertions.assertAll(
                 //Testing for empty table
                 () -> Assertions.assertEquals(
@@ -106,22 +91,6 @@ final class TableFormatterTest {
                         1 + randomTopicData.get(0).size(),
                         randomTopics.size()
                     )
-                ),
-                () -> Assertions.assertEquals(
-                    Arrays.asList(
-                        Arrays.asList("Name", "Party", "Age", "Sex", "DOB"),
-                        Arrays.asList("Joseph Biden", "Democrat", "78", "M", "1942/11/20"),
-                        Arrays.asList("Kamala Harris", "Democrat", "56", "F", "1964/10/20"),
-                        Arrays.asList("Donald Trump", "Republican", "74", "M", "1946/06/14"),
-                        Arrays.asList("Michael Pence", "Republican", "61", "M", "1959/06/07")
-                    ),
-                    objColTableToStrRowTable.invoke(
-                        tableFormatter,
-                        randomCandidateHeader,
-                        randomCandidateData,
-                        1 + randomCandidateData.get(0).size(),
-                        randomCandidateData.size()
-                    )
                 )
             );
         }
@@ -145,9 +114,6 @@ final class TableFormatterTest {
             final double earthGravity = 9.81;
             final double molarGasConstant = 0.0821;
             final List<String> randomTopics = Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants");
-            
-            //Creating random candidate table for testing
-            final List<String> randomCandidateHeader = Arrays.asList("Name", "Party", "Age", "Sex", "DOB");
             
             Assertions.assertAll(
                 //Testing for empty table
@@ -181,20 +147,6 @@ final class TableFormatterTest {
                         ),
                         randomTopics.size()
                     )
-                ),
-                () -> Assertions.assertArrayEquals(
-                    new int[] {"Kamala Harris".length(), "Republican".length(), "Age".length(), "Sex".length(), "1942/11/20".length()},
-                    (int[]) getColumnLengths.invoke(
-                        tableFormatter,
-                        Arrays.asList(
-                            Arrays.asList("Name", "Party", "Age", "Sex", "DOB"),
-                            Arrays.asList("Joseph Biden", "Democrat", "78", "M", "1942/11/20"),
-                            Arrays.asList("Kamala Harris", "Democrat", "56", "F", "1964/10/20"),
-                            Arrays.asList("Donald Trump", "Republican", "74", "M", "1946/06/14"),
-                            Arrays.asList("Michael Pence", "Republican", "61", "M", "1959/06/07")
-                        ),
-                        randomCandidateHeader.size()
-                    )
                 )
             );
         }
@@ -227,12 +179,7 @@ final class TableFormatterTest {
                     "| %42s |",
                     getTableFormat.invoke(tableFormatter, Collections.singletonList(Alignment.RIGHT), new int[] {42}, 1)
                 ),
-                //Testing for two columns with left and right aligning
-                () -> Assertions.assertEquals(
-                    "| %-42s | %24s |",
-                    getTableFormat.invoke(tableFormatter, Arrays.asList(Alignment.LEFT, Alignment.RIGHT), new int[] {42, 24}, 2)
-                ),
-                //Testing for five columns with left and right aligning
+                //Testing for five arbitrary columns with left and right aligning
                 () -> Assertions.assertEquals(
                     "| %-42s | %24s | %-5s | %-2s | %3s |",
                     getTableFormat.invoke(
@@ -280,36 +227,10 @@ final class TableFormatterTest {
                         getHorizontalDivider.invoke(tableFormatter, new int[] {-1}, 1, "|")
                     ).getCause().getClass()
                 ),
-                () -> Assertions.assertEquals(
-                    IllegalArgumentException.class,
-                    Assertions.assertThrows(InvocationTargetException.class, () ->
-                        getHorizontalDivider.invoke(tableFormatter, new int[] {5, 4, 3, -1}, 4, "|")
-                    ).getCause().getClass()
-                ),
-                () -> Assertions.assertEquals(
-                    IllegalArgumentException.class,
-                    Assertions.assertThrows(InvocationTargetException.class, () ->
-                        getHorizontalDivider.invoke(tableFormatter, new int[] {5, 4, -1, 3}, 4, "|")
-                    ).getCause().getClass()
-                ),
-                () -> Assertions.assertEquals(
-                    IllegalArgumentException.class,
-                    Assertions.assertThrows(InvocationTargetException.class, () ->
-                        getHorizontalDivider.invoke(tableFormatter, new int[] {-1, 5, 4, 3}, 4, "|")
-                    ).getCause().getClass()
-                ),
-                //Arbitrary tests
-                () -> Assertions.assertEquals(
-                    "|---|",
-                    getHorizontalDivider.invoke(tableFormatter, new int[] {1}, 1, "|")
-                ),
+                //Arbitrary test
                 () -> Assertions.assertEquals(
                     "|--+---+----+-----+------|",
                     getHorizontalDivider.invoke(tableFormatter, new int[] {0, 1, 2, 3, 4}, 5, "|")
-                ),
-                () -> Assertions.assertEquals(
-                    "|------+-----+----+---+--|",
-                    getHorizontalDivider.invoke(tableFormatter, new int[] {4, 3, 2, 1, 0}, 5, "|")
                 )
             );
         }
@@ -415,19 +336,12 @@ final class TableFormatterTest {
             randomTopicData,
             Arrays.asList(Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT)
         );
-        
-        //Testing left/right alignment with arbitrary data
+    
+        //Testing left and right alignments with arbitrary data
         final Supplier<String> alternatingLeftRight = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
             Arrays.asList(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT)
-        );
-        
-        //Testing right/left alignment with arbitrary data
-        final Supplier<String> alternatingRightLeft = () -> tableFormatter.formatAsTable(
-            randomTopics,
-            randomTopicData,
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT)
         );
         
         //Testing table with alternate symbols
@@ -524,8 +438,8 @@ final class TableFormatterTest {
                     + "+---------+------------+--------+-------------------+",
                 allRight.get()
             ),
-            
-            //Testing left/right alignment with arbitrary data
+    
+            //Testing left and right alignment with arbitrary data
             () -> Assertions.assertEquals(
                 "+---------+------------+--------+-------------------+\n"
                     + "| Numbers |      Fruit | Names  | Physics Constants |\n"
@@ -545,28 +459,6 @@ final class TableFormatterTest {
                     + "| 3       |      Guava | Gary   |            0.0821 |\n"
                     + "+---------+------------+--------+-------------------+",
                 alternatingLeftRight.get()
-            ),
-            
-            //Testing right/left alignment with arbitrary data
-            () -> Assertions.assertEquals(
-                "+---------+------------+--------+-------------------+\n"
-                    + "| Numbers | Fruit      |  Names | Physics Constants |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|      -3 | Apple      |   Adam | 3.141592653589793 |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|      -2 | Banana     |    Ben | 2.718281828459045 |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|      -1 | Cantaloupe |  Craig | 6.02214E23        |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|       0 | Date       |    Dan | 2.99792458E8      |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|       1 | Eggplant   | Edward | 6.62607E-34       |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|       2 | Fig        |   Fred | 9.81              |\n"
-                    + "|---------+------------+--------+-------------------|\n"
-                    + "|       3 | Guava      |   Gary | 0.0821            |\n"
-                    + "+---------+------------+--------+-------------------+",
-                alternatingRightLeft.get()
             ),
             
             //Testing table with alternate symbols

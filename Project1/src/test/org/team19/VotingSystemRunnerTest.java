@@ -17,40 +17,28 @@ final class VotingSystemRunnerTest {
     @Test
     void testGetFullFilePath() {
         try {
-            final String projectRootDir = new File("." + File.separator).getCanonicalPath();
+            final String projectRootDir = new File(".").getCanonicalPath();
             final String userHomeDir = System.getProperty("user.home");
             
             final Method getFullFilePath = VotingSystemRunner.class.getDeclaredMethod("getFullFilePath", String.class);
             getFullFilePath.setAccessible(true);
-            
-            final String fileSep = File.separator;
+    
+            final char fileSep = File.separatorChar;
             
             Assertions.assertAll(
-                //Testing paths relative to project directory
+                //Testing path relative to project directory
                 () -> Assertions.assertEquals(
-                    String.format("%s%stest.txt", projectRootDir, fileSep), getFullFilePath.invoke(VotingSystemRunner.class, "test.txt")),
-                () -> Assertions.assertEquals(
-                    String.format("%s%srandomFolder%Sa.txt", projectRootDir, fileSep, fileSep),
-                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("randomFolder%sa.txt", fileSep))
+                    String.format("%s/test.txt".replace('/', fileSep), projectRootDir), getFullFilePath.invoke(VotingSystemRunner.class, "test.txt")
                 ),
-                //Testing paths relative to home directory
+                //Testing path relative to home directory
                 () -> Assertions.assertEquals(
-                    String.format("%s%stest.txt", userHomeDir, fileSep),
-                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("~%stest.txt", fileSep))
+                    String.format("%s/test.txt".replace('/', fileSep), userHomeDir),
+                    getFullFilePath.invoke(VotingSystemRunner.class, "~/test.txt".replace('/', fileSep))
                 ),
+                //Testing absolute path
                 () -> Assertions.assertEquals(
-                    String.format("%s%srandomFolder%sa.txt", userHomeDir, fileSep, fileSep),
-                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("~%srandomFolder%sa.txt", fileSep, fileSep))
-                ),
-                //Testing absolute paths
-                () -> Assertions.assertEquals(
-                    String.format("%s%sDesktop%stest.txt", userHomeDir, fileSep, fileSep),
-                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("%s%sDesktop%stest.txt", userHomeDir, fileSep, fileSep))
-                ),
-                () -> Assertions.assertEquals(
-                    String.format("%s%sDesktop%srandomDirectory%stest.txt", userHomeDir, fileSep, fileSep, fileSep),
-                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("%s%sDesktop%srandomDirectory%stest.txt", userHomeDir, fileSep,
-                        fileSep, fileSep))
+                    String.format("%s/Desktop/test.txt".replace('/', fileSep), userHomeDir),
+                    getFullFilePath.invoke(VotingSystemRunner.class, String.format("%s/Desktop/test.txt".replace('/', fileSep), userHomeDir))
                 )
             );
         }
@@ -68,17 +56,21 @@ final class VotingSystemRunnerTest {
         try {
             getFileInputStream = VotingSystemRunner.class.getDeclaredMethod("getFileInputStream", String.class);
             getFileInputStream.setAccessible(true);
-            
+    
             final Method getFullFilePath = VotingSystemRunner.class.getDeclaredMethod("getFullFilePath", String.class);
             getFullFilePath.setAccessible(true);
-            
+    
+            final char fileSep = File.separatorChar;
+    
             Assertions.assertAll(
-                //Testing valid file paths
+                //Testing valid file path
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFileInputStream.invoke(
                         VotingSystem.class,
-                        getFullFilePath.invoke(VotingSystemRunner.class, String.format("test-resources%svotingSystemRunnerTest%stest.txt",
-                            File.separator, File.separator))
+                        getFullFilePath.invoke(
+                            VotingSystemRunner.class,
+                            "Project1/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
+                        )
                     )
                 ),
                 //Testing invalid file path
@@ -87,8 +79,10 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFileInputStream.invoke(
                             VotingSystem.class,
-                            getFullFilePath.invoke(VotingSystemRunner.class, String.format("test-resources%svotingSystemRunnerTest%sb.txt",
-                                File.separator, File.separator))
+                            getFullFilePath.invoke(
+                                VotingSystemRunner.class,
+                                "Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
+                            )
                         )
                     ).getCause().getClass()
                 ),
@@ -98,7 +92,10 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFileInputStream.invoke(
                             VotingSystem.class,
-                            getFullFilePath.invoke(VotingSystemRunner.class, String.format("test-resources%svotingSystemRunnerTest", File.separator))
+                            getFullFilePath.invoke(
+                                VotingSystemRunner.class,
+                                "Project1/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
+                            )
                         )
                     ).getCause().getClass()
                 )
@@ -119,30 +116,17 @@ final class VotingSystemRunnerTest {
             
             //Testing various prefixes and time stamps for generateTimestampedFileName
             Assertions.assertAll(
-                () -> Assertions.assertEquals("audit_2000-01-01_01-01-01.txt", generateTimestampedFileName.invoke(
-                    VotingSystemRunner.class,
-                    "audit",
-                    LocalDateTime.of(2000, 1, 1, 1, 1, 1)
-                )),
+                //Testing arbitrary date
                 () -> Assertions.assertEquals("report_2016-08-14_14-55-47.txt", generateTimestampedFileName.invoke(
                     VotingSystemRunner.class,
                     "report",
                     LocalDateTime.of(2016, 8, 14, 14, 55, 47)
                 )),
-                () -> Assertions.assertEquals("potato_2019-09-21_22-27-00.txt", generateTimestampedFileName.invoke(
+                //Testing for proper zero padding
+                () -> Assertions.assertEquals("potato_2021-09-09_09-09-09.txt", generateTimestampedFileName.invoke(
                     VotingSystemRunner.class,
                     "potato",
-                    LocalDateTime.of(2019, 9, 21, 22, 27, 0)
-                )),
-                () -> Assertions.assertEquals("audit_2001-09-13_20-41-29.txt", generateTimestampedFileName.invoke(
-                    VotingSystemRunner.class,
-                    "audit",
-                    LocalDateTime.of(2001, 9, 13, 20, 41, 29)
-                )),
-                () -> Assertions.assertEquals("report_2003-12-17_05-41-08.txt", generateTimestampedFileName.invoke(
-                    VotingSystemRunner.class,
-                    "report",
-                    LocalDateTime.of(2003, 12, 17, 5, 41, 8)
+                    LocalDateTime.of(2021, 9, 9, 9, 9, 9)
                 )),
                 //Edge case: Very low timestamp
                 () -> Assertions.assertEquals("entrée_0-01-01_00-00-00.txt", generateTimestampedFileName.invoke(
@@ -166,31 +150,32 @@ final class VotingSystemRunnerTest {
     @Test
     void testGetFileOutputStream() {
         final Method getFileOutputStream;
+    
+        final char fileSep = File.separatorChar;
+    
         try {
             //Retrieve getFileOutputStream using reflection due to it being private, and use reflection to make it accessible
             getFileOutputStream = VotingSystemRunner.class.getDeclaredMethod("getFileOutputStream", String.class);
             getFileOutputStream.setAccessible(true);
-            
+        
             Assertions.assertAll(
                 //Testing existing file path
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFileOutputStream.invoke(
                         VotingSystem.class,
-                        String.format("test-resources%svotingSystemRunnerTest%stest.txt", File.separator, File.separator)
+                        "Project1/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
                     )
                 ),
                 //Testing nonexistent file path
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFileOutputStream.invoke(
                         VotingSystem.class,
-                        String.format("test-resources%svotingSystemRunnerTest%srandomDirectory%sb.txt", File.separator, File.separator,
-                            File.separator)
+                        "Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
                     )
                 ),
                 //Check that the nonexistent file was created for the output stream from the previous assertion
                 () -> Assertions.assertTrue(
-                    new File(String.format("test-resources%svotingSystemRunnerTest%srandomDirectory%sb.txt", File.separator, File.separator,
-                        File.separator)).exists()
+                    new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).exists()
                 ),
                 //Testing existing path but to directory
                 () -> Assertions.assertEquals(
@@ -198,7 +183,7 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFileOutputStream.invoke(
                             VotingSystem.class,
-                            String.format("test-resources%svotingSystemRunnerTest", File.separator)
+                            "Project1/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
                         )
                     ).getCause().getClass()
                 )
@@ -210,8 +195,7 @@ final class VotingSystemRunnerTest {
         finally {
             //Remove the created test file after the test is completed to reset to the initial state of files
             //noinspection ResultOfMethodCallIgnored
-            new File(String.format("test-resources%svotingSystemRunnerTest%srandomDirectory%sb.txt", File.separator, File.separator,
-                File.separator)).delete();
+            new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).delete();
         }
     }
     
