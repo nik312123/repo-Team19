@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * CompareInputStream.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Compares two input streams
+ */
+
 package org.team19;
 
 import java.io.BufferedReader;
@@ -8,7 +19,7 @@ import java.text.ParseException;
 import java.util.Objects;
 
 /**
- * A utility class that contains method to compare the contents of input streams
+ * A utility class that contains method to compare the contents of {@link InputStream}
  */
 public class CompareInputStreams {
     
@@ -25,7 +36,7 @@ public class CompareInputStreams {
     }
     
     /**
-     * Compares two input streams
+     * Compares two {@link InputStream}
      *
      * @param inputStream1  an {@link InputStream} to compare
      * @param inputStream2  another {@link InputStream} to compare
