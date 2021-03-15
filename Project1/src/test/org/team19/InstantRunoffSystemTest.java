@@ -29,9 +29,10 @@ import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.ParseException;
+
+import org.team19.InstantRunoffSystem.Ballot;
 
 import org.team19.InstantRunoffSystem.Ballot;
 
@@ -181,11 +182,6 @@ final class InstantRunoffSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
-            //Retrieve the Ballot class using reflection, retrieve its constructor, and make it accessible for testing
-            final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
-            final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
-            ballotConstructor.setAccessible(true);
-            
             Method parseBallotTmp = null;
             try {
                 parseBallotTmp = InstantRunoffSystem.class.getDeclaredMethod("parseBallot", int.class, String.class, int.class);
@@ -221,7 +217,7 @@ final class InstantRunoffSystemTest {
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "2,4,3,5,", 5)),
                 //Test the case where all candidates are ranked
                 () -> Assertions.assertEquals(
-                    ballotConstructor.newInstance(1, new Candidate[] {
+                    new Ballot(1, new Candidate[] {
                         new Candidate("C3", "P3"),
                         new Candidate("C1", "P1"),
                         new Candidate("C4", "P4"),
@@ -232,7 +228,7 @@ final class InstantRunoffSystemTest {
                 ),
                 //Test the case where not all candidates are ranked
                 () -> Assertions.assertEquals(
-                    ballotConstructor.newInstance(1, new Candidate[] {
+                    new Ballot(1, new Candidate[] {
                         new Candidate("C4", "P4"),
                         new Candidate("C3", "P3"),
                         new Candidate("C1", "P1")
@@ -240,14 +236,6 @@ final class InstantRunoffSystemTest {
                     parseBallot.invoke(instantRunoffSystem, 1, ",3,,2,1", 5)
                 )
             );
-        }
-        //If unable to retrieve the constructor for Ballot, fail
-        catch(NoSuchMethodException e) {
-            Assertions.fail("Could not retrieve the Ballot constructor");
-        }
-        //If unable to retrieve the class for Ballot, fail
-        catch(ClassNotFoundException e) {
-            Assertions.fail("Could not retrieve the Ballot class");
         }
         finally {
             //Redirect STDOUT back to STDOUT

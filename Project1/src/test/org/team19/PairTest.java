@@ -152,27 +152,23 @@ final class PairTest {
     
     @Test
     void testEquals() {
-        final Object objInstance = new Object();
-        final Pair<Integer, Integer> twoFour = new Pair<>(2, 4);
+        final Pair<Integer, String> twoHi = new Pair<>(2, "Hi");
         final Pair<Character, Integer> cSix = new Pair<>('c', 6);
         final Pair<Integer, Integer> twoSix = new Pair<>(2, 6);
-        final Pair<Object, Object> objObj = new Pair<>(objInstance, objInstance);
         final Pair<String, String> nullDemocrat = new Pair<>(null, "Democrat");
         final Pair<String, Integer> obamaNull = new Pair<>("Obama", null);
         
         Assertions.assertAll(
             //Testing pairs equivalent to the above variables (same input)
-            () -> Assertions.assertEquals(new Pair<>(2, 4), twoFour),
-            //Testing essentially object equals for both the key and value, that is ==
-            () -> Assertions.assertEquals(new Pair<>(objInstance, objInstance), objObj),
+            () -> Assertions.assertEquals(new Pair<>(2, "Hi"), twoHi),
             //Special case: null key
             () -> Assertions.assertEquals(new Pair<>(null, "Democrat"), nullDemocrat),
             //Special case: null value
             () -> Assertions.assertEquals(new Pair<>("Obama", null), obamaNull),
-            
+    
             //Testing that having equivalent keys but differing values does not result in equal pairs
-            () -> Assertions.assertNotEquals(twoSix, twoFour),
-            
+            () -> Assertions.assertNotEquals(twoSix, twoHi),
+    
             //Testing that having equivalent values but differing keys does not result in equal pairs
             () -> Assertions.assertNotEquals(cSix, twoSix)
         );

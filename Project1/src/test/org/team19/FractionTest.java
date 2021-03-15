@@ -148,12 +148,12 @@ final class FractionTest {
         
         //Testing the fractional parts of the above fractions
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.getFractionalPart()),
+            () -> Assertions.assertEquals(twoNinths, twoNinths.getFractionalPart()),
             () -> Assertions.assertEquals(new Fraction(1, 4), fiveFourths.getFractionalPart()),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.getFractionalPart()),
+            () -> Assertions.assertEquals(negativeSixSevenths, negativeSixSevenths.getFractionalPart()),
             () -> Assertions.assertEquals(new Fraction(-1, 6), negativeSevenSixths.getFractionalPart()),
-            () -> Assertions.assertEquals(new Fraction(0, 1), one.getFractionalPart()),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.getFractionalPart())
+            () -> Assertions.assertEquals(zero, one.getFractionalPart()),
+            () -> Assertions.assertEquals(zero, zero.getFractionalPart())
         );
     }
     
@@ -180,8 +180,8 @@ final class FractionTest {
             () -> Assertions.assertTrue(doubleEqualsEpsilon(fiveFourths.getDoubleValue(), 5.0 / 4, epsilon)),
             () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSixSevenths.getDoubleValue(), -6.0 / 7, epsilon)),
             () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSevenSixths.getDoubleValue(), -7.0 / 6, epsilon)),
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(one.getDoubleValue(), 1, epsilon)),
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(zero.getDoubleValue(), 0, epsilon))
+            () -> Assertions.assertEquals(one.getDoubleValue(), 1.0),
+            () -> Assertions.assertEquals(zero.getDoubleValue(), 0.0)
         );
     }
     
@@ -204,37 +204,48 @@ final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(-40, 63), twoNinths.add(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-17, 18), twoNinths.add(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(11, 9), twoNinths.add(one)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.add(zero)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(twoNinths, twoNinths.add(zero)),
             () -> Assertions.assertEquals(new Fraction(53, 36), fiveFourths.add(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(5, 2), fiveFourths.add(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(11, 28), fiveFourths.add(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(1, 12), fiveFourths.add(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(9, 4), fiveFourths.add(one)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), fiveFourths.add(zero)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(fiveFourths, fiveFourths.add(zero)),
             () -> Assertions.assertEquals(new Fraction(-40, 63), negativeSixSevenths.add(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(11, 28), negativeSixSevenths.add(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-12, 7), negativeSixSevenths.add(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-85, 42), negativeSixSevenths.add(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(1, 7), negativeSixSevenths.add(one)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.add(zero)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(negativeSixSevenths, negativeSixSevenths.add(zero)),
             () -> Assertions.assertEquals(new Fraction(-17, 18), negativeSevenSixths.add(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(1, 12), negativeSevenSixths.add(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-85, 42), negativeSevenSixths.add(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-7, 3), negativeSevenSixths.add(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-1, 6), negativeSevenSixths.add(one)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSevenSixths.add(zero)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(negativeSevenSixths, negativeSevenSixths.add(zero)),
             () -> Assertions.assertEquals(new Fraction(11, 9), one.add(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(9, 4), one.add(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(1, 7), one.add(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-1, 6), one.add(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(2, 1), one.add(one)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), one.add(zero)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), zero.add(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), zero.add(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), zero.add(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), zero.add(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), zero.add(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.add(zero))
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(one, one.add(zero)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(twoNinths, zero.add(twoNinths)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(fiveFourths, zero.add(fiveFourths)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(negativeSixSevenths, zero.add(negativeSixSevenths)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(negativeSevenSixths, zero.add(negativeSevenSixths)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(one, zero.add(one)),
+            //Special case: addition with identity
+            () -> Assertions.assertEquals(zero, zero.add(zero))
         );
     }
     
@@ -252,42 +263,53 @@ final class FractionTest {
          * combinations of the above, with zero being included as the identity for subtraction
          */
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Fraction(0, 1), twoNinths.subtract(twoNinths)),
+            //Special case: subtraction with self
+            () -> Assertions.assertEquals(zero, twoNinths.subtract(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-37, 36), twoNinths.subtract(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(68, 63), twoNinths.subtract(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(25, 18), twoNinths.subtract(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-7, 9), twoNinths.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.subtract(zero)),
+            //Special case: subtraction with identity
+            () -> Assertions.assertEquals(twoNinths, twoNinths.subtract(zero)),
             () -> Assertions.assertEquals(new Fraction(37, 36), fiveFourths.subtract(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), fiveFourths.subtract(fiveFourths)),
+            //Special case: subtraction with self
+            () -> Assertions.assertEquals(zero, fiveFourths.subtract(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(59, 28), fiveFourths.subtract(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(29, 12), fiveFourths.subtract(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(1, 4), fiveFourths.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), fiveFourths.subtract(zero)),
+            //Special case: subtraction with identity
+            () -> Assertions.assertEquals(fiveFourths, fiveFourths.subtract(zero)),
             () -> Assertions.assertEquals(new Fraction(-68, 63), negativeSixSevenths.subtract(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-59, 28), negativeSixSevenths.subtract(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), negativeSixSevenths.subtract(negativeSixSevenths)),
+            //Special case: subtraction with self
+            () -> Assertions.assertEquals(zero, negativeSixSevenths.subtract(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(13, 42), negativeSixSevenths.subtract(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-13, 7), negativeSixSevenths.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.subtract(zero)),
+            //Special case: subtraction with identity
+            () -> Assertions.assertEquals(negativeSixSevenths, negativeSixSevenths.subtract(zero)),
             () -> Assertions.assertEquals(new Fraction(-25, 18), negativeSevenSixths.subtract(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-29, 12), negativeSevenSixths.subtract(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-13, 42), negativeSevenSixths.subtract(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), negativeSevenSixths.subtract(negativeSevenSixths)),
+            //Special case: subtraction with self
+            () -> Assertions.assertEquals(zero, negativeSevenSixths.subtract(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-13, 6), negativeSevenSixths.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSevenSixths.subtract(zero)),
+            //Special case: subtraction with identity
+            () -> Assertions.assertEquals(negativeSevenSixths, negativeSevenSixths.subtract(zero)),
             () -> Assertions.assertEquals(new Fraction(7, 9), one.subtract(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-1, 4), one.subtract(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(13, 7), one.subtract(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(13, 6), one.subtract(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), one.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), one.subtract(zero)),
+            //Special case: subtraction with self
+            () -> Assertions.assertEquals(zero, one.subtract(one)),
+            //Special case: subtraction with identity
+            () -> Assertions.assertEquals(one, one.subtract(zero)),
             () -> Assertions.assertEquals(new Fraction(-2, 9), zero.subtract(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-5, 4), zero.subtract(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(6, 7), zero.subtract(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(7, 6), zero.subtract(negativeSevenSixths)),
             () -> Assertions.assertEquals(new Fraction(-1, 1), zero.subtract(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.subtract(zero))
+            //Special case: subtraction with identity, subtraction with self
+            () -> Assertions.assertEquals(zero, zero.subtract(zero))
         );
     }
     
@@ -309,38 +331,60 @@ final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(5, 18), twoNinths.multiply(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-4, 21), twoNinths.multiply(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-7, 27), twoNinths.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), twoNinths.multiply(zero)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(twoNinths, twoNinths.multiply(one)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, twoNinths.multiply(zero)),
             () -> Assertions.assertEquals(new Fraction(5, 18), fiveFourths.multiply(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(25, 16), fiveFourths.multiply(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-15, 14), fiveFourths.multiply(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-35, 24), fiveFourths.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), fiveFourths.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), fiveFourths.multiply(zero)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(fiveFourths, fiveFourths.multiply(one)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, fiveFourths.multiply(zero)),
             () -> Assertions.assertEquals(new Fraction(-4, 21), negativeSixSevenths.multiply(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-15, 14), negativeSixSevenths.multiply(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(36, 49), negativeSixSevenths.multiply(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), negativeSixSevenths.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), negativeSixSevenths.multiply(zero)),
+            //Special case: multiplication with reciprocal
+            () -> Assertions.assertEquals(one, negativeSixSevenths.multiply(negativeSevenSixths)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(negativeSixSevenths, negativeSixSevenths.multiply(one)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, negativeSixSevenths.multiply(zero)),
             () -> Assertions.assertEquals(new Fraction(-7, 27), negativeSevenSixths.multiply(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-35, 24), negativeSevenSixths.multiply(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), negativeSevenSixths.multiply(negativeSixSevenths)),
+            //Special case: multiplication with reciprocal
+            () -> Assertions.assertEquals(one, negativeSevenSixths.multiply(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(49, 36), negativeSevenSixths.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSevenSixths.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), negativeSevenSixths.multiply(zero)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), one.multiply(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), one.multiply(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), one.multiply(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), one.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), one.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), one.multiply(zero)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(one)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.multiply(zero))
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(negativeSevenSixths, negativeSevenSixths.multiply(one)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, negativeSevenSixths.multiply(zero)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(twoNinths, one.multiply(twoNinths)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(fiveFourths, one.multiply(fiveFourths)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(negativeSixSevenths, one.multiply(negativeSixSevenths)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(negativeSevenSixths, one.multiply(negativeSevenSixths)),
+            //Special case: multiplication with identity
+            () -> Assertions.assertEquals(one, one.multiply(one)),
+            //Special case: multiplication with identity, multiplication with 0
+            () -> Assertions.assertEquals(zero, one.multiply(zero)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(twoNinths)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(fiveFourths)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(negativeSixSevenths)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(negativeSevenSixths)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(one)),
+            //Special case: multiplication with 0
+            () -> Assertions.assertEquals(zero, zero.multiply(zero))
         );
     }
     
@@ -359,49 +403,67 @@ final class FractionTest {
          * by zero results in an exception
          */
         Assertions.assertAll(
-            () -> Assertions.assertEquals(new Fraction(1, 1), twoNinths.divide(twoNinths)),
+            //Special case: division by self (when nonzero)
+            () -> Assertions.assertEquals(one, twoNinths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(8, 45), twoNinths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-7, 27), twoNinths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-4, 21), twoNinths.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(2, 9), twoNinths.divide(one)),
+            //Special case: division by 1
+            () -> Assertions.assertEquals(twoNinths, twoNinths.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> twoNinths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(45, 8), fiveFourths.divide(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), fiveFourths.divide(fiveFourths)),
+            //Special case: division by self (when nonzero)
+            () -> Assertions.assertEquals(one, fiveFourths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(-35, 24), fiveFourths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(-15, 14), fiveFourths.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(5, 4), fiveFourths.divide(one)),
+            //Special case: division by 1
+            () -> Assertions.assertEquals(fiveFourths, fiveFourths.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> fiveFourths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(-27, 7), negativeSixSevenths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-24, 35), negativeSixSevenths.divide(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), negativeSixSevenths.divide(negativeSixSevenths)),
+            //Special case: division by self (when nonzero)
+            () -> Assertions.assertEquals(one, negativeSixSevenths.divide(negativeSixSevenths)),
             () -> Assertions.assertEquals(new Fraction(36, 49), negativeSixSevenths.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSixSevenths.divide(one)),
+            //Special case: division by 1
+            () -> Assertions.assertEquals(negativeSixSevenths, negativeSixSevenths.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> negativeSixSevenths.divide(zero)),
             () -> Assertions.assertEquals(new Fraction(-21, 4), negativeSevenSixths.divide(twoNinths)),
             () -> Assertions.assertEquals(new Fraction(-14, 15), negativeSevenSixths.divide(fiveFourths)),
             () -> Assertions.assertEquals(new Fraction(49, 36), negativeSevenSixths.divide(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), negativeSevenSixths.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSevenSixths.divide(one)),
+            //Special case: division by self (when nonzero)
+            () -> Assertions.assertEquals(one, negativeSevenSixths.divide(negativeSevenSixths)),
+            () -> Assertions.assertEquals(negativeSevenSixths, negativeSevenSixths.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> negativeSevenSixths.divide(zero)),
-            () -> Assertions.assertEquals(new Fraction(9, 2), one.divide(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(4, 5), one.divide(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(-7, 6), one.divide(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(-6, 7), one.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(1, 1), one.divide(one)),
+            //Special case: 1 divided by a fraction is equivalent to its reciprocal (when nonzero)
+            () -> Assertions.assertEquals(twoNinths.reciprocal(), one.divide(twoNinths)),
+            //Special case: 1 divided by a fraction is equivalent to its reciprocal (when nonzero)
+            () -> Assertions.assertEquals(fiveFourths.reciprocal(), one.divide(fiveFourths)),
+            //Special case: 1 divided by a fraction is equivalent to its reciprocal (when nonzero)
+            () -> Assertions.assertEquals(negativeSixSevenths.reciprocal(), one.divide(negativeSixSevenths)),
+            //Special case: 1 divided by a fraction is equivalent to its reciprocal (when nonzero)
+            () -> Assertions.assertEquals(negativeSevenSixths.reciprocal(), one.divide(negativeSevenSixths)),
+            //Special case: division by self (when nonzero), division by 1, 1 divided by a fraction is equivalent to its reciprocal (when nonzero)
+            () -> Assertions.assertEquals(one, one.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> one.divide(zero)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(twoNinths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(fiveFourths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(negativeSixSevenths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(negativeSevenSixths)),
-            () -> Assertions.assertEquals(new Fraction(0, 1), zero.divide(one)),
+            //Special case: 0 divided by anything nonzero
+            () -> Assertions.assertEquals(zero, zero.divide(twoNinths)),
+            //Special case: 0 divided by anything nonzero
+            () -> Assertions.assertEquals(zero, zero.divide(fiveFourths)),
+            //Special case: 0 divided by anything nonzero
+            () -> Assertions.assertEquals(zero, zero.divide(negativeSixSevenths)),
+            //Special case: 0 divided by anything nonzero
+            () -> Assertions.assertEquals(zero, zero.divide(negativeSevenSixths)),
+            //Special case: 0 divided by anything nonzero, division by 1
+            () -> Assertions.assertEquals(zero, zero.divide(one)),
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> zero.divide(zero))
         );
+    
     }
     
     @Test
