@@ -1622,13 +1622,13 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 6));
 
         opl.numSeats = 14;
-        opl.numBallots = 100;
+        opl.numBallots = partyD.numBallots + partyR.numBallots + partyI.numBallots;
 
-        opl.partiesToPartyInformation = new LinkedHashMap<>();
-        opl.partiesToPartyInformation.put("D", partyD);
-        opl.partiesToPartyInformation.put("R", partyR);
-        opl.partiesToPartyInformation.put("I", partyI);
-
+        opl.partyToPartyInformation = new LinkedHashMap<>();
+        opl.partyToPartyInformation.put("D", partyD);
+        opl.partyToPartyInformation.put("R", partyR);
+        opl.partyToPartyInformation.put("I", partyI);
+        
         opl.partyToCandidateCounts = new LinkedHashMap<>();
 
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
@@ -1662,7 +1662,7 @@ final class OpenPartyListSystemTest {
         new File(auditOutput.replace('/', FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
         new File(reportOutput.replace('/', FILE_SEP)).delete();
-        
+
         System.setOut(originalSystemOut);
     }
 
