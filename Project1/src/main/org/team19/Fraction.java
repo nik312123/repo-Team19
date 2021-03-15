@@ -31,14 +31,14 @@ public class Fraction implements Comparable<Fraction> {
     protected long denominator;
     
     /**
-     * The floor of this {@link Fraction}, which is assigned upon the first usage of {@link #getWholePart()} and then returned for any subsequent
-     * usage
+     * The truncation of the floating-point form of the {@link Fraction}, which is assigned upon the first usage of {@link #getWholePart()} and then
+     * returned for any subsequent usage
      */
     protected Fraction wholePart;
     
     /**
-     * This {@link Fraction} minus its floor, which is assigned upon the first usage of {@link #getFractionalPart()} and then returned for any
-     * subsequent usage
+     * This {@link Fraction} minus the truncation of its floating-point form, which is assigned upon the first usage of {@link #getFractionalPart()}
+     * and then returned for any subsequent usage
      */
     protected Fraction fractionalPart;
     
@@ -154,9 +154,9 @@ public class Fraction implements Comparable<Fraction> {
     }
     
     /**
-     * Returns the floor of this {@link Fraction}
+     * Returns the truncation of the floating-point form of this {@link Fraction}
      *
-     * @return The floor of this {@link Fraction}
+     * @return The truncation of the floating-point form of this {@link Fraction}
      */
     public long getWholePart() {
         if(wholePart == null) {
@@ -166,9 +166,9 @@ public class Fraction implements Comparable<Fraction> {
     }
     
     /**
-     * Returns this {@link Fraction} minus its floor
+     * Returns this {@link Fraction} minus the truncation of its floating-point form
      *
-     * @return This {@link Fraction} minus its floor
+     * @return This {@link Fraction} the truncation of its floating-point form
      */
     public Fraction getFractionalPart() {
         if(fractionalPart == null) {
