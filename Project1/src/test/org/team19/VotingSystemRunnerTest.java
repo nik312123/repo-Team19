@@ -936,7 +936,6 @@ final class VotingSystemRunnerTest {
 
             //Get the runtime in seconds, and if it exceeds the time limit, then fail
             final double runtime = (double) (finalTime - initTime) / 1000000000;
-            originalSystemOut.println(runtime);
             if(runtime > timeLimitSeconds) {
                 shouldDelete = false;
 
