@@ -8,7 +8,7 @@ final class CandidateTest {
     private CandidateTest() {}
     
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         Assertions.assertAll(
             //Testing typical case
             () -> Assertions.assertDoesNotThrow(() -> new Candidate("Obama", "Democrat")),
@@ -19,23 +19,23 @@ final class CandidateTest {
     }
     
     @Test
-    public void testGetName() {
+    void testGetName() {
         final Candidate obama = new Candidate("Obama", "Democrat");
-    
+        
         //Testing that what we put as the name is what is returned by getName()
         Assertions.assertEquals("Obama", obama.getName());
     }
     
     @Test
-    public void testGetParty() {
+    void testGetParty() {
         final Candidate obama = new Candidate("Obama", "Democrat");
-    
+        
         //Testing that what we put as the name is what is returned by getParty()
         Assertions.assertEquals("Democrat", obama.getParty());
     }
     
     @Test
-    public void testToString() {
+    void testToString() {
         final Candidate obama = new Candidate("Obama", "Democrat");
         
         /*
@@ -46,7 +46,7 @@ final class CandidateTest {
     }
     
     @Test
-    public void testEquals() {
+    void testEquals() {
         final Candidate obama = new Candidate("Obama", "Democrat");
         final Candidate obamaDoppelganger = new Candidate("Obama", "Democrat");
         final Candidate alternateUniverseObama = new Candidate("Obama", "Republican");

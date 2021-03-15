@@ -40,21 +40,21 @@ final class TableFormatterTest {
             final Method objColTableToStrRowTable = TableFormatter.class.getDeclaredMethod("objColTableToStrRowTable", List.class, List.class,
                 int.class, int.class);
             objColTableToStrRowTable.setAccessible(true);
-            
+    
             //Creating arbitrary data table for testing
             final double avogadrosConstant = 6.02214 * Math.pow(10, 23);
             final double speedOfLight = 299792458;
             final double plancksConstant = 6.62607 * Math.pow(10, -34);
             final double earthGravity = 9.81;
             final double molarGasConstant = 0.0821;
-            final List<String> randomTopics = Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants");
-            final List<List<Object>> randomTopicData = Arrays.asList(
-                Arrays.asList(-3, -2, -1, 0, 1, 2, 3),
-                Arrays.asList("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
-                Arrays.asList("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
-                Arrays.asList(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
+            final List<String> randomTopics = List.of("Numbers", "Fruit", "Names", "Physics Constants");
+            final List<List<Object>> randomTopicData = List.of(
+                List.of(-3, -2, -1, 0, 1, 2, 3),
+                List.of("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
+                List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
+                List.of(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
             );
-            
+    
             Assertions.assertAll(
                 //Testing for empty table
                 () -> Assertions.assertEquals(
@@ -63,7 +63,7 @@ final class TableFormatterTest {
                 ),
                 //Testing for single item table
                 () -> Assertions.assertEquals(
-                    Arrays.asList(Collections.singletonList("Name"), Collections.singletonList("Nikunj Chawla")),
+                    List.of(Collections.singletonList("Name"), Collections.singletonList("Nikunj Chawla")),
                     objColTableToStrRowTable.invoke(
                         tableFormatter,
                         Collections.singletonList("Name"),
@@ -74,15 +74,15 @@ final class TableFormatterTest {
                 ),
                 //Testing arbitrary tables
                 () -> Assertions.assertEquals(
-                    Arrays.asList(
-                        Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants"),
-                        Arrays.asList("-3", "Apple", "Adam", Double.toString(Math.PI)),
-                        Arrays.asList("-2", "Banana", "Ben", Double.toString(Math.E)),
-                        Arrays.asList("-1", "Cantaloupe", "Craig", Double.toString(avogadrosConstant)),
-                        Arrays.asList("0", "Date", "Dan", Double.toString(speedOfLight)),
-                        Arrays.asList("1", "Eggplant", "Edward", Double.toString(plancksConstant)),
-                        Arrays.asList("2", "Fig", "Fred", Double.toString(earthGravity)),
-                        Arrays.asList("3", "Guava", "Gary", Double.toString(molarGasConstant))
+                    List.of(
+                        List.of("Numbers", "Fruit", "Names", "Physics Constants"),
+                        List.of("-3", "Apple", "Adam", Double.toString(Math.PI)),
+                        List.of("-2", "Banana", "Ben", Double.toString(Math.E)),
+                        List.of("-1", "Cantaloupe", "Craig", Double.toString(avogadrosConstant)),
+                        List.of("0", "Date", "Dan", Double.toString(speedOfLight)),
+                        List.of("1", "Eggplant", "Edward", Double.toString(plancksConstant)),
+                        List.of("2", "Fig", "Fred", Double.toString(earthGravity)),
+                        List.of("3", "Guava", "Gary", Double.toString(molarGasConstant))
                     ),
                     objColTableToStrRowTable.invoke(
                         tableFormatter,
@@ -113,7 +113,7 @@ final class TableFormatterTest {
             final double plancksConstant = 6.62607 * Math.pow(10, -34);
             final double earthGravity = 9.81;
             final double molarGasConstant = 0.0821;
-            final List<String> randomTopics = Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants");
+            final List<String> randomTopics = List.of("Numbers", "Fruit", "Names", "Physics Constants");
             
             Assertions.assertAll(
                 //Testing for empty table
@@ -126,7 +126,7 @@ final class TableFormatterTest {
                     new int[] {"Nikunj Chawla".length()},
                     (int[]) getColumnLengths.invoke(
                         tableFormatter,
-                        Arrays.asList(Collections.singletonList("Name"), Collections.singletonList("Nikunj Chawla")),
+                        List.of(Collections.singletonList("Name"), Collections.singletonList("Nikunj Chawla")),
                         1
                     )
                 ),
@@ -135,15 +135,15 @@ final class TableFormatterTest {
                     new int[] {"Numbers".length(), "Cantaloupe".length(), "Edward".length(), Double.toString(Math.PI).length()},
                     (int[]) getColumnLengths.invoke(
                         tableFormatter,
-                        Arrays.asList(
-                            Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants"),
-                            Arrays.asList("-3", "Apple", "Adam", Double.toString(Math.PI)),
-                            Arrays.asList("-2", "Banana", "Ben", Double.toString(Math.E)),
-                            Arrays.asList("-1", "Cantaloupe", "Craig", Double.toString(avogadrosConstant)),
-                            Arrays.asList("0", "Date", "Dan", Double.toString(speedOfLight)),
-                            Arrays.asList("1", "Eggplant", "Edward", Double.toString(plancksConstant)),
-                            Arrays.asList("2", "Fig", "Fred", Double.toString(earthGravity)),
-                            Arrays.asList("3", "Guava", "Gary", Double.toString(molarGasConstant))
+                        List.of(
+                            List.of("Numbers", "Fruit", "Names", "Physics Constants"),
+                            List.of("-3", "Apple", "Adam", Double.toString(Math.PI)),
+                            List.of("-2", "Banana", "Ben", Double.toString(Math.E)),
+                            List.of("-1", "Cantaloupe", "Craig", Double.toString(avogadrosConstant)),
+                            List.of("0", "Date", "Dan", Double.toString(speedOfLight)),
+                            List.of("1", "Eggplant", "Edward", Double.toString(plancksConstant)),
+                            List.of("2", "Fig", "Fred", Double.toString(earthGravity)),
+                            List.of("3", "Guava", "Gary", Double.toString(molarGasConstant))
                         ),
                         randomTopics.size()
                     )
@@ -184,7 +184,7 @@ final class TableFormatterTest {
                     "| %-42s | %24s | %-5s | %-2s | %3s |",
                     getTableFormat.invoke(
                         tableFormatter,
-                        Arrays.asList(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT, Alignment.RIGHT),
+                        List.of(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT, Alignment.RIGHT),
                         new int[] {42, 24, 5, 2, 3},
                         5
                     )
@@ -264,104 +264,104 @@ final class TableFormatterTest {
         //Testing for incorrect differences in sizes between headers, columns, and alignments
         final Supplier<String> undersizedHeader = () -> tableFormatter.formatAsTable(
             Collections.singletonList("Hello"),
-            Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList(1, 2)
+            List.of(
+                List.of("a", "b"),
+                List.of(1, 2)
             ),
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT)
+            List.of(Alignment.RIGHT, Alignment.LEFT)
         );
         final Supplier<String> oversizedHeader = () -> tableFormatter.formatAsTable(
-            Arrays.asList("Hello", "Goodbye", "1337"),
-            Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList(1, 2)
+            List.of("Hello", "Goodbye", "1337"),
+            List.of(
+                List.of("a", "b"),
+                List.of(1, 2)
             ),
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT)
+            List.of(Alignment.RIGHT, Alignment.LEFT)
         );
         final Supplier<String> undersizedNumColumns = () -> tableFormatter.formatAsTable(
-            Arrays.asList("Hello", "Goodbye"),
-            Collections.singletonList(Arrays.asList("a", "b")),
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT)
+            List.of("Hello", "Goodbye"),
+            Collections.singletonList(List.of("a", "b")),
+            List.of(Alignment.RIGHT, Alignment.LEFT)
         );
         final Supplier<String> oversizedNumColumns = () -> tableFormatter.formatAsTable(
-            Arrays.asList("Hello", "Goodbye"),
-            Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList(1, 2),
-                Arrays.asList(3.14159, 2.71828)
+            List.of("Hello", "Goodbye"),
+            List.of(
+                List.of("a", "b"),
+                List.of(1, 2),
+                List.of(3.14159, 2.71828)
             ),
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT)
+            List.of(Alignment.RIGHT, Alignment.LEFT)
         );
         final Supplier<String> undersizedAlignments = () -> tableFormatter.formatAsTable(
-            Arrays.asList("Hello", "Goodbye"),
-            Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList(1, 2)
+            List.of("Hello", "Goodbye"),
+            List.of(
+                List.of("a", "b"),
+                List.of(1, 2)
             ),
             Collections.singletonList(Alignment.RIGHT)
         );
         final Supplier<String> oversizedAlignments = () -> tableFormatter.formatAsTable(
-            Arrays.asList("Hello", "Goodbye"),
-            Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList(1, 2)
+            List.of("Hello", "Goodbye"),
+            List.of(
+                List.of("a", "b"),
+                List.of(1, 2)
             ),
-            Arrays.asList(Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT)
+            List.of(Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT)
         );
-        
+    
         //Creating arbitrary data table for testing
         final double avogadrosConstant = 6.02214 * Math.pow(10, 23);
         final double speedOfLight = 299792458;
         final double plancksConstant = 6.62607 * Math.pow(10, -34);
         final double earthGravity = 9.81;
         final double molarGasConstant = 0.0821;
-        final List<String> randomTopics = Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants");
-        final List<List<?>> randomTopicData = Arrays.asList(
-            Arrays.asList(-3, -2, -1, 0, 1, 2, 3),
-            Arrays.asList("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
-            Arrays.asList("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
-            Arrays.asList(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
+        final List<String> randomTopics = List.of("Numbers", "Fruit", "Names", "Physics Constants");
+        final List<List<?>> randomTopicData = List.of(
+            List.of(-3, -2, -1, 0, 1, 2, 3),
+            List.of("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
+            List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
+            List.of(Math.PI, Math.E, avogadrosConstant, speedOfLight, plancksConstant, earthGravity, molarGasConstant)
         );
-        
+    
         //Testing left alignment with arbitrary data
         final Supplier<String> allLeft = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
-            Arrays.asList(Alignment.LEFT, Alignment.LEFT, Alignment.LEFT, Alignment.LEFT)
+            List.of(Alignment.LEFT, Alignment.LEFT, Alignment.LEFT, Alignment.LEFT)
         );
-        
+    
         //Testing right alignment with arbitrary data
         final Supplier<String> allRight = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
-            Arrays.asList(Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT)
+            List.of(Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT, Alignment.RIGHT)
         );
     
         //Testing left and right alignments with arbitrary data
         final Supplier<String> alternatingLeftRight = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
-            Arrays.asList(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT)
+            List.of(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT)
         );
         
         //Testing table with alternate symbols
         final TableFormatter tableFormatter2 = new TableFormatter('┼', '─', '│');
         
         final Supplier<String> randomCandidateData = () -> tableFormatter2.formatAsTable(
-            Arrays.asList("Name", "Party", "Age", "Sex", "DOB"),
-            Arrays.asList(
-                Arrays.asList("Joseph Biden", "Kamala Harris", "Donald Trump", "Michael Pence"),
-                Arrays.asList("Democrat", "Democrat", "Republican", "Republican"),
-                Arrays.asList(78, 56, 74, 61),
-                Arrays.asList('M', 'F', 'M', 'M'),
-                Arrays.asList(
+            List.of("Name", "Party", "Age", "Sex", "DOB"),
+            List.of(
+                List.of("Joseph Biden", "Kamala Harris", "Donald Trump", "Michael Pence"),
+                List.of("Democrat", "Democrat", "Republican", "Republican"),
+                List.of(78, 56, 74, 61),
+                List.of('M', 'F', 'M', 'M'),
+                List.of(
                     new Date(1942, 11, 20),
                     new Date(1964, 10, 20),
                     new Date(1946, 6, 14),
                     new Date(1959, 6, 7)
                 )
             ),
-            Arrays.asList(Alignment.LEFT, Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT)
+            List.of(Alignment.LEFT, Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT, Alignment.RIGHT)
         );
         
         Assertions.assertAll(
