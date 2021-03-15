@@ -40,7 +40,7 @@ final class InstantRunoffSystemTest {
 
     //Creates a null device output stream to consume and ignore all output
     private static final OutputStream NULL_OUTPUT = OutputStream.nullOutputStream();
-    
+
     //Creates an InstantRunoffSystem with null device output streams
     private static InstantRunoffSystem createIrNullStreams() {
         return new InstantRunoffSystem(NULL_OUTPUT, NULL_OUTPUT);
@@ -421,7 +421,7 @@ final class InstantRunoffSystemTest {
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
 
-        for(Ballot ballot : ballots){
+        for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
 
@@ -471,7 +471,8 @@ final class InstantRunoffSystemTest {
     void testEliminateLowestOutput() {
 
         //Initializes InstantRunoffSystem with audit OutputStream
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt".replace('/', FILE_SEP);
+        final String auditOutput =
+            "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt".replace('/', FILE_SEP);
 
         InstantRunoffSystem ir = null;
         try {
@@ -501,7 +502,7 @@ final class InstantRunoffSystemTest {
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
 
-        for(Ballot ballot : ballots){
+        for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
 
@@ -575,7 +576,7 @@ final class InstantRunoffSystemTest {
             new Ballot(9, new Candidate[] {ir.candidates[1]})
         };
 
-        for(Ballot ballot : ballots){
+        for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
 
@@ -650,12 +651,12 @@ final class InstantRunoffSystemTest {
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
 
-        for(Ballot ballot : ballots){
+        for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
 
         ir.candidateBallotsMap = new LinkedHashMap<>();
-
+        
         //Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0

@@ -128,14 +128,14 @@ public final class VotingStreamParser {
         final BufferedReader inReader = new BufferedReader(new InputStreamReader(input));
         final PrintWriter auditWriter = new PrintWriter(auditStream, true);
         final PrintWriter reportWriter = new PrintWriter(reportStream, true);
-        
+
         int lineNumber = 1;
 
         VotingSystem votingSystem = null;
 
         //Attempt to read the first line of the file
         String firstLine = readLine(inReader, lineNumber);
-
+        
         //Throw an exception if the file has 0 lines (if such a file exists)
         throwParseExceptionIfEofLine(firstLine, lineNumber);
 

@@ -91,7 +91,7 @@ public final class TableFormatter {
         if(numCols != 0) {
             headers.forEach(strRowTable.get(0)::add);
         }
-    
+        
         for(final Collection<?> col : colTable) {
             final Iterator<?> colIter = col.iterator();
             for(int rowIndex = 1; rowIndex < numRows; rowIndex++) {
@@ -195,9 +195,9 @@ public final class TableFormatter {
         Objects.requireNonNull(headers);
         Objects.requireNonNull(colTableData);
         Objects.requireNonNull(alignments);
-    
+        
         final int numCols = colTableData.size();
-    
+        
         //If the number of columns does not match the size of the column headers or alignment lists, then throw an IllegalArgumentException
         if(numCols != headers.size()) {
             throw new IllegalArgumentException("The given headers list must have the same size as the number of columns in the table");

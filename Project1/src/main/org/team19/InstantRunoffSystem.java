@@ -32,52 +32,52 @@ import java.util.stream.Collectors;
  * The {@link VotingSystem} representing the instant runoff voting system
  */
 public class InstantRunoffSystem extends VotingSystem {
-    
+
     /**
      * Used for randomization for breaking ties
      */
     protected static final Random RAND = new SecureRandom();
-    
+
     /**
      * The number of candidates in this election
      */
     protected int numCandidates;
-    
+
     /**
      * The number of ballots provided in this election
      */
     protected int numBallots;
-    
+
     /**
      * Half of the number of ballots provided in this election
      */
     protected int halfNumBallots;
-    
+
     /**
      * The array of {@link Candidate}s for this election in the order presented in the election file
      */
     protected Candidate[] candidates;
-    
+
     /**
      * The mapping of {@link Candidate}s to their current corresponding {@link Ballot}s
      */
     protected Map<Candidate, ArrayDeque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
-    
+
     /**
      * The writer to an output stream for the audit file to write detailed information about the running of the election
      */
     protected PrintWriter auditWriter;
-    
+
     /**
      * The writer to an output stream for the report file to write a summary about the running of the election.
      */
     protected PrintWriter reportWriter;
-    
+
     /**
      * The {@link TableFormatter} used to produce tables as output
      */
     protected TableFormatter tableFormatter;
-    
+
     /**
      * The pattern associated with a valid candidate of the form "[candidate1] ([party1])", replacing the corresponding bracketed items with the
      * actual candidate's name and party
@@ -94,7 +94,7 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @SuppressWarnings("RegExpRedundantEscape")
     protected Pattern candidatePattern = Pattern.compile("^([^\\(\\),]+)\\(([^\\(\\),]+)\\)\\s*$");
-    
+
     /**
      * Represents a ballot in an {@link InstantRunoffSystem} election
      */
@@ -103,17 +103,17 @@ public class InstantRunoffSystem extends VotingSystem {
          * The ballot number associated with this ballot, corresponding to its position in the provided election file, starting at 1
          */
         protected int ballotNumber;
-        
+
         /**
          * The index corresponding to the current candidate this ballot is on at the current stage of eliminations
          */
         protected int candidateIndex = -1;
-        
+
         /**
          * The array of {@link Candidate}s in order of rank for this {@link Ballot}
          */
         protected Candidate[] rankedCandidates;
-        
+
         /**
          * Initializes a {@link Ballot}
          *
@@ -125,7 +125,7 @@ public class InstantRunoffSystem extends VotingSystem {
             this.ballotNumber = ballotNumber;
             this.rankedCandidates = rankedCandidates;
         }
-        
+
         /**
          * Returns the ballot number associated with this ballot
          *
@@ -134,7 +134,7 @@ public class InstantRunoffSystem extends VotingSystem {
         public int getBallotNumber() {
             return ballotNumber;
         }
-        
+
         /**
          * Returns the array of {@link Candidate}s in order of rank for this {@link Ballot}
          *
@@ -143,7 +143,7 @@ public class InstantRunoffSystem extends VotingSystem {
         public Candidate[] getRankedCandidates() {
             return rankedCandidates;
         }
-        
+
         /**
          * Returns the next ranked {@link Candidate} for this ballot
          *
@@ -156,7 +156,7 @@ public class InstantRunoffSystem extends VotingSystem {
             candidateIndex++;
             return rankedCandidates[candidateIndex];
         }
-        
+
         /**
          * Returns the {@link String} form of this {@link Ballot}
          *
@@ -165,7 +165,7 @@ public class InstantRunoffSystem extends VotingSystem {
         public String toString() {
             return String.format("Ballot %d: %s", ballotNumber, Arrays.toString(rankedCandidates));
         }
-        
+
         /**
          * Returns true if the provided {@link Object} is equivalent to this {@link Ballot}
          *
@@ -184,7 +184,7 @@ public class InstantRunoffSystem extends VotingSystem {
             return ballotNumber == ballot.ballotNumber && candidateIndex == ballot.candidateIndex &&
                 Arrays.equals(rankedCandidates, ballot.rankedCandidates);
         }
-        
+
         /**
          * Returns the hashcode for this {@link Ballot}
          *
@@ -198,7 +198,7 @@ public class InstantRunoffSystem extends VotingSystem {
             return result;
         }
     }
-    
+
     /**
      * Initializes a {@link InstantRunoffSystem}
      *
@@ -206,17 +206,18 @@ public class InstantRunoffSystem extends VotingSystem {
      * @param reportOutput The {@link OutputStream} to write a summary about the running of the election
      * @throws NullPointerException Thrown if either auditOutput or reportOutput is null
      */
+    
     public InstantRunoffSystem(final OutputStream auditOutput, final OutputStream reportOutput) throws NullPointerException {
         super(auditOutput, reportOutput);
         Objects.requireNonNull(auditOutput);
         Objects.requireNonNull(reportOutput);
-        
+
         auditWriter = new PrintWriter(auditOutput);
         reportWriter = new PrintWriter(reportOutput);
-    
+
         tableFormatter = new TableFormatter('+', '-', '|');
     }
-    
+
     /**
      * Returns the number of lines that makes up the header for the candidates
      *
@@ -226,7 +227,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public int getCandidateHeaderSize() {
         return 1;
     }
-    
+
     /**
      * Returns the number of lines that makes up the header for the ballots
      *
@@ -236,7 +237,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public int getBallotHeaderSize() {
         return 1;
     }
-    
+
     /**
      * Parses the lines corresponding to the header for the candidates
      *
@@ -254,7 +255,7 @@ public class InstantRunoffSystem extends VotingSystem {
                     "The number of candidates provided in the candidates header was %d but must be at least 1", numCandidates
                 ), line);
             }
-            
+
             //Output the number of candidates to the audit, report, and summary
             final String numCandidatesOutput = String.format("Number of Candidates: %d\n", numCandidates);
             auditWriter.println(numCandidatesOutput);
@@ -267,7 +268,7 @@ public class InstantRunoffSystem extends VotingSystem {
             ), line);
         }
     }
-    
+
     /**
      * Parses the candidates line from the election file and returns the resultant array
      *
@@ -301,7 +302,7 @@ public class InstantRunoffSystem extends VotingSystem {
         }
         return candidatesArr;
     }
-    
+
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
@@ -312,24 +313,24 @@ public class InstantRunoffSystem extends VotingSystem {
     @Override
     public void addCandidates(final String candidatesLine, final int line) throws ParseException {
         candidates = parseCandidates(candidatesLine, line);
-        
+
         //Print the output corresponding to the candidates
         auditWriter.println("Candidates:");
         reportWriter.println("Candidates:");
         System.out.println("Candidates:");
-        
+
         for(final Candidate candidate : candidates) {
             final String candidateStr = candidate.toString();
             auditWriter.println(candidateStr);
             reportWriter.println(candidateStr);
             System.out.println(candidateStr);
         }
-        
+
         auditWriter.println();
         reportWriter.println();
         System.out.println();
     }
-    
+
     /**
      * Parses the lines corresponding to the header for the ballots
      *
@@ -348,7 +349,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 ), line);
             }
             halfNumBallots = numBallots / 2;
-            
+
             //Output the number of ballots to the audit, report, and summary
             final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
             auditWriter.println(numBallotsOutput);
@@ -361,7 +362,7 @@ public class InstantRunoffSystem extends VotingSystem {
             ), line);
         }
     }
-    
+
     /**
      * Retrieves the positive integer at the current position of the {@link String} and the position after the integer
      *
@@ -372,11 +373,11 @@ public class InstantRunoffSystem extends VotingSystem {
     private Pair<Integer, Integer> getNumber(final String str, int pos) {
         //The StringBuilder in which the number string will be built
         final StringBuilder numberBuilder = new StringBuilder();
-        
+
         //Adds the current character as it is a digit
         numberBuilder.append(str.charAt(pos));
         pos++;
-        
+
         //Adds the other characters after the current characters if they are digits
         for(; pos < str.length(); pos++) {
             final char curChar = str.charAt(pos);
@@ -385,10 +386,10 @@ public class InstantRunoffSystem extends VotingSystem {
             }
             numberBuilder.append(curChar);
         }
-        
+
         return new Pair<>(Integer.parseInt(numberBuilder.toString()), pos);
     }
-    
+
     /**
      * Parses the ballot line from the election file and returns the resultant {@link Ballot}
      *
@@ -400,27 +401,27 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     private Ballot parseBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
         int numCommas = 0;
-        
+
         //Store the minimum and maximum rank found in the rankings
         int minRank = Integer.MAX_VALUE;
         int maxRank = 0;
-        
+
         //Mapping of rankings to candidates for the ballot
         final Map<Integer, Candidate> rankedCandidateMap = new HashMap<>();
-        
+
         //IIterate through the characters of the ballot line
         for(int i = 0; i < ballotLine.length(); ++i) {
             final char curChar = ballotLine.charAt(i);
-            
+
             if(curChar == ',') {
                 numCommas++;
             }
             else if(Character.isDigit(curChar)) {
                 //Retrieve the number at the current position of the string and the position after the number
                 final Pair<Integer, Integer> rankNewPos = getNumber(ballotLine, i);
-                
+
                 final int rank = rankNewPos.getFirst();
-                
+
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
                 if(rank < 1 || rank > numCandidates) {
                     VotingStreamParser.throwParseException(String.format(
@@ -428,12 +429,12 @@ public class InstantRunoffSystem extends VotingSystem {
                         rank, 1, numCandidates, numCandidates
                     ), line);
                 }
-                
+
                 //Update the minimum, maximum, and ranked candidates map
                 minRank = Math.min(minRank, rank);
                 maxRank = Math.max(maxRank, rank);
                 rankedCandidateMap.put(rank, candidates[numCommas]);
-                
+
                 //Change the current index i to the position of the last character of the rank number
                 i = rankNewPos.getSecond() - 1;
             }
@@ -444,14 +445,14 @@ public class InstantRunoffSystem extends VotingSystem {
                 ), line);
             }
         }
-        
+
         //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
         if(numCommas + 1 != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
             ), line);
         }
-        
+
         //If the ballot has not ranked a single candidate, then throw an exception
         if(minRank == Integer.MAX_VALUE) {
             VotingStreamParser.throwParseException("A ballot must rank at least one candidate", line);
@@ -460,7 +461,7 @@ public class InstantRunoffSystem extends VotingSystem {
         else if(minRank != 1) {
             VotingStreamParser.throwParseException("A ballot must start ranking at 1", line);
         }
-        
+
         //For each of the ranked candidates, add it to an array, throwing an exception if there are any skipped ranks
         final Candidate[] rankedCandidates = new Candidate[maxRank];
         for(int i = 1; i <= maxRank; ++i) {
@@ -471,10 +472,10 @@ public class InstantRunoffSystem extends VotingSystem {
             }
             rankedCandidates[i - 1] = rankedCandidateMap.get(i);
         }
-        
+
         return new Ballot(ballotNumber, rankedCandidates);
     }
-    
+
     /**
      * Parses a line corresponding to a ballot and adds it internally
      *
@@ -486,28 +487,28 @@ public class InstantRunoffSystem extends VotingSystem {
     @Override
     public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
         final Ballot ballot = parseBallot(ballotNumber, ballotLine, line);
-        
+
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
-        
+
         //Writes the output for this ballot to the audit output
         auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
-        
+
         final Candidate[] rankedCandidates = ballot.getRankedCandidates();
         for(int i = 0; i < rankedCandidates.length; i++) {
             auditWriter.printf("    %d – %s\n", i + 1, rankedCandidates[i]);
         }
         auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
-        
+
         //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
         if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
             candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
         }
-        
+
         //Add the ballot to its first ranked candidate list of ballots
         candidateBallotsMap.get(firstRankedCandidate).add(ballot);
     }
-    
+
     /**
      * Returns the name of this voting system
      *
@@ -517,7 +518,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public String getName() {
         return "Instant Runoff Voting";
     }
-    
+
     /**
      * Returns the short name for the voting system; that is, the name that appears at the top of an election file
      *
@@ -527,7 +528,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public String getShortName() {
         return "IR";
     }
-    
+
     /**
      * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
      * <p></p>
@@ -539,7 +540,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public int getNumCandidates() {
         return numCandidates;
     }
-    
+
     /**
      * Precondition: {@link #addCandidates(String, int)} has been executed successfully
      * <p></p>
@@ -551,7 +552,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public Collection<Candidate> getCandidates() {
         return List.of(candidates);
     }
-    
+
     /**
      * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
      * <p></p>
@@ -563,7 +564,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public int getNumBallots() {
         return numBallots;
     }
-    
+
     /**
      * Returns the string form of this {@link InstantRunoffSystem}
      *
@@ -573,7 +574,7 @@ public class InstantRunoffSystem extends VotingSystem {
     public String toString() {
         return String.format("InstantRunoffSystem{candidates=%s, numBallots=%d}", Arrays.toString(candidates), numBallots);
     }
-    
+
     /**
      * Returns one of the candidate with the highest ballot counts and the candidate(s) with the lowest ballot counts
      *
@@ -584,19 +585,19 @@ public class InstantRunoffSystem extends VotingSystem {
          * Note: The reason we only return one of the candidates with the highest ballot counts is that we only care about the case in which a
          * candidate has the majority of votes, and there can only be one candidate with the majority of votes at any time
          */
-        
+
         //Initializes the the highest ballot count and the candidate associated with it
         int highestBallots = -1;
         Candidate highestCandidate = null;
-        
+
         //Initializes the lowest ballot count and the candidate(s) associated with it
         int lowestBallots = Integer.MAX_VALUE;
         final List<Candidate> lowestCandidates = new ArrayList<>();
-        
+
         for(final Candidate candidate : candidateBallotsMap.keySet()) {
             //Gets the number of ballots for each candidate
             final int candidateNumBallots = candidateBallotsMap.get(candidate).size();
-            
+
             //Identifies new highest count and replaces highestCandidate
             if(candidateNumBallots > highestBallots) {
                 highestBallots = candidateNumBallots;
@@ -615,7 +616,7 @@ public class InstantRunoffSystem extends VotingSystem {
         }
         return new Pair<>(new Pair<>(lowestBallots, lowestCandidates), new Pair<>(highestBallots, highestCandidate));
     }
-    
+
     /**
      * Eliminates a candidate and redistributes their ballots
      *
@@ -624,17 +625,17 @@ public class InstantRunoffSystem extends VotingSystem {
     protected void eliminateLowest(final Candidate lowest) {
         //Eliminates candidate from map
         final ArrayDeque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
-        
+
         //Candidate has 0 ballots to distribute
         if(ballotsToRedistribute.isEmpty()) {
             auditWriter.printf("%s has no ballots to have distributed.\n\n", lowest);
             return;
         }
-        
+
         for(final Ballot ballot : ballotsToRedistribute) {
             //Gets next ranked candidate on the ballot
             Candidate nextCandidate = ballot.getNextCandidate();
-            
+
             //While the current candidate for the ballot has been eliminated, get the next candidate
             while(nextCandidate != null && !candidateBallotsMap.containsKey(nextCandidate)) {
                 auditWriter.printf(
@@ -643,7 +644,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 );
                 nextCandidate = ballot.getNextCandidate();
             }
-            
+
             //If there are no more candidates ranked for the ballot
             if(nextCandidate == null) {
                 auditWriter.printf(
@@ -660,7 +661,7 @@ public class InstantRunoffSystem extends VotingSystem {
             }
         }
     }
-    
+
     /**
      * Returns a table formatted as a {@link String} with all non-eliminated candidates and their number of ballots
      *
@@ -677,7 +678,7 @@ public class InstantRunoffSystem extends VotingSystem {
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
         ) + "\n";
     }
-    
+
     /**
      * Runs the IR election algorithm
      */
@@ -688,15 +689,15 @@ public class InstantRunoffSystem extends VotingSystem {
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
-        
+
         strToWriteToAll = getCurrentChoiceBallots();
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
-        
+
         while(true) {
             final int candidateBallotsMapLen = candidateBallotsMap.size();
-            
+
             //If there is only 1 candidate, they are automatically declared the winner
             if(candidateBallotsMapLen == 1) {
                 final Candidate winner = candidateBallotsMap.keySet().iterator().next();
@@ -717,31 +718,31 @@ public class InstantRunoffSystem extends VotingSystem {
             if(candidateBallotsMapLen == 2) {
                 //Stores the winner of the election
                 final Candidate winner;
-                
+
                 //True only if both candidates have an equal number of ballots, making randomization required
                 boolean randomSelectionRequired = false;
-                
+
                 //Store the last remaining candidates in an array
                 final Candidate[] topTwo = candidateBallotsMap.keySet().toArray(new Candidate[0]);
-                
+
                 //Compare the candidates' ballot counts
                 final int firstSecondCandidateComparison =
                     candidateBallotsMap.get(topTwo[0]).size() - candidateBallotsMap.get(topTwo[1]).size();
-                
+
                 if(firstSecondCandidateComparison > 0) {
                     winner = topTwo[0];
                 }
                 else if(firstSecondCandidateComparison < 0) {
                     winner = topTwo[1];
                 }
-                
+
                 //If the difference is 0, they share the same number of ballots, so randomization is needed to choose the candidate
                 else {
                     //Picks winner by choosing a random index
                     randomSelectionRequired = true;
                     winner = topTwo[RAND.nextInt(2)];
                 }
-                
+
                 //If there is a tie
                 if(randomSelectionRequired) {
                     auditWriter.printf("There exists a tie between %s and %s.\n", topTwo[0], topTwo[1]);
@@ -749,7 +750,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 }
                 else {
                     final int winnerBallotCount = candidateBallotsMap.get(winner).size();
-                    
+
                     strToWriteToAll = String.format(
                         "%s has received %d/%d ballots, giving them the greatest popularity with %s%% of the ballots",
                         winner,
@@ -768,7 +769,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 //Gets highest candidate and lowest candidate(s) by ballots
                 final Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>> lowestHighestCandidates = getLowestHighestCandidates();
                 final Pair<Integer, Candidate> highestCandidateBallots = lowestHighestCandidates.getSecond();
-                
+
                 //If the highest candidate has the majority, the winner is declared
                 if(highestCandidateBallots.getFirst() > halfNumBallots) {
                     strToWriteToAll = String.format(
@@ -787,10 +788,10 @@ public class InstantRunoffSystem extends VotingSystem {
                 else {
                     final Pair<Integer, List<Candidate>> lowestCandidateBallots = getLowestHighestCandidates().getFirst();
                     final List<Candidate> lowestCandidates = lowestCandidateBallots.getSecond();
-                    
+
                     //Randomly picks a candidate from the lowest candidates to eliminate
                     final Candidate lowest = lowestCandidates.get(RAND.nextInt(lowestCandidates.size()));
-                    
+
                     //If no tie breaking was required
                     if(lowestCandidates.size() == 1) {
                         auditWriter.println("No candidate has a majority. Eliminating the candidate with the lowest ballots: " + lowest + "\n");
@@ -802,19 +803,19 @@ public class InstantRunoffSystem extends VotingSystem {
                             auditWriter.print(lowestCandidates.get(i) + ", ");
                         }
                         auditWriter.println(lowestCandidates.get(lowestCandidates.size() - 1));
-                        
+
                         auditWriter.println("Random choice from the above for elimination: " + lowest);
                         auditWriter.println();
                     }
                     //Eliminated the lowest candidate chosen
                     eliminateLowest(lowest);
-                    
+
                     //Prints table of ballot counts after elimination
                     strToWriteToAll = "Ballots after " + lowest + " was eliminated:";
                     auditWriter.println(strToWriteToAll);
                     reportWriter.println(strToWriteToAll);
                     System.out.println(strToWriteToAll);
-                    
+
                     strToWriteToAll = getCurrentChoiceBallots();
                     auditWriter.println(strToWriteToAll);
                     reportWriter.println(strToWriteToAll);
@@ -822,7 +823,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 }
             }
         }
-        
+
         auditWriter.close();
         reportWriter.close();
     }

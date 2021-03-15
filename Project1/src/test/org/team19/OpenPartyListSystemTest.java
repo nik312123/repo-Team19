@@ -647,7 +647,8 @@ final class OpenPartyListSystemTest {
 
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsSingleCandidateHasAllVotes.txt".replace('/', FILE_SEP)),
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsSingleCandidateHasAllVotes.txt".replace('/', FILE_SEP)),
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit2.txt".replace('/', FILE_SEP)))
         );
 
@@ -735,7 +736,8 @@ final class OpenPartyListSystemTest {
 
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsBallotsNotEvenlyDivisibleByQuota.txt".replace('/', FILE_SEP)),
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsBallotsNotEvenlyDivisibleByQuota.txt"
+                .replace('/', FILE_SEP)),
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsAudit3.txt".replace('/', FILE_SEP)))
         );
 
@@ -788,8 +790,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit1.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport1.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit1.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport1.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -880,8 +884,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit2.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport2.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit2.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport2.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -978,8 +984,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1075,8 +1083,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsReport3.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1115,7 +1125,8 @@ final class OpenPartyListSystemTest {
 
         // Comparing expected output vs actual output.
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsMoreSeatsThanCandidates.txt".replace('/', FILE_SEP)),
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsMoreSeatsThanCandidates.txt".replace('/', FILE_SEP)),
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateRemainingSeatsAudit3.txt".replace('/', FILE_SEP)))
         );
 
@@ -1177,8 +1188,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesAudit1.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesReport1.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesAudit1.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesReport1.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1217,8 +1230,10 @@ final class OpenPartyListSystemTest {
 
         // Comparing expected output vs actual output for a typical seat distribution
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTypical.txt".replace('/', FILE_SEP)),
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesAudit1.txt".replace('/', FILE_SEP)))
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTypical.txt".replace('/', FILE_SEP)),
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesAudit1.txt".replace('/', FILE_SEP)))
         );
 
         //noinspection ResultOfMethodCallIgnored
@@ -1281,8 +1296,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksAudit1.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksReport1.txt".replace('/', FILE_SEP))
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksAudit1.txt"
+                    .replace('/', FILE_SEP)),
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testDistributeSeatsToCandidatesTieBreaksReport1.txt"
+                    .replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1316,9 +1333,8 @@ final class OpenPartyListSystemTest {
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         opl.printFinalSeatAllocations();
 
+        //Distributes seats to candidates where there are ties between them after allocation of seats
         final List<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
-
-        System.out.println(candidatesWithSeats);
 
         // Test to check that either Jones or Borg can get their party's allocated seat since they both have 1 vote
         assertTrue(candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Jones (R)]") || candidatesWithSeats.toString()
@@ -1383,8 +1399,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testPrintSummaryTableAudit1.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testPrintSummaryTableReport1.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testPrintSummaryTableAudit1.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testPrintSummaryTableReport1.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1475,8 +1493,10 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit1.txt".replace('/', FILE_SEP)),
-                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport1.txt".replace('/', FILE_SEP))
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit1.txt".replace('/', FILE_SEP)),
+                new FileOutputStream(
+                    "Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport1.txt".replace('/', FILE_SEP))
             );
         }
         catch(FileNotFoundException e) {
@@ -1571,8 +1591,10 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
 
-        String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesAudit1.txt".replace('/', FILE_SEP);
-        String reportOutput = "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesReport1.txt".replace('/', FILE_SEP);
+        String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesAudit1.txt".replace('/', FILE_SEP);
+        String reportOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesReport1.txt".replace('/', FILE_SEP);
 
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -1648,13 +1670,15 @@ final class OpenPartyListSystemTest {
 
         // Comparing expected output vs actual output of Audit file
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesAudit.txt".replace('/', FILE_SEP)),
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesAudit.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
 
         // Comparing expected output vs actual output of report file
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesReport.txt".replace('/', FILE_SEP)),
+            new FileInputStream(
+                "Project1/testing/test-resources/openPartyListSystemTest/testElectionMoreSeatsThanCandidatesReport.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
         );
 
@@ -1664,11 +1688,5 @@ final class OpenPartyListSystemTest {
         new File(reportOutput.replace('/', FILE_SEP)).delete();
 
         System.setOut(originalSystemOut);
-    }
-
-
-    @Test
-    void testToString() {
-
     }
 }

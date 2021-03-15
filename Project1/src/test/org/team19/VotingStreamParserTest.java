@@ -186,12 +186,12 @@ final class VotingStreamParserTest {
             final FileInputStream inputStream = new FileInputStream(
                 "Project1/testing/test-resources/votingStreamParserTest/correct_ir.csv"
             );
-    
+            
             //Get the InstantRunoffSystem if the assertion holds that no exception is thrown in parsing the file
             final InstantRunoffSystem instantRunoffSystem = (InstantRunoffSystem) Assertions.assertDoesNotThrow(() ->
                 VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
-    
+            
             Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
                 () -> Assertions.assertEquals(instantRunoffSystem.getNumCandidates(), 4),
@@ -225,12 +225,12 @@ final class VotingStreamParserTest {
             final FileInputStream inputStream = new FileInputStream(
                 "Project1/testing/test-resources/votingStreamParserTest/correct_opl.csv"
             );
-    
+            
             //Get the OpenPartyListSystem if the assertion holds that no exception is thrown in parsing the file
             final OpenPartyListSystem openPartyListSystem = (OpenPartyListSystem) Assertions.assertDoesNotThrow(() ->
                 VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
-    
+            
             Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
                 () -> Assertions.assertEquals(openPartyListSystem.getNumCandidates(), 6),

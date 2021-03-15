@@ -371,12 +371,12 @@ public class OpenPartyListSystem extends VotingSystem {
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
             ), line);
         }
-
+        
         //If there are no 1s for the ballot, then throw an exception
         if(oneLocationZeroBased == null) {
             VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", line);
         }
-        
+
         return candidates[oneLocationZeroBased];
     }
 
@@ -880,7 +880,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 if(highestRemainingCandidatesSize > 1) {
                     auditWriter.printf("Candidates %s have equivalent ballot counts of %d.%n",
                         highestNames.substring(1,
-                        highestNames.length() - 1),
+                            highestNames.length() - 1),
                         nextHighestCandidateBallots.getValue()
                     );
                     auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.%n",
