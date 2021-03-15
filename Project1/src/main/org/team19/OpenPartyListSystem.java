@@ -1028,7 +1028,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 partyToCandidateCounts.get(party).entrySet()
             );
             orderedCandidateBallots.sort(Map.Entry.comparingByValue());
-
+            
             partyInformation.numCandidates = orderedCandidateBallots.size();
             partyInformation.orderedCandidateBallots = orderedCandidateBallots;
         }
@@ -1052,7 +1052,7 @@ public class OpenPartyListSystem extends VotingSystem {
         for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
         }
-        
+
         //If there are still more seats available after initial allocation
         if(numSeatsRemaining != 0) {
             allocateRemainingSeats(numSeatsRemaining, remainingParties);
