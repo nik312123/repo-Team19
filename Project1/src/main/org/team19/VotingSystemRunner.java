@@ -185,6 +185,21 @@ public final class VotingSystemRunner {
             final int dataFormattingExitCode = 65;
             System.exit(dataFormattingExitCode);
         }
+    
+        try {
+            auditOutput.close();
+        }
+        catch(IOException e) {
+            System.err.println("Error: Was unable to close audit file successfully");
+            System.exit(2);
+        }
+        try {
+            reportOutput.close();
+        }
+        catch(IOException e) {
+            System.err.println("Error: Was unable to close report file successfully");
+            System.exit(2);
+        }
     }
     
 }
