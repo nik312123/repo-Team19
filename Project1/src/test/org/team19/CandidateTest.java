@@ -14,8 +14,7 @@ final class CandidateTest {
             () -> Assertions.assertDoesNotThrow(() -> new Candidate("Obama", "Democrat")),
             //Testing that if null name or party is passed in, a NullPointerException is thrown
             () -> Assertions.assertThrows(NullPointerException.class, () -> new Candidate("Obama", null)),
-            () -> Assertions.assertThrows(NullPointerException.class, () -> new Candidate(null, "Democrat")),
-            () -> Assertions.assertThrows(NullPointerException.class, () -> new Candidate(null, null))
+            () -> Assertions.assertThrows(NullPointerException.class, () -> new Candidate(null, "Democrat"))
         );
     }
     

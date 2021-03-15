@@ -192,7 +192,7 @@ final class TableFormatterTest {
             );
         }
         catch(NoSuchMethodException e) {
-            Assertions.fail("Unable to retrieve the getColumnLengths method from TableFormatter");
+            Assertions.fail("Unable to retrieve the getTableFormat method from TableFormatter");
         }
     }
     
@@ -235,7 +235,7 @@ final class TableFormatterTest {
             );
         }
         catch(NoSuchMethodException e) {
-            Assertions.fail("Unable to retrieve the getColumnLengths method from TableFormatter");
+            Assertions.fail("Unable to retrieve the getHorizontalDivider method from TableFormatter");
         }
     }
     

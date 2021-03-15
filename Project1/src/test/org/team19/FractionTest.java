@@ -100,7 +100,7 @@ final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(4, 5), fiveFourths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(-7, 6), negativeSixSevenths.reciprocal()),
             () -> Assertions.assertEquals(new Fraction(-6, 7), negativeSevenSixths.reciprocal()),
-            () -> Assertions.assertEquals(new Fraction(1, 1), one.reciprocal()),
+            () -> Assertions.assertEquals(one, one.reciprocal()),
             //Special case: the reciprocal of 0 will result in an exception being thrown
             () -> Assertions.assertThrows(ArithmeticException.class, zero::reciprocal)
         );
@@ -461,15 +461,18 @@ final class FractionTest {
             () -> Assertions.assertEquals(new Fraction(2, 1), new Fraction(2, 1)),
             //Testing the identity with 1/1
             () -> Assertions.assertEquals(new Fraction(1, 1), new Fraction(1, 1)),
-            
-            //Confirms the inequality of 2/9 and -2/9
-            () -> Assertions.assertNotEquals(new Fraction(2, 9), new Fraction(-2, 9)),
-            //Confirms the inequality of -2/9 and 2/9
-            () -> Assertions.assertNotEquals(new Fraction(-2, 9), new Fraction(2, 9)),
-            //Confirms the inequality of 9/2 and -9/2
-            () -> Assertions.assertNotEquals(new Fraction(9, 2), new Fraction(-9, 2)),
-            //Confirms the inequality of -9/2 and 9/2
-            () -> Assertions.assertNotEquals(new Fraction(-9, 2), new Fraction(9, 2))
+            //Testing the identity with -2/9
+            () -> Assertions.assertEquals(new Fraction(-2, 9), new Fraction(-2, 9)),
+            //Testing the identity with -9/4
+            () -> Assertions.assertEquals(new Fraction(-9, 4), new Fraction(-9, 4)),
+    
+            //Testing that two fractions with the same numerators but different denominators are not equal
+            () -> Assertions.assertNotEquals(new Fraction(2, 3), new Fraction(2, 9)),
+            //Testing that two fractions with the same denominators but different numerators are not equal
+            () -> Assertions.assertNotEquals(new Fraction(3, 2), new Fraction(9, 2)),
+    
+            //Confirms the inequality of a fraction and its negative form
+            () -> Assertions.assertNotEquals(new Fraction(2, 9), new Fraction(-2, 9))
         );
     }
     
