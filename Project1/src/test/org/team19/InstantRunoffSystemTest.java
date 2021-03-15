@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,16 +20,71 @@ import java.util.List;
 
 import org.team19.InstantRunoffSystem.Ballot;
 
-class InstantRunoffSystemTest {
+final class InstantRunoffSystemTest {
     
     final static char FILE_SEP = File.separatorChar;
     
     //Creates a null device output stream to consume and ignore all output
     private static final OutputStream NULL_OUTPUT = OutputStream.nullOutputStream();
     
+    private InstantRunoffSystemTest() {}
+    
     //Creates an InstantRunoffSystem with null device output streams
     private static InstantRunoffSystem createIrNullStreams() {
         return new InstantRunoffSystem(NULL_OUTPUT, NULL_OUTPUT);
+    }
+    
+    @Test
+    void testConstructor() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testGetCandidateHeaderSize() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testGetBallotHeaderSize() {
+        Assertions.fail();
+    }
+    
+    //getNumCandidates is tested here indirectly as well
+    @Test
+    void testImportCandidatesHeader() {
+        Assertions.fail();
+    }
+    
+    //getCandidates is tested here indirectly as well
+    @Test
+    void testAddCandidates() {
+        Assertions.fail();
+    }
+    
+    //getNumBallots is tested here indirectly as well
+    @Test
+    void testImportBallotsHeader() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testAddBallot() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testGetName() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testGetShortName() {
+        Assertions.fail();
+    }
+    
+    @Test
+    void testToString() {
+        Assertions.fail();
     }
     
     @Test
