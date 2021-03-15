@@ -109,15 +109,15 @@ public final class VotingSystemRunner {
     }
     
     /**
-     * Runs the election for a {@link VotingSystem} given a filepath relative to the workspace
+     * Runs the election for a {@link VotingSystem} given a filepath relative to the workspace, using standard input if no file is provided
      *
-     * @param args The command-line arguments to the program, which should only consist of one command-line argument: a path to a file, which can
-     *             be absolute or relative to the current working directory
+     * @param args The command-line arguments to the program, which should only consist of at most one command-line argument: a path to a file, which
+     *             can be absolute or relative to the current working directory
      */
-    public static void main(final String[] args) {
+    public static void main(final String... args) {
         //The input stream from which to read input
         InputStream input = null;
-        
+    
         //If there are no arguments provided, then assume standard input is being used
         if(args.length == 0) {
             System.out.println("Reading from standard input");
