@@ -276,6 +276,33 @@ final class OpenPartyListSystemTest {
     }
     
     @Test
+    void testGetRemainingBallots(){
+        
+        OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(),OutputStream.nullOutputStream());
+        
+        OpenPartyListSystem.PartyInformation testParty = new OpenPartyListSystem.PartyInformation();
+        
+        testParty.numSeats = 0;
+        testParty.numBallots = 10;
+        
+        // Tests the case where a party has been allocated 0 seats.
+        // No ballots taken out from initial allocation
+        assertEquals("10", opl.getRemainingBallots(testParty));
+        
+        testParty.numSeats = 2;
+        testParty.remainder = new Fraction(5,1);
+        
+        // Tests the case where a party has > 0 seats and remaining ballots is a whole number (numerator of 1)
+        assertEquals("5", opl.getRemainingBallots(testParty));
+        
+        testParty.remainder = new Fraction(4,3);
+        
+        // Tests the case where a party has > 0 seats and remaining ballots is not a whole number
+        assertEquals("1.3333",opl.getRemainingBallots(testParty));
+        
+    }
+    
+    @Test
     void testAllocateInitialSeatsTypical() {
         
         Class<?> partyInformation = null;
@@ -1499,7 +1526,7 @@ final class OpenPartyListSystemTest {
         Candidate borg_r = new Candidate("Borg", "R");
         
         Candidate smith_i = new Candidate("Smith", "I");
-        
+    
         assert partyD != null;
         
         partyD.numCandidates = 2;
