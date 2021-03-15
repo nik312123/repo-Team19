@@ -619,7 +619,7 @@ final class InstantRunoffSystemTest {
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit1.txt".replace('/', FILE_SEP);
         final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport1.txt".replace('/', FILE_SEP);
 
