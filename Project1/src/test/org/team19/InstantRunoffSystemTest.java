@@ -32,17 +32,20 @@ class InstantRunoffSystemTest {
     
     @Test
     void testGetLowestHighestCandidatesSingleHighestSingleLowest() {
+        // Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
         
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
         
+        // Creates Candidates
         ir.candidates[0] = new Candidate("Rosen","D");
         ir.candidates[1] = new Candidate("Kleinberg","R");
         ir.candidates[2] = new Candidate("Chou","I");
         ir.candidates[3] = new Candidate("Royce","L");
     
+        // Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -51,23 +54,26 @@ class InstantRunoffSystemTest {
         final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
     
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        
+        // Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
         
+        // Tests that only 1 lowest and 1 highest are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
     
     @Test
     void testGetLowestHighestCandidatesMultipleLowest(){
+        // Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
     
         ir.numCandidates = 6;
         ir.numBallots = 6;
         ir.candidates = new Candidate[6];
     
+        // Creates Candidates
         ir.candidates[0] = new Candidate("Rosen","D");
         ir.candidates[1] = new Candidate("Kleinberg","R");
         ir.candidates[2] = new Candidate("Chou","I");
@@ -75,6 +81,7 @@ class InstantRunoffSystemTest {
         ir.candidates[4] = new Candidate("Loser","L");
         ir.candidates[5] = new Candidate("Bobster","I");
     
+        // Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -83,7 +90,7 @@ class InstantRunoffSystemTest {
         final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3], ir.candidates[5]});
     
         ir.candidateBallotsMap = new LinkedHashMap<>();
-    
+        // Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
@@ -91,23 +98,27 @@ class InstantRunoffSystemTest {
         ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[5], new ArrayDeque<>());
     
+        // Tests the multiple lowest candidates are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R), Loser (L), Bobster (I)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
     
     @Test
     void testGetLowestHighestCandidatesMultipleHighest(){
+        // Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
     
         ir.numCandidates = 5;
         ir.numBallots = 9;
         ir.candidates = new Candidate[5];
     
+        // Creates candidates
         ir.candidates[0] = new Candidate("Rosen","D");
         ir.candidates[1] = new Candidate("Kleinberg","R");
         ir.candidates[2] = new Candidate("Chou","I");
         ir.candidates[3] = new Candidate("Royce","L");
         ir.candidates[4] = new Candidate("Bobster", "I");
-    
+        
+        // Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -119,29 +130,33 @@ class InstantRunoffSystemTest {
         final Ballot ballot9 = new Ballot(9, new Candidate[]{ir.candidates[4], ir.candidates[2]});
     
         ir.candidateBallotsMap = new LinkedHashMap<>();
-    
+        // Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
         ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>(List.of(ballot7, ballot8, ballot9)));
     
+        // Tests that only 1 highest candidate is returned
         assertEquals("Pair{Pair{0, [Kleinberg (R)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
     
     @Test
     void testEliminateLowest() {
+        // Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
     
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
     
+        // Creates candidates
         ir.candidates[0] = new Candidate("Rosen","D");
         ir.candidates[1] = new Candidate("Kleinberg","R");
         ir.candidates[2] = new Candidate("Chou","I");
         ir.candidates[3] = new Candidate("Royce","L");
     
+        // Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -151,6 +166,7 @@ class InstantRunoffSystemTest {
     
         ir.candidateBallotsMap = new LinkedHashMap<>();
     
+        // Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3))); // 3
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                   // 0
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));          // 2
@@ -192,7 +208,8 @@ class InstantRunoffSystemTest {
     
     @Test
     void testEliminateLowestOutput(){
-        
+    
+        // Initializes InstantRunoffSystem with audit OutputStream
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt";
         
         InstantRunoffSystem ir = null;
@@ -207,11 +224,13 @@ class InstantRunoffSystemTest {
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
     
+        // Creates candidates
         ir.candidates[0] = new Candidate("Rosen","D");
         ir.candidates[1] = new Candidate("Kleinberg","R");
         ir.candidates[2] = new Candidate("Chou","I");
         ir.candidates[3] = new Candidate("Royce","L");
-    
+        
+        // Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -220,7 +239,7 @@ class InstantRunoffSystemTest {
         final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
     
         ir.candidateBallotsMap = new LinkedHashMap<>();
-    
+        // Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
