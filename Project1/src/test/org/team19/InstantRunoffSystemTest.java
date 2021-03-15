@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.team19.InstantRunoffSystem.Ballot;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +40,7 @@ final class InstantRunoffSystemTest {
 
     //Creates a null device output stream to consume and ignore all output
     private static final OutputStream NULL_OUTPUT = OutputStream.nullOutputStream();
-
+    
     //Creates an InstantRunoffSystem with null device output streams
     private static InstantRunoffSystem createIrNullStreams() {
         return new InstantRunoffSystem(NULL_OUTPUT, NULL_OUTPUT);
