@@ -55,11 +55,11 @@ public abstract class VotingSystem {
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
-     * @param candidates The {@link String} representing the list of candidates and their parties
-     * @param line       The line number associated with the candidates {@link String}
+     * @param candidatesLine The {@link String} representing the list of candidates and their parties
+     * @param line           The line number associated with the candidates {@link String}
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
-    public abstract void addCandidates(final String candidates, final int line) throws ParseException;
+    public abstract void addCandidates(final String candidatesLine, final int line) throws ParseException;
     
     /**
      * Parses the lines corresponding to the header for the ballots
@@ -74,11 +74,11 @@ public abstract class VotingSystem {
      * Parses a line corresponding to a ballot and adds it internally
      *
      * @param ballotNumber The number corresponding to the current ballot
-     * @param ballot       The {@link String} corresponding to a ballot
+     * @param ballotLine   The {@link String} corresponding to a ballot
      * @param line         The line number associated with the current ballot line being read
      * @throws ParseException Thrown if there is an issue in parsing the current ballot
      */
-    public abstract void addBallot(int ballotNumber, final String ballot, final int line) throws ParseException;
+    public abstract void addBallot(int ballotNumber, final String ballotLine, final int line) throws ParseException;
     
     /**
      * Returns the name of this voting system
