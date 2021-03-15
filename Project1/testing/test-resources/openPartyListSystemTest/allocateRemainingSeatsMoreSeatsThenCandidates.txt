@@ -1,0 +1,24 @@
+D initial allocation of seats: floor(5 / (9 / 10)) = 2
+Remaining ballots: 3.2000
+
+R initial allocation of seats: floor(3 / (9 / 10)) = 3
+Remaining ballots: 0.3000
+
+I initial allocation of seats: floor(1 / (9 / 10)) = 1
+Remaining ballots: 0.1000
+
+6 / 10 have been allocates. 4 seats remaining
+
+Initial Seat Allocation Results:
++-------+---------------+-------------------+
+| Party | Initial Seats | Remaining Ballots |
+|-------+---------------+-------------------|
+| D     |             2 |            3.2000 |
+|-------+---------------+-------------------|
+| R     |             3 |            0.3000 |
+|-------+---------------+-------------------|
+| I     |             1 |            0.1000 |
++-------+---------------+-------------------+
+
+There are 4 seats remaining, but there are no more candidates to which seats can be distributed
+

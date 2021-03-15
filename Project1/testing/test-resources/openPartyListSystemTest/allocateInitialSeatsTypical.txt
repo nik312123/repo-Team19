@@ -1,0 +1,22 @@
+D initial allocation of seats: floor(5 / 3) = 1
+Remaining ballots: 2
+
+R initial allocation of seats: floor(3 / 3) = 1
+Remaining ballots: 0
+
+I initial allocation of seats: floor(1 / 3) = 0
+Remaining ballots: 1
+
+2 / 3 have been allocates. 1 seats remaining
+
+Initial Seat Allocation Results:
++-------+---------------+-------------------+
+| Party | Initial Seats | Remaining Ballots |
+|-------+---------------+-------------------|
+| D     |             1 |                 2 |
+|-------+---------------+-------------------|
+| R     |             1 |                 0 |
+|-------+---------------+-------------------|
+| I     |             0 |                 1 |
++-------+---------------+-------------------+
+
