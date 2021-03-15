@@ -27,6 +27,7 @@ public abstract class VotingSystem {
      * @param reportOutput The {@link OutputStream} to write a summary about the running of the election
      * @throws NullPointerException Thrown if either auditOutput or reportOutput is null
      */
+    @SuppressWarnings("unused")
     public VotingSystem(final OutputStream auditOutput, final OutputStream reportOutput) throws NullPointerException {}
     
     /**

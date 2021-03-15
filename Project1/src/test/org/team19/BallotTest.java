@@ -161,7 +161,7 @@ final class BallotTest {
             );
             
             //Creates copy of ballot
-            final Ballot ballotDoppleganger = (Ballot) ballotConstructor.newInstance(
+            final Ballot ballotDoppelganger = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
@@ -187,7 +187,7 @@ final class BallotTest {
             
             Assertions.assertAll(
                 //Test that ballots with equal ballot numbers, equal ranked candidates array, and equal positions in array are equal
-                () -> Assertions.assertEquals(ballotDoppleganger, ballot),
+                () -> Assertions.assertEquals(ballotDoppelganger, ballot),
                 //Test that ballots with equal ballot numbers, equal ranked candidates array, and different positions in array are not equal
                 () -> Assertions.assertNotEquals(ballotDifferentPosition, ballot),
                 //Test that ballots with equal ballot numbers, different ranked candidates array, and equal positions in array are not equal

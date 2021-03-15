@@ -18,7 +18,6 @@ import org.team19.TableFormatter.Alignment;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -28,15 +27,15 @@ final class TableFormatterTest {
     private TableFormatterTest() {}
     
     //Date class made for testing
-    static class Date {
+    final static class Date {
         private final int year, month, day;
-        
+    
         private Date(final int year, final int month, final int day) {
             this.day = day;
             this.month = month;
             this.year = year;
         }
-        
+    
         @Override
         public String toString() {
             return String.format("%d/%02d/%02d", year, month, day);

@@ -75,7 +75,7 @@ public class OpenPartyListSystem extends VotingSystem {
     protected TableFormatter tableFormatter;
     
     /**
-     * The pattern associated with a valid candidate of the form "[[canididate1], [party1]], [[canididate2], [party2]], ...", replacing the
+     * The pattern associated with a valid candidate of the form "[[candidate1], [party1]], [[candidate2], [party2]], ...", replacing the
      * corresponding bracketed arguments (not including the outer brackets for candidate-party pairs) with the actual candidate's name and party
      * <p></p>
      * Regex breakdown:
