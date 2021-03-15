@@ -1,0 +1,29 @@
+First-choice ballots:
++---------------+---------+
+| Candidate     | Ballots |
+|---------------+---------|
+| Rosen (D)     |       4 |
+|---------------+---------|
+| Kleinberg (R) |       1 |
+|---------------+---------|
+| Chou (I)      |       2 |
+|---------------+---------|
+| Royce (L)     |       2 |
++---------------+---------+
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Kleinberg (R)
+
+Ballot 8 has their next choice as candidate Rosen (D). The ballot will be distributed to Rosen (D).
+
+Ballots after Kleinberg (R) was eliminated:
++-----------+---------+
+| Candidate | Ballots |
+|-----------+---------|
+| Rosen (D) |       5 |
+|-----------+---------|
+| Chou (I)  |       2 |
+|-----------+---------|
+| Royce (L) |       2 |
++-----------+---------+
+
+Rosen (D) has received 5/9 ballots giving them a majority of 55.56% of the ballots. They have therefore won.
