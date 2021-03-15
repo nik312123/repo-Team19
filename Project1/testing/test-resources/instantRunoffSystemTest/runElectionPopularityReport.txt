@@ -31,4 +31,4 @@ Ballots after Royce (L) was eliminated:
 | Chou (I)  |       2 |
 +-----------+---------+
 
-Rosen (D) has received 3/6 ballots, votes giving them the greatest popularity with 50.00% of the ballots
+Rosen (D) has received 3/6 ballots, giving them the greatest popularity with 50.00% of the ballots
