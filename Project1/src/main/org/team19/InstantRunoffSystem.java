@@ -297,7 +297,7 @@ public class InstantRunoffSystem extends VotingSystem {
         }
         
         //Split the candidates line by comma delimiter and add each candidate to an array
-        final String[] candidatesStr = candidatesLine.split(",");
+        final String[] candidatesStr = candidatesLine.split(",", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
         for(int i = 0; i < candidatesArr.length; ++i) {
             final Matcher candidateMatcher = candidatePattern.matcher(candidatesStr[i]);
@@ -391,7 +391,7 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     private Ballot parseBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
         //Split the ballots line by the comma delimiter
-        final String[] ballotStr = ballotLine.split(",");
+        final String[] ballotStr = ballotLine.split(",", -1);
         
         //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
         if(ballotStr.length != numCandidates) {
@@ -541,7 +541,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
      * <p></p>
-     * Returns the number of ballots that the {@link InstantRunoffSystem} contains, which should be available after
+     * Returns the number of ballots that the {@link InstantRunoffSystem} contains
      *
      * @return The number of ballots that the {@link InstantRunoffSystem} contains
      */

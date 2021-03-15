@@ -38,6 +38,8 @@ final class InstantRunoffSystemTest {
         return new InstantRunoffSystem(NULL_OUTPUT, NULL_OUTPUT);
     }
     
+    private InstantRunoffSystemTest() {}
+    
     @Test
     void testConstructor() {
         Assertions.assertAll(
@@ -52,13 +54,13 @@ final class InstantRunoffSystemTest {
     
     @Test
     void testGetCandidateHeaderSize() {
-        //Test that an instant runoff system has one line as its candidate header size
+        //Test that an instant runoff system has 1 line as its candidate header size
         Assertions.assertEquals(1, createIrNullStreams().getCandidateHeaderSize());
     }
     
     @Test
     void testGetBallotHeaderSize() {
-        //Test that an instant runoff system has one line as its ballot header size
+        //Test that an instant runoff system has 1 line as its ballot header size
         Assertions.assertEquals(1, createIrNullStreams().getBallotHeaderSize());
     }
     
@@ -76,7 +78,7 @@ final class InstantRunoffSystemTest {
                 //Test that a nonpositive candidate header results in an exception being thrown
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"0"}, 2)),
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"-2"}, 2)),
-                //Test that a nonnumeric candidate header results in an exception being thrown
+                //Test that a nonnumerical candidate header results in an exception being thrown
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"a"}, 2)),
                 /*
                  * Try executing importCandidatesHeader with a positive integer, failing if it is unable to run without exception and ensure that
@@ -137,7 +139,7 @@ final class InstantRunoffSystemTest {
             Assertions.assertAll(
                 //Test that a negative ballots header results in an exception being thrown
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"-2"}, 4)),
-                //Test that a nonnumeric ballots header results in an exception being thrown
+                //Test that a nonnumerical ballots header results in an exception being thrown
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"a"}, 4)),
                 /*
                  * Try executing importBallotsHeader with an input of 0, failing if it is unable to run without exception; then, ensure that the
@@ -258,23 +260,33 @@ final class InstantRunoffSystemTest {
     void testToString() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
     
-        //Put required sample data
-        try {
-            instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
-            instantRunoffSystem.importBallotsHeader(new String[] {"143"}, 4);
-        }
-        catch(ParseException e) {
-            Assertions.fail("Unable to properly set up the candidates for the test");
-        }
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
     
-        /*
-         * Test that InstantRunoffSystem's toString produces output like "InstantRunoffSystem{candidates=[candidates], numBallots=<numBallots>}"
-         * where [candidates] is replaced by the string form of the candidates array and [numBallots] is replaced by the number of ballots
-         */
-        Assertions.assertEquals(
-            "InstantRunoffSystem{candidates=[C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)], numBallots=143}",
-            instantRunoffSystem.toString()
-        );
+        try {
+            //Put required sample data
+            try {
+                instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
+                instantRunoffSystem.importBallotsHeader(new String[] {"143"}, 4);
+            }
+            catch(ParseException e) {
+                Assertions.fail("Unable to properly set up the candidates for the test");
+            }
+        
+            /*
+             * Test that InstantRunoffSystem's toString produces output like "InstantRunoffSystem{candidates=[candidates], numBallots=<numBallots>}"
+             * where [candidates] is replaced by the string form of the candidates array and [numBallots] is replaced by the number of ballots
+             */
+            Assertions.assertEquals(
+                "InstantRunoffSystem{candidates=[C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)], numBallots=143}",
+                instantRunoffSystem.toString()
+            );
+        }
+        finally {
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
+        }
     }
     
     @Test

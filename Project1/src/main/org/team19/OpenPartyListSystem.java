@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -233,13 +234,19 @@ public class OpenPartyListSystem extends VotingSystem {
                 candidatesLine
             ), line);
         }
-        
-        //Split the candidates line by comma delimiter and add each candidate to an array
-        final String[] candidatesStr = candidatesLine.split("],");
+    
+        //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
+        final String[] candidatesStr = candidatesLine.split("]\\s*,", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
         for(int i = 0; i < candidatesArr.length; ++i) {
             //Substring starting on 1 before splitting to get rid of the left bracket
-            final String[] candidate = candidatesStr[i].substring(1).split(",");
+            final String[] candidate = candidatesStr[i].strip().substring(1).split(",");
+        
+            //Removes the right bracket for the last candidate's party
+            if(i == candidatesArr.length - 1) {
+                final String party = candidate[1];
+                candidate[1] = party.substring(0, party.length() - 1);
+            }
             candidatesArr[i] = new Candidate(candidate[0].strip(), candidate[1].strip());
         }
         return candidatesArr;
@@ -343,7 +350,7 @@ public class OpenPartyListSystem extends VotingSystem {
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
     private Candidate parseBallot(final String ballotLine, final int line) throws ParseException {
-        final String[] ballotStr = ballotLine.split(",");
+        final String[] ballotStr = ballotLine.split(",", -1);
         if(ballotStr.length != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", ballotStr.length, numCandidates
@@ -352,7 +359,7 @@ public class OpenPartyListSystem extends VotingSystem {
         
         Integer oneLocation = null;
         for(int i = 1; i <= numCandidates; ++i) {
-            final String value = ballotStr[i].strip();
+            final String value = ballotStr[i - 1].strip();
             if(value.equals("1") && oneLocation == null) {
                 oneLocation = i;
             }
@@ -444,13 +451,24 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
      * <p></p>
-     * Returns the number of ballots that the {@link OpenPartyListSystem} contains, which should be available after
+     * Returns the number of ballots that the {@link OpenPartyListSystem} contains
      *
      * @return The number of ballots that the {@link OpenPartyListSystem} contains
      */
     @Override
     public int getNumBallots() {
         return numBallots;
+    }
+    
+    /**
+     * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
+     * <p></p>
+     * Returns the number of seats that the {@link OpenPartyListSystem} contains
+     *
+     * @return The number of seats that the {@link OpenPartyListSystem} contains
+     */
+    public int getNumSeats() {
+        return numSeats;
     }
     
     @Override
@@ -463,6 +481,6 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     @Override
     public String toString() {
-        return null;
+        return String.format("OpenPartyListSystem{candidates=%s, numBallots=%d}", Arrays.toString(candidates), numBallots);
     }
 }
