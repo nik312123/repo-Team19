@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * Pair.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Represents a key and its corresponding value or, alternatively, a pair of elements
+ */
+
 package org.team19;
 
 import java.util.Objects;

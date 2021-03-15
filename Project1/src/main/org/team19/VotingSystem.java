@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * VotingSystem.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Represents an abstract view of a voting system
+ */
+
 package org.team19;
 
 import java.io.OutputStream;

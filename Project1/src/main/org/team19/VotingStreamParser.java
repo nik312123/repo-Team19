@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * VotingSystemParser.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Parses an InputStream and returns a VotingSystem
+ */
+
 package org.team19;
 
 import java.io.BufferedReader;
@@ -112,22 +123,22 @@ public final class VotingStreamParser {
         Objects.requireNonNull(input);
         Objects.requireNonNull(auditStream);
         Objects.requireNonNull(reportStream);
-    
+        
         //Use a BufferedReader to read from the input stream and PrintWriters to write to the output streams
         final BufferedReader inReader = new BufferedReader(new InputStreamReader(input));
         final PrintWriter auditWriter = new PrintWriter(auditStream);
         final PrintWriter reportWriter = new PrintWriter(reportStream);
-    
+        
         int lineNumber = 1;
-    
+        
         VotingSystem votingSystem = null;
-    
+        
         //Attempt to read the first line of the file
         final String firstLine = readLine(inReader, lineNumber);
-    
+        
         //Throw an exception if the file has 0 lines (if such a file exists)
         throwParseExceptionIfEofLine(firstLine, lineNumber);
-    
+        
         //If the election file's header does not match one of the headers from the headerSystemMap, then throw an exception
         if(!headerSystemMap.containsKey(firstLine)) {
             String headers = headerSystemMap.keySet().toString();
@@ -145,7 +156,7 @@ public final class VotingStreamParser {
                 votingSystem = headerSystemMap.get(firstLine)
                     .getConstructor(OutputStream.class, OutputStream.class)
                     .newInstance(auditStream, reportStream);
-            
+                
                 //Output the election type to the audit, report, and summary
                 final String electionType = String.format("Election type: %s\n", firstLine);
                 auditWriter.println(electionType);
@@ -160,17 +171,17 @@ public final class VotingStreamParser {
                 ), lineNumber);
             }
         }
-    
+        
         lineNumber++;
-    
+        
         //Import the candidates header, throwing an exception if there was an issue in reading or parsing the candidates header
         final int candidateHeaderSize = votingSystem.getCandidateHeaderSize();
         final String[] candidatesHeader = readLines(inReader, lineNumber, candidateHeaderSize);
         throwParseExceptionIfEofLines(candidatesHeader, lineNumber);
         votingSystem.importCandidatesHeader(candidatesHeader, lineNumber);
-    
+        
         lineNumber += candidateHeaderSize;
-    
+        
         /*
          * Parse and add the candidates, throwing an exception if there was an issue in reading or parsing the candidates or if there is a
          * difference in the number of candidates parsed and the number of candidates mentioned in the candidates header
@@ -179,22 +190,22 @@ public final class VotingStreamParser {
         final String candidatesLine = readLine(inReader, lineNumber);
         throwParseExceptionIfEofLine(candidatesLine, lineNumber);
         votingSystem.addCandidates(candidatesLine, lineNumber);
-    
+        
         //Throw an exception if the number of candidates parsed does not match the number of candidates provided in the candidates header
         if(votingSystem.getCandidates().size() != numCandidates) {
             throwParseException("The number of parsed candidates is not equivalent to the number provided in the candidates header", lineNumber);
         }
-    
+        
         lineNumber++;
-    
+        
         //Import the ballots header, throwing an exception if there was an issue in reading or parsing the candidates header
         final int ballotsHeaderSize = votingSystem.getBallotHeaderSize();
         final String[] ballotsHeader = readLines(inReader, lineNumber, ballotsHeaderSize);
         throwParseExceptionIfEofLines(candidatesHeader, lineNumber);
         votingSystem.importBallotsHeader(ballotsHeader, lineNumber);
-    
+        
         lineNumber += ballotsHeaderSize;
-    
+        
         /*
          * Parse and add the ballots, throwing an exception if there was an issue in reading or parsing the ballots or if there is a
          * difference in the number of ballots parsed and the number of ballots mentioned in the ballots header
@@ -202,19 +213,19 @@ public final class VotingStreamParser {
         final int numBallots = votingSystem.getNumBallots();
         int ballotNumber = 1;
         String nextBallot;
-    
+        
         //Read in ballots until the end of the file is reached
         while((nextBallot = readLine(inReader, lineNumber)) != null) {
             votingSystem.addBallot(ballotNumber, nextBallot, lineNumber);
             lineNumber++;
             ballotNumber++;
         }
-    
+        
         //Throw an exception if the number of ballots parsed does not match the number of ballots provided in the ballots header
         if(numBallots != ballotNumber - 1) {
             throwParseException("The number of parsed ballots is not equivalent to the number provided in the ballots header", lineNumber);
         }
-    
+        
         return votingSystem;
     }
     

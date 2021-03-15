@@ -1,3 +1,15 @@
+/*
+ * File name:
+ * TableFormatter.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Creates the String form of a table from a list of string column headers, a list of lists with each list representing a column, and a list of
+ * Alignments corresponding to whether a column should be left-aligned or right-aligned
+ */
+
 package org.team19;
 
 import java.util.ArrayList;
@@ -7,8 +19,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Creates a table from a list of string column headers, a list of lists with each list representing a column, and a list of {@link Alignment}
- * corresponding to whether a column should be left-aligned or right-aligned
+ * Creates the {@link String} form of a table from a list of string column headers, a list of lists with each list representing a column, and a
+ * list of {@link Alignment}s corresponding to whether a column should be left-aligned or right-aligned
  */
 public final class TableFormatter {
     
@@ -35,7 +47,7 @@ public final class TableFormatter {
          * Represents the left alignment for a column
          */
         LEFT,
-    
+        
         /**
          * Represents the right alignment for a column
          */

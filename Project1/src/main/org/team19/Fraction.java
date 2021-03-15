@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * Fraction.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Represents a rational number in the form of a simplified fraction for use as the quota in OpenPartyListSystem and operations involving the quota
+ */
+
 package org.team19;
 
 import java.util.Objects;
@@ -111,7 +122,7 @@ public class Fraction implements Comparable<Fraction> {
             denominator = 1;
             return;
         }
-    
+        
         /*
          * Otherwise, we can divide both the numerator and denominator by their greatest common factor to simplify it
          *

@@ -1,3 +1,14 @@
+/*
+ * File name:
+ * Candidate.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Represents an election candidate
+ */
+
 package org.team19;
 
 import java.util.Objects;
