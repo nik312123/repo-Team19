@@ -12,9 +12,13 @@ See <a href="documentation/Documentation.md" target="_blank">Documentation.md</a
 
 More resources that indicate the use of `Fraction` and decimal remaining ballots being acceptable:
 
-1. https://en.idi.org.il/articles/3302
+1. See page 5 of https://www.legco.gov.hk/yr97-98/english/sec/library/in1_plc.pdf
 
-2. https://www.utas.edu.au/library/companion_to_tasmanian_history/H/Hare-Clark%20system.htm
+2. https://www.accuratedemocracy.com/e_shares.htm
+
+3. https://en.idi.org.il/articles/3302
+
+4. https://www.utas.edu.au/library/companion_to_tasmanian_history/H/Hare-Clark%20system.htm
 
 ## Running the program
 
