@@ -418,7 +418,10 @@ public class OpenPartyListSystem extends VotingSystem {
         partyToPartyInformation.get(party).numBallots++;
 
         //Writes the output for this ballot to the audit output
-        auditWriter.printf("Ballot %d chose %s\n", ballotNumber, candidate);
+        auditWriter.printf("Ballot %d chose %s\n",
+            ballotNumber,
+            candidate
+        );
     }
 
     /**
@@ -519,11 +522,16 @@ public class OpenPartyListSystem extends VotingSystem {
                 party.getValue().numSeats
             );
 
-            auditWriter.printf("Remaining ballots: %s%n", getRemainingBallots(party.getValue()));
+            auditWriter.printf("Remaining ballots: %s%n",
+                getRemainingBallots(party.getValue()));
             auditWriter.println();
         }
         final int numSeatsAllocated = numSeats - numSeatsRemaining;
-        auditWriter.printf("%d / %d have been allocates. %d seats remaining\n\n", numSeatsAllocated, numSeats, numSeatsRemaining);
+        auditWriter.printf("%d / %d have been allocates. %d seats remaining\n\n",
+            numSeatsAllocated,
+            numSeats,
+            numSeatsRemaining
+        );
     }
 
     /**
@@ -650,13 +658,16 @@ public class OpenPartyListSystem extends VotingSystem {
 
         final String remainingBallots = getRemainingBallots(partyToPartyInformation.get(chosenParty));
 
-        auditWriter.printf("Allocating seat %d:%n", seatNumber);
+        auditWriter.printf("Allocating seat %d:%n",
+            seatNumber);
         if(tieBreakMessage != null) {
             auditWriter.print(tieBreakMessage);
         }
         else {
-            auditWriter
-                .printf("The party with the next largest remaining ballots is %s with %s remaining ballots\n", chosenParty, remainingBallots);
+            auditWriter.printf("The party with the next largest remaining ballots is %s with %s remaining ballots\n",
+                chosenParty,
+                remainingBallots
+            );
         }
         auditWriter.println();
     }
@@ -796,7 +807,11 @@ public class OpenPartyListSystem extends VotingSystem {
             numSeatsRemaining--;
 
             final int numberOfSeatsAllocated = numSeats - numSeatsRemaining;
-            auditWriter.printf("%d / %d have been allocated. %d seats remaining\n", numberOfSeatsAllocated, numSeats, numSeatsRemaining);
+            auditWriter.printf("%d / %d have been allocated. %d seats remaining\n",
+                numberOfSeatsAllocated,
+                numSeats,
+                numSeatsRemaining
+            );
             auditWriter.println();
         }
     }
@@ -818,7 +833,10 @@ public class OpenPartyListSystem extends VotingSystem {
             int numSeatsRemaining = partyInformation.numSeats;
 
             if(numSeatsRemaining > 0) {
-                auditWriter.printf("Distributing %d seats for the party %s:\n%n", numSeatsRemaining, party);
+                auditWriter.printf("Distributing %d seats for the party %s:\n%n",
+                    numSeatsRemaining,
+                    party
+                );
             }
 
             //The list of candidates ordered by ballot count
@@ -854,11 +872,13 @@ public class OpenPartyListSystem extends VotingSystem {
 
                 int highestRemainingCandidatesSize = highestRemainingCandidates.size();
 
+                // Gets list of the highest remaining candidates
                 ArrayList<Candidate> highestRemainingCandidatesNames = new ArrayList<>();
                 for(Map.Entry<Candidate, Integer> candidatePair : highestRemainingCandidates) {
                     highestRemainingCandidatesNames.add(candidatePair.getKey());
                 }
 
+                // Creates a string of all the names of all the highest remaining candidates
                 String highestNames =
                     highestRemainingCandidatesNames.toString();
 
@@ -875,9 +895,15 @@ public class OpenPartyListSystem extends VotingSystem {
                 numSeatsRemaining--;
 
                 if(highestRemainingCandidatesSize > 1) {
-                    auditWriter.printf("Candidates %s have equivalent ballot counts of %d.%n", highestNames.substring(1,
-                        highestNames.length() - 1), nextHighestCandidateBallots.getValue());
-                    auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.%n", selected, selected);
+                    auditWriter.printf("Candidates %s have equivalent ballot counts of %d.%n",
+                        highestNames.substring(1,
+                        highestNames.length() - 1),
+                        nextHighestCandidateBallots.getValue()
+                    );
+                    auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.%n",
+                        selected,
+                        selected
+                    );
                 }
                 else {
                     auditWriter.printf(
@@ -898,9 +924,18 @@ public class OpenPartyListSystem extends VotingSystem {
         reportWriter.println("Final Seats:");
         System.out.println("Final Seats");
         for(final Candidate candidate : finalSeats) {
-            auditWriter.printf("%s (%s)\n", candidate.getName(), candidate.getParty());
-            reportWriter.printf("%s (%s)\n", candidate.getName(), candidate.getParty());
-            System.out.printf("%s (%s)\n", candidate.getName(), candidate.getParty());
+            auditWriter.printf("%s (%s)\n",
+                candidate.getName(),
+                candidate.getParty()
+            );
+            reportWriter.printf("%s (%s)\n",
+                candidate.getName(),
+                candidate.getParty()
+            );
+            System.out.printf("%s (%s)\n",
+                candidate.getName(),
+                candidate.getParty()
+            );
         }
         return finalSeats;
     }
@@ -912,9 +947,16 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     private void printQuotaInformation(final Fraction quota) {
         final String ballotsPerSeat = quota.getWholePart() + " ballots per seat";
-        auditWriter.printf("Quota: floor(%s) = %s\n\n", quota.toString(), ballotsPerSeat);
-        reportWriter.printf("Quota: %s\n\n", ballotsPerSeat);
-        System.out.printf("Quota: %s\n\n", ballotsPerSeat);
+        auditWriter.printf("Quota: floor(%s) = %s\n\n",
+            quota.toString(),
+            ballotsPerSeat
+        );
+        reportWriter.printf("Quota: %s\n\n",
+            ballotsPerSeat
+        );
+        System.out.printf("Quota: %s\n\n",
+            ballotsPerSeat
+        );
     }
 
     /**
@@ -923,9 +965,13 @@ public class OpenPartyListSystem extends VotingSystem {
     private void printPartyGrouping() {
         auditWriter.println("Grouping by Party:");
         for(final String party : partyToCandidateCounts.keySet()) {
-            auditWriter.printf("Party: %s%n", party);
+            auditWriter.printf("Party: %s%n",
+                party
+            );
             for(final Candidate candidate : partyToCandidateCounts.get(party).keySet()) {
-                auditWriter.printf("    %s%n", candidate.getName());
+                auditWriter.printf("    %s%n",
+                    candidate.getName()
+                );
             }
         }
         auditWriter.println();
