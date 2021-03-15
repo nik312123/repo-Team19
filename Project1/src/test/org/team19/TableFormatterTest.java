@@ -395,7 +395,7 @@ final class TableFormatterTest {
         final double earthGravity = 9.81;
         final double molarGasConstant = 0.0821;
         final List<String> randomTopics = Arrays.asList("Numbers", "Fruit", "Names", "Physics Constants");
-        final List<List<Object>> randomTopicData = Arrays.asList(
+        final List<List<?>> randomTopicData = Arrays.asList(
             Arrays.asList(-3, -2, -1, 0, 1, 2, 3),
             Arrays.asList("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
             Arrays.asList("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary"),
