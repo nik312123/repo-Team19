@@ -79,30 +79,6 @@ public class InstantRunoffSystem extends VotingSystem {
     protected TableFormatter tableFormatter;
     
     /**
-     * The pattern associated with a valid candidates line of the form "[candidate1] ([party1]),[candidate2] ([party2]), ...", replacing the
-     * corresponding bracketed items with the actual candidate's name and party
-     * <p></p>
-     * Regex breakdown:
-     * <ol>
-     *     <li>^: Match the start of string</li>
-     *     <li>
-     *         *: Match the following group (noncapture group as denoted by "?:") any number of times
-     *         <ol>
-     *             <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate name</li>
-     *             <li>\([^\(\),]+\): One or more nonparenthesis or comma characters associated with a party that is surrounded by parentheses</li>
-     *             <li>,: Comma</li>
-     *         </ol>
-     *     </li>
-     *     <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate name</li>
-     *     <li>\([^\(\),]+\): One or more nonparenthesis or comma characters associated with a party that is surrounded by parentheses</li>
-     *     <li>\s*: Followed by any amount of whitespace</li>
-     *     <li>$: Match the end of the string</li>
-     * </ol>
-     */
-    @SuppressWarnings("RegExpRedundantEscape")
-    protected Pattern candidatesLinePattern = Pattern.compile("^(?:[^\\(\\),]+\\([^\\(\\),]+\\)\\s*,)*[^\\(\\),]+\\([^\\(\\),]+\\)\\s*$");
-    
-    /**
      * The pattern associated with a valid candidate of the form "[candidate1] ([party1])", replacing the corresponding bracketed items with the
      * actual candidate's name and party
      * <p></p>
@@ -205,8 +181,8 @@ public class InstantRunoffSystem extends VotingSystem {
                 return false;
             }
             final Ballot ballot = (Ballot) obj;
-            return ballotNumber == ballot.ballotNumber && candidateIndex == ballot.candidateIndex && Arrays
-                .equals(rankedCandidates, ballot.rankedCandidates);
+            return ballotNumber == ballot.ballotNumber && candidateIndex == ballot.candidateIndex &&
+                Arrays.equals(rankedCandidates, ballot.rankedCandidates);
         }
         
         /**
@@ -301,14 +277,6 @@ public class InstantRunoffSystem extends VotingSystem {
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
     private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
-        //If the candidates line does not match the regular expression for a valid candidates line, then throw an exception
-        if(!candidatesLinePattern.matcher(candidatesLine).matches()) {
-            VotingStreamParser.throwParseException(String.format(
-                "The given candidates line \"%s\" does not match the format \"[candidate1] ([party1]),[candidate2] ([party2]), ...\"",
-                candidatesLine
-            ), line);
-        }
-        
         //Split the candidates line by comma delimiter and add each candidate to an array
         final String[] candidatesStr = candidatesLine.split(",", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
@@ -323,7 +291,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
             }
-            //If, for some inexplicable reason, there exists a candidate string that doesn't properly match the format, then throw an exception
+            //If the candidates line does not match the regular expression for a valid candidates line, then throw an exception
             catch(IllegalStateException | IndexOutOfBoundsException e) {
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[candidate1] ([party1]),[candidate2] ([party2]), ...\"",
@@ -395,6 +363,33 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
+     * Retrieves the positive integer at the current position of the {@link String} and the position after the integer
+     *
+     * @param str The string from which to retrieve the positive integer
+     * @param pos The position at which to retrieve the positive integer
+     * @return The positive integer at the current position of the {@link String} and the position after the integer
+     */
+    private Pair<Integer, Integer> getNumber(final String str, int pos) {
+        //The StringBuilder in which the number string will be built
+        final StringBuilder numberBuilder = new StringBuilder();
+        
+        //Adds the current character as it is a digit
+        numberBuilder.append(str.charAt(pos));
+        pos++;
+        
+        //Adds the other characters after the current characters if they are digits
+        for(; pos < str.length(); pos++) {
+            final char curChar = str.charAt(pos);
+            if(!Character.isDigit(curChar)) {
+                break;
+            }
+            numberBuilder.append(curChar);
+        }
+        
+        return new Pair<>(Integer.parseInt(numberBuilder.toString()), pos);
+    }
+    
+    /**
      * Parses the ballot line from the election file and returns the resultant {@link Ballot}
      *
      * @param ballotNumber The number corresponding to the current ballot
@@ -404,15 +399,7 @@ public class InstantRunoffSystem extends VotingSystem {
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
     private Ballot parseBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
-        //Split the ballots line by the comma delimiter
-        final String[] ballotStr = ballotLine.split(",", -1);
-        
-        //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
-        if(ballotStr.length != numCandidates) {
-            VotingStreamParser.throwParseException(String.format(
-                "The number of values %d for this ballot is not equivalent to the number of candidates %d", ballotStr.length, numCandidates
-            ), line);
-        }
+        int numCommas = 0;
         
         //Store the minimum and maximum rank found in the rankings
         int minRank = Integer.MAX_VALUE;
@@ -421,35 +408,48 @@ public class InstantRunoffSystem extends VotingSystem {
         //Mapping of rankings to candidates for the ballot
         final Map<Integer, Candidate> rankedCandidateMap = new HashMap<>();
         
-        for(int i = 0; i < numCandidates; ++i) {
-            final String ballotRank = ballotStr[i].strip();
+        //IIterate through the characters of the ballot line
+        for(int i = 0; i < ballotLine.length(); ++i) {
+            final char curChar = ballotLine.charAt(i);
             
-            //If the current ballot rank is empty, then continue to the next ballot rank
-            if(ballotRank.isEmpty()) {
-                continue;
+            if(curChar == ',') {
+                numCommas++;
             }
-            
-            try {
-                //Try to parse the current rank value as an integer
-                final int currentRank = Integer.parseInt(ballotRank);
+            else if(Character.isDigit(curChar)) {
+                //Retrieve the number at the current position of the string and the position after the number
+                final Pair<Integer, Integer> rankNewPos = getNumber(ballotLine, i);
+                
+                final int rank = rankNewPos.getFirst();
                 
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
-                if(currentRank < 1 || currentRank > numCandidates) {
+                if(rank < 1 || rank > numCandidates) {
                     VotingStreamParser.throwParseException(String.format(
                         "The provided rank %d is out of the range %d to %d for %d candidates",
-                        currentRank, 1, numCandidates, numCandidates
+                        rank, 1, numCandidates, numCandidates
                     ), line);
                 }
                 
                 //Update the minimum, maximum, and ranked candidates map
-                minRank = Math.min(minRank, currentRank);
-                maxRank = Math.max(maxRank, currentRank);
-                rankedCandidateMap.put(currentRank, candidates[i]);
+                minRank = Math.min(minRank, rank);
+                maxRank = Math.max(maxRank, rank);
+                rankedCandidateMap.put(rank, candidates[numCommas]);
+                
+                //Change the current index i to the position of the last character of the rank number
+                i = rankNewPos.getSecond() - 1;
             }
-            //If the current rank is not a valid integer, throw an exception
-            catch(NumberFormatException e) {
-                VotingStreamParser.throwParseException(String.format("The rank provided \"%s\" was not a valid integer", ballotStr[i]), line);
+            else if(!Character.isWhitespace(curChar)) {
+                VotingStreamParser.throwParseException(String.format(
+                    "Ballot lines can only consist of commas, digits, and whitespace for IR, but character %c was found",
+                    curChar
+                ), line);
             }
+        }
+        
+        //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
+        if(numCommas + 1 != numCandidates) {
+            VotingStreamParser.throwParseException(String.format(
+                "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
+            ), line);
         }
         
         //If the ballot has not ranked a single candidate, then throw an exception

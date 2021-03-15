@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -81,31 +80,6 @@ public class OpenPartyListSystem extends VotingSystem {
      * The {@link TableFormatter} used to produce tables as output
      */
     protected TableFormatter tableFormatter;
-
-    /**
-     * The pattern associated with a valid candidate of the form "[[candidate1], [party1]], [[candidate2], [party2]], ...", replacing the
-     * corresponding bracketed arguments (not including the outer brackets for candidate-party pairs) with the actual candidate's name and party
-     * <p></p>
-     * Regex breakdown:
-     * <ol>
-     *     <li>^: Match the start of the string</li>
-     *     <li>\s*: Beginning with any amount of whitespace</li>
-     *     <li>
-     *         *: Any number of the noncapture group
-     *         <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate name</li>
-     *         <li>,: Comma</li>
-     *         <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate party</li>
-     *         <li>\s*,\s*: Comma surrounded by any amount of whitespace</li>
-     *     </li>
-     *     <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate name</li>
-     *     <li>,: Comma</li>
-     *     <li>[^\(\),]+: One or more nonparenthesis or comma characters associated with the candidate party</li>
-     *     <li>\s*: Ending with any amount of whitespace</li>
-     *     <li>$: Match the end of the string</li>
-     * </ol>
-     */
-    @SuppressWarnings("RegExpRedundantEscape")
-    protected Pattern candidatesLinePattern = Pattern.compile("^\\s*(?:\\[[^\\[\\],]+,[^\\[\\]+,]+\\]\\s*,\\s*)*\\[[^\\[\\],]+,[^\\[\\]+,]+\\]\\s*$");
 
     /**
      * Represents party information for a party in an {@link OpenPartyListSystem} election
@@ -234,20 +208,19 @@ public class OpenPartyListSystem extends VotingSystem {
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
     private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
-        //If the candidates line does not match the regular expression for a valid candidates line, then throw an exception
-        if(!candidatesLinePattern.matcher(candidatesLine).matches()) {
-            VotingStreamParser.throwParseException(String.format(
-                "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
-                candidatesLine
-            ), line);
-        }
-
         //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
         final String[] candidatesStr = candidatesLine.split("]\\s*,", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
         for(int i = 0; i < candidatesArr.length; ++i) {
             //Substring starting on 1 before splitting to get rid of the left bracket
             final String[] candidate = candidatesStr[i].strip().substring(1).split(",");
+
+            if(candidate.length != 2) {
+                VotingStreamParser.throwParseException(String.format(
+                    "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
+                    candidatesLine
+                ), line);
+            }
 
             //Removes the right bracket for the last candidate's party
             if(i == candidatesArr.length - 1) {
@@ -357,44 +330,54 @@ public class OpenPartyListSystem extends VotingSystem {
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
     private Candidate parseBallot(final String ballotLine, final int line) throws ParseException {
-        //Split using a comma as a delimiter
-        final String[] ballotStr = ballotLine.split(",", -1);
+        //The location of the 1 in the ballot line (a.k.a. the candidate position at which 1 is stored)
+        Integer oneLocationZeroBased = null;
+
+        //The number of commas in the ballot line
+        int numCommas = 0;
+
+        //Iterate through the characters of the ballot line
+        for(int i = 0; i < ballotLine.length(); ++i) {
+            final char curChar = ballotLine.charAt(i);
+            switch(curChar) {
+                case ',':
+                    numCommas++;
+                    break;
+                case '1':
+                    //If the position of 1 has already been set, then there is more than one 1 in the ballot line, so throw an exception
+                    if(oneLocationZeroBased != null) {
+                        VotingStreamParser.throwParseException("There can only be one choice for the OPL ballots", line);
+                    }
+                    //Otherwise, assigned the position of 1
+                    else {
+                        oneLocationZeroBased = numCommas;
+                    }
+                    break;
+                default:
+                    //If the character is not a comma, 1, or whitespace, then throw an exception
+                    if(!Character.isWhitespace(curChar)) {
+                        VotingStreamParser.throwParseException(String.format(
+                            "Ballot lines can only consist of commas, 1, and whitespace for OPL, but character %c was found",
+                            curChar
+                        ), line);
+                    }
+                    break;
+            }
+        }
 
         //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
-        if(ballotStr.length != numCandidates) {
+        if(numCommas + 1 != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
-                "The number of values %d for this ballot is not equivalent to the number of candidates %d", ballotStr.length, numCandidates
+                "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
             ), line);
         }
 
-        //The location of the last one found in the ballot
-        Integer oneLocation = null;
-
-        for(int i = 1; i <= numCandidates; ++i) {
-            final String value = ballotStr[i - 1].strip();
-
-            //If a value is equal to 1 and oneLocation is not already set, then set it
-            if(value.equals("1") && oneLocation == null) {
-                oneLocation = i;
-            }
-            //Otherwise, if a value is equal to 1 and oneLocation is set, then throw an exception
-            else if(value.equals("1")) {
-                VotingStreamParser.throwParseException("There can only be one choice for the OPL ballots", line);
-            }
-            //Otherwise, if a value is equal to something other than 1 or an empty string, throw an exception
-            else if(!value.isEmpty()) {
-                VotingStreamParser.throwParseException(String.format(
-                    "Ballot values for OPL ballots can either be empty or 1, but \"%s\" was found", value
-                ), line);
-            }
-        }
-
         //If there are no 1s for the ballot, then throw an exception
-        if(oneLocation == null) {
+        if(oneLocationZeroBased == null) {
             VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", line);
         }
-
-        return candidates[oneLocation - 1];
+        
+        return candidates[oneLocationZeroBased];
     }
 
     /**
@@ -995,6 +978,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 }
                 catch(IllegalAccessException | NoSuchFieldException e) {
                     e.printStackTrace();
+                    System.exit(1);
                 }
                 return null;
             })
