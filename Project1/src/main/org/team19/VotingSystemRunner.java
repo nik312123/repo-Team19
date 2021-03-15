@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,6 +40,16 @@ import java.util.Map;
 public final class VotingSystemRunner {
     
     /**
+     * The potential source for the audit output set by classes in this package to specify an alternative output location for the audit contents
+     */
+    static OutputStream auditOutputPotentialSource = null;
+    
+    /**
+     * The potential source for the audit output set by classes in this package to specify an alternative output location for the report contents
+     */
+    static OutputStream reportOutputPotentialSource = null;
+    
+    /**
      * A private constructor for the utility class {@link VotingSystemRunner} to prevent instantiation
      */
     private VotingSystemRunner() {}
@@ -50,7 +61,7 @@ public final class VotingSystemRunner {
      * @return The full, unique canonical form of the provided file path
      * @throws IOException Thrown if the provided file path cannot be resolved
      */
-    private static String getFullFilePath(@SuppressWarnings("CheckStyle") String filePath) throws IOException {
+    private static String getFullFilePath(String filePath) throws IOException {
         //If it starts with ~ plus the file separator, replace it with the home directory
         if(filePath.startsWith("~" + File.separator)) {
             filePath = System.getProperty("user.home") + filePath.substring(1);
@@ -149,29 +160,40 @@ public final class VotingSystemRunner {
         final LocalDateTime currentTimestamp = LocalDateTime.now();
         
         //Streams for the audit and report files
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
+        OutputStream auditOutput = null;
+        OutputStream reportOutput = null;
         
-        //Retrieves the output streams for the audit and report files
-        try {
-            auditOutput = getFileOutputStream(
-                "Project1/audits/".replace('/', File.separatorChar)
-                    + generateTimestampedFileName("audit", currentTimestamp)
-            );
+        //Retrieves the output streams for the audit and report files, using the potential source variables if set
+        if(auditOutputPotentialSource == null) {
+            try {
+                auditOutput = getFileOutputStream(
+                    "Project1/audits/".replace('/', File.separatorChar)
+                        + generateTimestampedFileName("audit", currentTimestamp)
+                );
+            }
+            catch(FileNotFoundException e) {
+                System.err.println("The audit file could not be created");
+                System.exit(2);
+            }
         }
-        catch(FileNotFoundException e) {
-            System.err.println("The audit file could not be created");
-            System.exit(2);
+        else {
+            auditOutput = auditOutputPotentialSource;
         }
-        try {
-            reportOutput = getFileOutputStream(
-                "Project1/reports/".replace('/', File.separatorChar)
-                    + generateTimestampedFileName("report", currentTimestamp)
-            );
+        
+        if(reportOutputPotentialSource == null) {
+            try {
+                reportOutput = getFileOutputStream(
+                    "Project1/reports/".replace('/', File.separatorChar)
+                        + generateTimestampedFileName("report", currentTimestamp)
+                );
+            }
+            catch(FileNotFoundException e) {
+                System.err.println("The report file could not be created");
+                System.exit(2);
+            }
         }
-        catch(FileNotFoundException e) {
-            System.err.println("The report file could not be created");
-            System.exit(2);
+        else {
+            reportOutput = reportOutputPotentialSource;
         }
         
         //Mapping of nonnull header strings to corresponding nonnull VotingSystem classes

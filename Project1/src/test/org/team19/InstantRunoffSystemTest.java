@@ -11,13 +11,11 @@
 
 package org.team19;
 
+import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -32,8 +30,6 @@ import java.util.List;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-
-import org.team19.InstantRunoffSystem.Ballot;
 
 import org.team19.InstantRunoffSystem.Ballot;
 
@@ -361,6 +357,7 @@ final class InstantRunoffSystemTest {
 
     @Test
     void testGetLowestHighestCandidatesMultipleHighest() {
+
         //Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
 
@@ -672,7 +669,7 @@ final class InstantRunoffSystemTest {
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
-        
+
         // Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport.txt".replace('/', FILE_SEP)),

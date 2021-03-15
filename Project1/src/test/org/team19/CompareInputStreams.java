@@ -43,8 +43,8 @@ public class CompareInputStreams {
     /**
      * Compares two {@link InputStream}s
      *
-     * @param inputStream1  an {@link InputStream} to compare
-     * @param inputStream2  another {@link InputStream} to compare
+     * @param inputStream1 an {@link InputStream} to compare
+     * @param inputStream2 another {@link InputStream} to compare
      * @throws ParseException thrown when there is an error on a line
      */
     public static void compareFiles(final InputStream inputStream1, final InputStream inputStream2) throws ParseException {

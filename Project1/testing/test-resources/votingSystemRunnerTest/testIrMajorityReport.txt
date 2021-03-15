@@ -1,0 +1,37 @@
+Election type: IR
+
+Number of Candidates: 4
+
+Candidates:
+Rosen (D)
+Kleinberg (R)
+Chou (I)
+Royce (L)
+
+Number of Ballots: 9
+
+First-choice ballots:
++---------------+---------+
+| Candidate     | Ballots |
+|---------------+---------|
+| Rosen (D)     |       4 |
+|---------------+---------|
+| Chou (I)      |       2 |
+|---------------+---------|
+| Royce (L)     |       2 |
+|---------------+---------|
+| Kleinberg (R) |       1 |
++---------------+---------+
+
+Ballots after Kleinberg (R) was eliminated:
++-----------+---------+
+| Candidate | Ballots |
+|-----------+---------|
+| Rosen (D) |       5 |
+|-----------+---------|
+| Chou (I)  |       2 |
+|-----------+---------|
+| Royce (L) |       2 |
++-----------+---------+
+
+Rosen (D) has received 5/9 ballots giving them a majority of 55.56% of the ballots. They have therefore won.
