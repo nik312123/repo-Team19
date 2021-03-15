@@ -13,6 +13,8 @@
 package org.team19;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -78,22 +80,22 @@ public final class TableFormatter {
      * @param numCols  The number of columns in the table
      * @return The provided table but all objects are in string form, the column headers are added, and the table is returned as a list of rows
      */
-    protected List<List<String>> objColTableToStrRowTable(final List<String> headers, final List<List<?>> colTable, final int numRows,
-        final int numCols) {
+    protected List<List<String>> objColTableToStrRowTable(final List<String> headers, final Collection<? extends Collection<?>> colTable,
+        final int numRows, final int numCols) {
         //Creates the table of strings rows
         final List<List<String>> strRowTable = IntStream.range(0, numRows)
             .mapToObj(i -> new ArrayList<String>(numCols))
             .collect(Collectors.toList());
-    
-        //Adds the headers to the table if there are a nonzero number of rows
+        
+        //Adds the headers to the table if there are a nonzero number of columns
         if(numCols != 0) {
             headers.forEach(strRowTable.get(0)::add);
         }
-        
-        //Adds the object columns to the table as string rows
-        for(final List<?> col : colTable) {
+    
+        for(final Collection<?> col : colTable) {
+            final Iterator<?> colIter = col.iterator();
             for(int rowIndex = 1; rowIndex < numRows; rowIndex++) {
-                strRowTable.get(rowIndex).add(col.get(rowIndex - 1).toString());
+                strRowTable.get(rowIndex).add(colIter.next().toString());
             }
         }
         return strRowTable;
@@ -187,7 +189,7 @@ public final class TableFormatter {
      * @throws IllegalArgumentException Thrown if the number of columns in provided either does not match the length of the column headers or the
      *                                  length of the alignments
      */
-    public String formatAsTable(final List<String> headers, final List<List<?>> colTableData, final List<Alignment> alignments)
+    public String formatAsTable(final List<String> headers, final Collection<? extends Collection<?>> colTableData, final List<Alignment> alignments)
         throws NullPointerException, IllegalArgumentException {
         //Throw a NullPointerException if any of the lists provided are null
         Objects.requireNonNull(headers);
@@ -205,7 +207,7 @@ public final class TableFormatter {
         }
         
         //Get the number of rows, including the header
-        final int numRows = numCols == 0 ? 0 : colTableData.get(0).size() + 1;
+        final int numRows = numCols == 0 ? 0 : colTableData.iterator().next().size() + 1;
         
         /*
          * From the table of column lists composed of objects, retrieves the same table but with each object converted to its string form and the
