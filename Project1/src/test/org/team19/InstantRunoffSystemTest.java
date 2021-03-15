@@ -598,7 +598,7 @@ final class InstantRunoffSystemTest {
             new FileInputStream(auditOutput))
         );
 
-        // Comparing expected output vs actual output of audit
+        // Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityReport.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
@@ -672,8 +672,8 @@ final class InstantRunoffSystemTest {
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
-
-        // Comparing expected output vs actual output of audit
+        
+        // Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
