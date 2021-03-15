@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.io.PrintStream;
@@ -37,21 +38,19 @@ import org.team19.InstantRunoffSystem.Ballot;
 import org.team19.InstantRunoffSystem.Ballot;
 
 final class InstantRunoffSystemTest {
-    
+
     final static char FILE_SEP = File.separatorChar;
-    
+
     //Creates a null device output stream to consume and ignore all output
     private static final OutputStream NULL_OUTPUT = OutputStream.nullOutputStream();
-    
-    private InstantRunoffSystemTest() {}
-    
+
     //Creates an InstantRunoffSystem with null device output streams
     private static InstantRunoffSystem createIrNullStreams() {
         return new InstantRunoffSystem(NULL_OUTPUT, NULL_OUTPUT);
     }
-    
+
     private InstantRunoffSystemTest() {}
-    
+
     @Test
     void testConstructor() {
         Assertions.assertAll(
@@ -63,28 +62,28 @@ final class InstantRunoffSystemTest {
             () -> Assertions.assertThrows(NullPointerException.class, () -> new InstantRunoffSystem(null, NULL_OUTPUT))
         );
     }
-    
+
     @Test
     void testGetCandidateHeaderSize() {
         //Test that an instant runoff system has 1 line as its candidate header size
         Assertions.assertEquals(1, createIrNullStreams().getCandidateHeaderSize());
     }
-    
+
     @Test
     void testGetBallotHeaderSize() {
         //Test that an instant runoff system has 1 line as its ballot header size
         Assertions.assertEquals(1, createIrNullStreams().getBallotHeaderSize());
     }
-    
+
     //getNumCandidates is tested here indirectly as well
     @Test
     void testImportCandidatesHeader() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-        
+
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         try {
             Assertions.assertAll(
                 //Test that a nonpositive candidate header results in an exception being thrown
@@ -105,20 +104,20 @@ final class InstantRunoffSystemTest {
             System.setOut(originalSystemOut);
         }
     }
-    
+
     //getCandidates is tested here indirectly as well
     @Test
     void testAddCandidates() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-        
+
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         try {
             //Test example candidates array
             final Candidate[] c0c1 = new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")};
-            
+
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of parentheses
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0), C1 P1", 3)),
@@ -137,16 +136,16 @@ final class InstantRunoffSystemTest {
             System.setOut(originalSystemOut);
         }
     }
-    
+
     //getNumBallots is tested here indirectly as well
     @Test
     void testImportBallotsHeader() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-        
+
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         try {
             Assertions.assertAll(
                 //Test that a negative ballots header results in an exception being thrown
@@ -172,15 +171,15 @@ final class InstantRunoffSystemTest {
             System.setOut(originalSystemOut);
         }
     }
-    
+
     @Test
     void testAddBallot() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-        
+
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         try {
             Method parseBallotTmp = null;
             try {
@@ -191,7 +190,7 @@ final class InstantRunoffSystemTest {
                 Assertions.fail("Unable to retrieve parseBallot from InstantRunoffSystem");
             }
             final Method parseBallot = parseBallotTmp;
-            
+
             try {
                 instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, 2);
                 instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
@@ -199,7 +198,7 @@ final class InstantRunoffSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-            
+
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
                 () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,3,4", 5)),
@@ -242,27 +241,27 @@ final class InstantRunoffSystemTest {
             System.setOut(originalSystemOut);
         }
     }
-    
+
     @Test
     void testGetName() {
         //Test that the name returned is "Instant Runoff Voting"
         Assertions.assertEquals("Instant Runoff Voting", createIrNullStreams().getName());
     }
-    
+
     @Test
     void testGetShortName() {
         //Test that the short name returned is "IR"
         Assertions.assertEquals("IR", createIrNullStreams().getShortName());
     }
-    
+
     @Test
     void testToString() {
         final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
-        
+
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+
         try {
             //Put required sample data
             try {
@@ -272,7 +271,7 @@ final class InstantRunoffSystemTest {
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
             }
-            
+
             /*
              * Test that InstantRunoffSystem's toString produces output like "InstantRunoffSystem{candidates=[candidates], numBallots=<numBallots>}"
              * where [candidates] is replaced by the string form of the candidates array and [numBallots] is replaced by the number of ballots
@@ -287,250 +286,265 @@ final class InstantRunoffSystemTest {
             System.setOut(originalSystemOut);
         }
     }
-    
+
     @Test
     void testGetLowestHighestCandidatesSingleHighestSingleLowest() {
         // Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
-        
+
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
-        
+
         // Creates Candidates
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
-    
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+
         // Creates ballots
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
-    
+        final Ballot ballot1 = new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot2 = new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]});
+        final Ballot ballot3 = new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot4 = new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
+        final Ballot ballot5 = new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]});
+        final Ballot ballot6 = new Ballot(6, new Candidate[] {ir.candidates[3]});
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        // Maps candidates to their ballots
+        //Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
-        
+
         // Tests that only 1 lowest and 1 highest are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
-    
+
     @Test
-    void testGetLowestHighestCandidatesMultipleLowest(){
-        // Initializes InstantRunoffSystem with null OutputStreams
+    void testGetLowestHighestCandidatesMultipleLowest() {
+        //Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
-    
+
         ir.numCandidates = 6;
         ir.numBallots = 6;
         ir.candidates = new Candidate[6];
-    
-        // Creates Candidates
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
-        ir.candidates[4] = new Candidate("Loser","L");
-        ir.candidates[5] = new Candidate("Bobster","I");
-    
-        // Creates ballots
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3], ir.candidates[4]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3], ir.candidates[5]});
-    
+
+        //Creates Candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+        ir.candidates[4] = new Candidate("Loser", "L");
+        ir.candidates[5] = new Candidate("Bobster", "I");
+
+        //Creates ballots
+        final Ballot ballot1 = new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot2 = new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]});
+        final Ballot ballot3 = new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot4 = new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
+        final Ballot ballot5 = new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3], ir.candidates[4]});
+        final Ballot ballot6 = new Ballot(6, new Candidate[] {ir.candidates[3], ir.candidates[5]});
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        // Maps candidates to their ballots
+        //Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
         ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[5], new ArrayDeque<>());
-    
+
         // Tests the multiple lowest candidates are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R), Loser (L), Bobster (I)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
-    
+
     @Test
-    void testGetLowestHighestCandidatesMultipleHighest(){
-        // Initializes InstantRunoffSystem with null OutputStreams
+    void testGetLowestHighestCandidatesMultipleHighest() {
+        //Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
-    
+
         ir.numCandidates = 5;
         ir.numBallots = 9;
         ir.candidates = new Candidate[5];
-    
-        // Creates candidates
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
+
+        //Creates candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
         ir.candidates[4] = new Candidate("Bobster", "I");
-        
-        // Creates ballots
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
-        final Ballot ballot7 = new Ballot(7, new Candidate[]{ir.candidates[4]});
-        final Ballot ballot8 = new Ballot(8, new Candidate[]{ir.candidates[4], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot9 = new Ballot(9, new Candidate[]{ir.candidates[4], ir.candidates[2]});
-    
+
+        //Creates ballots
+        final Ballot ballot1 = new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot2 = new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]});
+        final Ballot ballot3 = new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot4 = new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
+        final Ballot ballot5 = new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]});
+        final Ballot ballot6 = new Ballot(6, new Candidate[] {ir.candidates[3]});
+        final Ballot ballot7 = new Ballot(7, new Candidate[] {ir.candidates[4]});
+        final Ballot ballot8 = new Ballot(8, new Candidate[] {ir.candidates[4], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot9 = new Ballot(9, new Candidate[] {ir.candidates[4], ir.candidates[2]});
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        // Maps candidates to their ballots
+        //Maps candidates to their ballots
         ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
         ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>(List.of(ballot7, ballot8, ballot9)));
-    
-        // Tests that only 1 highest candidate is returned
+
+        //Tests that only 1 highest candidate is returned
         assertEquals("Pair{Pair{0, [Kleinberg (R)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
-    
+
     @Test
     void testEliminateLowest() {
-        // Initializes InstantRunoffSystem with null OutputStreams
+        //Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
-    
+
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
-    
-        // Creates candidates
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
-    
-        // Creates ballots
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
-    
+
+        //Creates candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+
+        //Creates ballots
+        final Ballot[] ballots = new Ballot[] {
+            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+            new Ballot(6, new Candidate[] {ir.candidates[3]}),
+        };
+
+        for(Ballot ballot : ballots){
+            ballot.getNextCandidate();
+        }
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-    
-        // Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3))); // 3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                   // 0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));          // 2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));                   // 1
-    
-        // Eliminates Kleinberg - 0 ballots
+
+        //Maps candidates to their ballots
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
+
+        //Eliminates Kleinberg - 0 ballots
         ir.eliminateLowest(ir.candidates[1]);
-    
-        // Test to check that at eliminated candidate is removed from the map
+
+        //Test to check that at eliminated candidate is removed from the map
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[1]));
-        
-        // Test to check that the other candidates' ballots are unchanged because
-        // the eliminated candidate had no ballots to redistribute
+
+        //Test to check that the other candidates' ballots are unchanged because
+        //the eliminated candidate had no ballots to redistribute
         assertEquals(3, ir.candidateBallotsMap.get(ir.candidates[0]).size());
         assertEquals(2, ir.candidateBallotsMap.get(ir.candidates[2]).size());
         assertEquals(1, ir.candidateBallotsMap.get(ir.candidates[3]).size());
-        
-        // Eliminates Royce - 1 ballot
+
+        //Eliminates Royce - 1 ballot
         ir.eliminateLowest(ir.candidates[3]);
-    
-        // Test to check that at eliminated candidate is removed from the map
+
+        //Test to check that at eliminated candidate is removed from the map
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[3]));
-    
-        // Test to check that the other candidates' ballots are unchanged because
-        // the eliminated candidate only had 1 ballot had not next candidate indicated
+
+        //Test to check that the other candidates' ballots are unchanged because
+        //the eliminated candidate only had 1 ballot had not next candidate indicated
         assertEquals(3, ir.candidateBallotsMap.get(ir.candidates[0]).size());
         assertEquals(2, ir.candidateBallotsMap.get(ir.candidates[2]).size());
-    
-        // Eliminates Chou - 2 ballots
+
+        //Eliminates Chou - 2 ballots
         ir.eliminateLowest(ir.candidates[2]);
-    
-        // Test to check that at eliminated candidate is removed from the map
+
+        //Test to check that at eliminated candidate is removed from the map
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[2]));
-    
-        // Test to check that only Chou's ballot 4 is distributed to Rosen as indicated by the ballot
-        assertTrue(ir.candidateBallotsMap.get(ir.candidates[0]).contains(ballot4));
-        // Chou's ballot 5 should not be distributed to Royce they have already been eliminated
+
+        //Test to check that only Chou's ballot 4 is distributed to Rosen as indicated by the ballot
+        assertTrue(ir.candidateBallotsMap.get(ir.candidates[0]).contains(ballots[3]));
+        //Chou's ballot 5 should not be distributed to Royce they have already been eliminated
     }
-    
+
     @Test
-    void testEliminateLowestOutput(){
-    
-        // Initializes InstantRunoffSystem with audit OutputStream
+    void testEliminateLowestOutput() {
+
+        //Initializes InstantRunoffSystem with audit OutputStream
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt";
-        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputReport.txt";
-    
+
         InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), OutputStream.nullOutputStream());
         }
         catch(FileNotFoundException e) {
             e.printStackTrace();
         }
-    
+
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
-    
-        // Creates candidates
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
-        
-        // Creates ballots
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
-    
+
+        //Creates candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+
+        //Creates candidates
+        final Ballot[] ballots = new Ballot[] {
+            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+            new Ballot(6, new Candidate[] {ir.candidates[3]}),
+        };
+
+        for(Ballot ballot : ballots){
+            ballot.getNextCandidate();
+        }
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        // Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
-    
-        // Eliminates Kleinberg - 0 ballots
+        //Maps candidates to their ballots
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
+
+        //Eliminates Kleinberg - 0 ballots
         ir.eliminateLowest(ir.candidates[1]);
-    
-        // Eliminates Royce - 1 ballot
+
+        //Eliminates Royce - 1 ballot
         ir.eliminateLowest(ir.candidates[3]);
 
-        // Eliminates Chou - 2 ballots
+        //Eliminates Chou - 2 ballots
         ir.eliminateLowest(ir.candidates[2]);
-    
+
         ir.auditWriter.close();
-    
-        // Comparing expected output vs actual output
+
+        //Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutput.txt"),
             new FileInputStream(auditOutput))
         );
-        
+
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
     }
-    
+
     @Test
-    void runElection() {
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionAudit1.txt";
-        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionReport1.txt";
-    
-    
+    void runElectionMajority() {
+
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+
+        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityAudit1.txt";
+        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityReport1.txt";
+
         InstantRunoffSystem ir = null;
         try {
             ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
@@ -538,48 +552,139 @@ final class InstantRunoffSystemTest {
         catch(FileNotFoundException e) {
             e.printStackTrace();
         }
-    
+
         ir.numCandidates = 4;
-        ir.numBallots = 6;
+        ir.numBallots = 9;
+        ir.halfNumBallots = ir.numBallots / 2;
         ir.candidates = new Candidate[4];
-    
-        ir.candidates[0] = new Candidate("Rosen","D");
-        ir.candidates[1] = new Candidate("Kleinberg","R");
-        ir.candidates[2] = new Candidate("Chou","I");
-        ir.candidates[3] = new Candidate("Royce","L");
-    
-        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
-        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
-        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
-        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
-        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
-    
+
+        //Creates candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+
+        //Creates ballots
+        final Ballot[] ballots = new Ballot[] {
+            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[0], ir.candidates[1], ir.candidates[3]}),
+            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+            new Ballot(6, new Candidate[] {ir.candidates[3]}),
+            new Ballot(7, new Candidate[] {ir.candidates[3]}),
+            new Ballot(8, new Candidate[] {ir.candidates[1], ir.candidates[0]}),
+            new Ballot(9, new Candidate[] {ir.candidates[1]})
+        };
+
+        for(Ballot ballot : ballots){
+            ballot.getNextCandidate();
+        }
+
         ir.candidateBallotsMap = new LinkedHashMap<>();
-    
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
-    
+
+        //Maps candidates to their ballots
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2], ballots[8])));  // 4
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>(List.of(ballots[7])));                          // 1
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5], ballots[6])));              // 2
+
         ir.runElection();
-    
+
         ir.auditWriter.close();
         // Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionAudit.txt"),
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityAudit.txt"),
             new FileInputStream(auditOutput))
         );
-    
+
         // Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionReport.txt"),
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityReport.txt"),
             new FileInputStream(reportOutput))
         );
-    
+
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
         new File(reportOutput.replace('/', FILE_SEP)).delete();
+
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+
+    @Test
+    void runElectionPopularity() {
+
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+
+        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit1.txt";
+        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport1.txt";
+
+        InstantRunoffSystem ir = null;
+        try {
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ir.numCandidates = 4;
+        ir.numBallots = 6;
+        ir.halfNumBallots = ir.numBallots / 2;
+        ir.candidates = new Candidate[4];
+
+        //Creates candidates
+        ir.candidates[0] = new Candidate("Rosen", "D");
+        ir.candidates[1] = new Candidate("Kleinberg", "R");
+        ir.candidates[2] = new Candidate("Chou", "I");
+        ir.candidates[3] = new Candidate("Royce", "L");
+
+        //Creates ballots
+        final Ballot[] ballots = new Ballot[] {
+            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+            new Ballot(6, new Candidate[] {ir.candidates[3]}),
+        };
+
+        for(Ballot ballot : ballots){
+            ballot.getNextCandidate();
+        }
+
+        ir.candidateBallotsMap = new LinkedHashMap<>();
+
+        //Maps candidates to their ballots
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
+
+        ir.runElection();
+
+        ir.auditWriter.close();
+        // Comparing expected output vs actual output of audit
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit.txt"),
+            new FileInputStream(auditOutput))
+        );
+
+        // Comparing expected output vs actual output of audit
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport.txt"),
+            new FileInputStream(reportOutput))
+        );
+
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutput.replace('/', FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutput.replace('/', FILE_SEP)).delete();
+
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
     }
 }
