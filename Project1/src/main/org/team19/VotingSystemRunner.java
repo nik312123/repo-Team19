@@ -168,7 +168,7 @@ public final class VotingSystemRunner {
             System.exit(2);
         }
         
-        //Mapping of header strings to corresponding VotingSystem classes
+        //Mapping of nonnull header strings to corresponding nonnull VotingSystem classes
         final Map<String, Class<? extends VotingSystem>> headerSystemMap = Map.of(
             "IR", InstantRunoffSystem.class,
             "OPL", OpenPartyListSystem.class
@@ -177,10 +177,6 @@ public final class VotingSystemRunner {
         //Attempt to retrieve a voting system from parsing and run its election
         try {
             final VotingSystem votingSystem = VotingStreamParser.parse(input, auditOutput, reportOutput, headerSystemMap);
-            if(votingSystem == null) {
-                System.err.println("Unable to retrieve election system from parsing file");
-                System.exit(2);
-            }
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file
