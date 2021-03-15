@@ -84,7 +84,7 @@ public final class TableFormatter {
         final List<List<String>> strRowTable = IntStream.range(0, numRows)
             .mapToObj(i -> new ArrayList<String>(numCols))
             .collect(Collectors.toList());
-        
+    
         //Adds the headers to the table if there are a nonzero number of rows
         if(numCols != 0) {
             headers.forEach(strRowTable.get(0)::add);
@@ -193,9 +193,9 @@ public final class TableFormatter {
         Objects.requireNonNull(headers);
         Objects.requireNonNull(colTableData);
         Objects.requireNonNull(alignments);
-        
+    
         final int numCols = colTableData.size();
-        
+    
         //If the number of columns does not match the size of the column headers or alignment lists, then throw an IllegalArgumentException
         if(numCols != headers.size()) {
             throw new IllegalArgumentException("The given headers list must have the same size as the number of columns in the table");
