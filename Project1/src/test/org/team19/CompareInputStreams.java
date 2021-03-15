@@ -41,7 +41,7 @@ public class CompareInputStreams {
     }
     
     /**
-     * Compares two {@link InputStream}
+     * Compares two {@link InputStream}s
      *
      * @param inputStream1  an {@link InputStream} to compare
      * @param inputStream2  another {@link InputStream} to compare
