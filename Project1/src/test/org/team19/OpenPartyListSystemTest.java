@@ -1316,9 +1316,9 @@ final class OpenPartyListSystemTest {
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         opl.printFinalSeatAllocations();
 
-        //Distributes seats to candidates where there are ties between them after allocation of seats
-        final ArrayList<Candidate> candidatesWithSeats = (ArrayList<Candidate>) opl.distributeSeatsToCandidates();
+        final List<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
 
+        System.out.println(candidatesWithSeats);
 
         // Test to check that either Jones or Borg can get their party's allocated seat since they both have 1 vote
         assertTrue(candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Jones (R)]") || candidatesWithSeats.toString()
@@ -1628,7 +1628,7 @@ final class OpenPartyListSystemTest {
         opl.partyToPartyInformation.put("D", partyD);
         opl.partyToPartyInformation.put("R", partyR);
         opl.partyToPartyInformation.put("I", partyI);
-        
+
         opl.partyToCandidateCounts = new LinkedHashMap<>();
 
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());

@@ -534,7 +534,7 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected String getRemainingBallots(final PartyInformation partyInformation) {
         final String remainingBallots;
-
+        
         //If a candidate has been allocated seats
         if(partyInformation.numSeats > 0) {
             //If the remaining value is a whole number
@@ -1066,7 +1066,7 @@ public class OpenPartyListSystem extends VotingSystem {
         for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
         }
-        
+
         //If there are still more seats available after initial allocation
         if(numSeatsRemaining != 0) {
             allocateRemainingSeats(numSeatsRemaining, remainingParties);
