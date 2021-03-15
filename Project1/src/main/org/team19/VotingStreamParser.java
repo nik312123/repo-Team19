@@ -40,7 +40,7 @@ public final class VotingStreamParser {
      * @param lineNumber The line number in the file at which the parsing error occurred
      * @throws ParseException Thrown always
      */
-    private static void throwParseException(final String message, final int lineNumber) throws ParseException {
+    static void throwParseException(final String message, final int lineNumber) throws ParseException {
         throw new ParseException(String.format("Error on line %d: %s", lineNumber, message), lineNumber);
     }
     
@@ -128,17 +128,21 @@ public final class VotingStreamParser {
         final BufferedReader inReader = new BufferedReader(new InputStreamReader(input));
         final PrintWriter auditWriter = new PrintWriter(auditStream);
         final PrintWriter reportWriter = new PrintWriter(reportStream);
-        
+    
         int lineNumber = 1;
-        
+    
         VotingSystem votingSystem = null;
-        
+    
         //Attempt to read the first line of the file
-        final String firstLine = readLine(inReader, lineNumber);
-        
+        String firstLine = readLine(inReader, lineNumber);
+    
         //Throw an exception if the file has 0 lines (if such a file exists)
         throwParseExceptionIfEofLine(firstLine, lineNumber);
-        
+    
+        //Strip any whitespace from the beginning or end of the line
+        //noinspection ConstantConditions
+        firstLine = firstLine.strip();
+    
         //If the election file's header does not match one of the headers from the headerSystemMap, then throw an exception
         if(!headerSystemMap.containsKey(firstLine)) {
             String headers = headerSystemMap.keySet().toString();
@@ -156,12 +160,12 @@ public final class VotingStreamParser {
                 votingSystem = headerSystemMap.get(firstLine)
                     .getConstructor(OutputStream.class, OutputStream.class)
                     .newInstance(auditStream, reportStream);
-                
+    
                 //Output the election type to the audit, report, and summary
-                final String electionType = String.format("Election type: %s\n", firstLine);
-                auditWriter.println(electionType);
-                reportWriter.println(electionType);
-                System.out.println(electionType);
+                final String electionTypeOutput = String.format("Election type: %s\n", firstLine);
+                auditWriter.println(electionTypeOutput);
+                reportWriter.println(electionTypeOutput);
+                System.out.println(electionTypeOutput);
             }
             //If there is an issue in creating the VotingSystem instance, throw an error
             catch(InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
@@ -193,7 +197,11 @@ public final class VotingStreamParser {
         
         //Throw an exception if the number of candidates parsed does not match the number of candidates provided in the candidates header
         if(votingSystem.getCandidates().size() != numCandidates) {
-            throwParseException("The number of parsed candidates is not equivalent to the number provided in the candidates header", lineNumber);
+            throwParseException(String.format(
+                "The number of parsed candidates %d is not equivalent to the number provided in the candidates header %d",
+                votingSystem.getCandidates().size(),
+                numCandidates
+            ), lineNumber);
         }
         
         lineNumber++;
@@ -213,19 +221,23 @@ public final class VotingStreamParser {
         final int numBallots = votingSystem.getNumBallots();
         int ballotNumber = 1;
         String nextBallot;
-        
+    
         //Read in ballots until the end of the file is reached
         while((nextBallot = readLine(inReader, lineNumber)) != null) {
             votingSystem.addBallot(ballotNumber, nextBallot, lineNumber);
             lineNumber++;
             ballotNumber++;
         }
-        
+    
         //Throw an exception if the number of ballots parsed does not match the number of ballots provided in the ballots header
-        if(numBallots != ballotNumber - 1) {
-            throwParseException("The number of parsed ballots is not equivalent to the number provided in the ballots header", lineNumber);
+        if(ballotNumber - 1 != numBallots) {
+            throwParseException(String.format(
+                "The number of parsed ballots %d is not equivalent to the number provided in the ballots header %d",
+                ballotNumber - 1,
+                numBallots
+            ), lineNumber);
         }
-        
+    
         return votingSystem;
     }
     
