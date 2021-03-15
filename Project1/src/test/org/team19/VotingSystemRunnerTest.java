@@ -908,8 +908,6 @@ final class VotingSystemRunnerTest {
         //Store the running time limit
         final int timeLimitSeconds = 8 * 60;
         
-        boolean shouldDelete = true;
-        
         //The file upon which this test will be run
         final String testFilePath = String.format(
             "Project1/testing/test-resources/votingSystemRunnerTest/oplTest%d.txt",
@@ -937,8 +935,6 @@ final class VotingSystemRunnerTest {
             //Get the runtime in seconds, and if it exceeds the time limit, then fail
             final double runtime = (double) (finalTime - initTime) / 1000000000;
             if(runtime > timeLimitSeconds) {
-                shouldDelete = false;
-                
                 Assertions.fail(String.format(
                     "testOplTime took %.2f seconds for %d candidates per party but a maximum of %d seconds was expected",
                     runtime,
@@ -954,11 +950,9 @@ final class VotingSystemRunnerTest {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
-            if(shouldDelete) {
-                //Delete the giant generated file
-                //noinspection ResultOfMethodCallIgnored
-                new File(testFilePath).delete();
-            }
+            //Delete the giant generated file
+            //noinspection ResultOfMethodCallIgnored
+            new File(testFilePath).delete();
         }
     }
 }
