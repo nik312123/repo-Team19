@@ -15,6 +15,10 @@
       <excludeFolder url="file://$MODULE_DIR$/docs" />
       <excludeFolder url="file://$MODULE_DIR$/Project1/audits" />
       <excludeFolder url="file://$MODULE_DIR$/Project1/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/Project1/documentation" />
+      <excludeFolder url="file://$MODULE_DIR$/Project1/testing" />
+      <excludeFolder url="file://$MODULE_DIR$/SDD" />
+      <excludeFolder url="file://$MODULE_DIR$/SRS" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
