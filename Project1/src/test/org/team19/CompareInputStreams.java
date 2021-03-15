@@ -24,6 +24,11 @@ import java.util.Objects;
 public class CompareInputStreams {
     
     /**
+     * A private constructor for the utility class {@link CompareInputStreams} to prevent instantiation
+     */
+    private CompareInputStreams() {}
+    
+    /**
      * Throws a {@link ParseException} with the message in the form "Error on line [lineNumber]: [message]", replacing [lineNumber] and [message]
      * with the corresponding parameters
      *
