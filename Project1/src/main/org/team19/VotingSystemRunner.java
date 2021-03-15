@@ -1,3 +1,20 @@
+/*
+ * File name:
+ * VotingSystemRunner.java
+ *
+ * Author:
+ * Nikunj Chawla
+ *
+ * Purpose:
+ * Runs the election for a VotingSystem given a path to a file, which can be absolute or relative to the current working directory
+ *
+ * If no file is given, then standard input will be used as the source
+ *
+ * Creates an audit files that shows the steps, process, computations, etc., along with various statistics pertaining to the election
+ *
+ * Creates a report file that shows a summary of various statistics pertaining to the election
+ */
+
 package org.team19;
 
 import java.io.File;
