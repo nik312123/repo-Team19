@@ -63,6 +63,24 @@ public final class VotingStreamParser {
     }
     
     /**
+     * Returns an array of the number of lines specified from the provided {@link BufferedReader}
+     *
+     * @param bufferedReader The {@link BufferedReader} from which to read the lines
+     * @param lineNumber     The line number of the first line in the group of lines to read
+     * @param numLines       The number of lines to read
+     * @return An array of the number of lines specified from the provided {@link BufferedReader}
+     * @throws ParseException Thrown if an {@link IOException} occurs when trying to read in the next line
+     */
+    private static String[] readLines(final BufferedReader bufferedReader, final int lineNumber, final int numLines) throws ParseException {
+        final String[] lines = new String[numLines];
+        for(int i = 0; i < numLines; i++) {
+            final String nextLine = readLine(bufferedReader, lineNumber + i);
+            lines[i] = nextLine;
+        }
+        return lines;
+    }
+    
+    /**
      * Throws a {@link ParseException} if the given line is null, meaning the file ends earlier than anticipated
      *
      * @param line       The line to test
@@ -86,24 +104,6 @@ public final class VotingStreamParser {
         for(int i = 0; i < lines.length; ++i) {
             throwParseExceptionIfEofLine(lines[i], lineNumber + i);
         }
-    }
-    
-    /**
-     * Returns an array of the number of lines specified from the provided {@link BufferedReader}
-     *
-     * @param bufferedReader The {@link BufferedReader} from which to read the lines
-     * @param lineNumber     The line number of the first line in the group of lines to read
-     * @param numLines       The number of lines to read
-     * @return An array of the number of lines specified from the provided {@link BufferedReader}
-     * @throws ParseException Thrown if an {@link IOException} occurs when trying to read in the next line
-     */
-    private static String[] readLines(final BufferedReader bufferedReader, final int lineNumber, final int numLines) throws ParseException {
-        final String[] lines = new String[numLines];
-        for(int i = 0; i < numLines; i++) {
-            final String nextLine = readLine(bufferedReader, lineNumber + i);
-            lines[i] = nextLine;
-        }
-        return lines;
     }
     
     /**
