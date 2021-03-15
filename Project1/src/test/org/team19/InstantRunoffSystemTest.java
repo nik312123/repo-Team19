@@ -211,10 +211,11 @@ class InstantRunoffSystemTest {
     
         // Initializes InstantRunoffSystem with audit OutputStream
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt";
-        
+        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputReport.txt";
+    
         InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), FileOutputStream.nullOutputStream());
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
             e.printStackTrace();
@@ -306,11 +307,17 @@ class InstantRunoffSystemTest {
         ir.runElection();
     
         ir.auditWriter.close();
-        // Comparing expected output vs actual output
-//        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-//            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutput.txt"),
-//            new FileInputStream(auditOutput))
-//        );
+        // Comparing expected output vs actual output of audit
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionAudit.txt"),
+            new FileInputStream(auditOutput))
+        );
+    
+        // Comparing expected output vs actual output of audit
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionReport.txt"),
+            new FileInputStream(reportOutput))
+        );
     
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
