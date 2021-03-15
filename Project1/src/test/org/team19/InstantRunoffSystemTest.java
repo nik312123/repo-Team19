@@ -175,7 +175,7 @@ class InstantRunoffSystemTest {
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[3]));
     
         // Test to check that the other candidates' ballots are unchanged because
-        // the eliminated candidate only had 1 ballot with only 1 candidate ranked
+        // the eliminated candidate only had 1 ballot had not next candidate indicated
         assertEquals(3, ir.candidateBallotsMap.get(ir.candidates[0]).size());
         assertEquals(2, ir.candidateBallotsMap.get(ir.candidates[2]).size());
     
@@ -249,5 +249,53 @@ class InstantRunoffSystemTest {
     
     @Test
     void runElection() {
+        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionAudit1.txt";
+        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionReport1.txt";
+    
+    
+        InstantRunoffSystem ir = null;
+        try {
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    
+        ir.numCandidates = 4;
+        ir.numBallots = 6;
+        ir.candidates = new Candidate[4];
+    
+        ir.candidates[0] = new Candidate("Rosen","D");
+        ir.candidates[1] = new Candidate("Kleinberg","R");
+        ir.candidates[2] = new Candidate("Chou","I");
+        ir.candidates[3] = new Candidate("Royce","L");
+    
+        final Ballot ballot1 = new Ballot(1, new Candidate[]{ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot2 = new Ballot(2, new Candidate[]{ir.candidates[0], ir.candidates[2]});
+        final Ballot ballot3 = new Ballot(3, new Candidate[]{ir.candidates[0], ir.candidates[1], ir.candidates[2]});
+        final Ballot ballot4 = new Ballot(4, new Candidate[]{ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]});
+        final Ballot ballot5 = new Ballot(5, new Candidate[]{ir.candidates[2], ir.candidates[3]});
+        final Ballot ballot6 = new Ballot(6, new Candidate[]{ir.candidates[3]});
+    
+        ir.candidateBallotsMap = new LinkedHashMap<>();
+    
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballot1, ballot2, ballot3)));
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
+    
+        ir.runElection();
+    
+        ir.auditWriter.close();
+        // Comparing expected output vs actual output
+//        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+//            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutput.txt"),
+//            new FileInputStream(auditOutput))
+//        );
+    
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutput.replace('/', FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutput.replace('/', FILE_SEP)).delete();
     }
 }
