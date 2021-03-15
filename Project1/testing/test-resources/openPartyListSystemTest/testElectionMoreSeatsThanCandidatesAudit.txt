@@ -1,4 +1,4 @@
-Quota: floor(50 / 7) = 7 ballots per seat
+Quota: floor(3 / 2) = 1 ballots per seat
 
 Grouping by Party:
 Party: D
@@ -22,52 +22,27 @@ The ballot counts for each party are as follows:
 | I     |       6 |
 +-------+---------+
 
-D initial allocation of seats: floor(5 / (50 / 7)) = 0
-Remaining ballots: 5
+D initial allocation of seats: floor(5 / (3 / 2)) = 2
+Remaining ballots: 2
 
-R initial allocation of seats: floor(10 / (50 / 7)) = 1
-Remaining ballots: 2.8571
+R initial allocation of seats: floor(10 / (3 / 2)) = 3
+Remaining ballots: 5.5000
 
-I initial allocation of seats: floor(6 / (50 / 7)) = 0
-Remaining ballots: 6
+I initial allocation of seats: floor(6 / (3 / 2)) = 1
+Remaining ballots: 4.5000
 
-1 / 14 have been allocates. 13 seats remaining
+6 / 14 have been allocates. 8 seats remaining
 
 Initial Seat Allocation Results:
 +-------+---------------+-------------------+
 | Party | Initial Seats | Remaining Ballots |
 |-------+---------------+-------------------|
-| D     |             0 |                 5 |
+| D     |             2 |                 2 |
 |-------+---------------+-------------------|
-| R     |             1 |            2.8571 |
+| R     |             3 |            5.5000 |
 |-------+---------------+-------------------|
-| I     |             0 |                 6 |
+| I     |             1 |            4.5000 |
 +-------+---------------+-------------------+
-
-Allocating seat 2:
-The party with the next largest remaining ballots is I with 6 remaining ballots
-
-2 / 14 have been allocated. 12 seats remaining
-
-Allocating seat 3:
-The party with the next largest remaining ballots is D with 5 remaining ballots
-
-3 / 14 have been allocated. 11 seats remaining
-
-Allocating seat 4:
-The party with the next largest remaining ballots is R with 2.8571 remaining ballots
-
-4 / 14 have been allocated. 10 seats remaining
-
-Allocating seat 5:
-The party with the next largest remaining ballots is D with 5 remaining ballots
-
-5 / 14 have been allocated. 9 seats remaining
-
-Allocating seat 6:
-The party with the next largest remaining ballots is R with 2.8571 remaining ballots
-
-6 / 14 have been allocated. 8 seats remaining
 
 There are 8 seats remaining, but there are no more candidates to which seats can be distributed
 
@@ -85,11 +60,11 @@ Final Seat Allocations:
 +---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
 | Parties | Ballots | First Allocation | Remaining Ballots | Second Allocation | Final Seats | % of Ballots to % of Seats |
 |---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
-| D       |       5 |                0 |                 5 |                 2 |           2 |                     5%/14% |
+| D       |       5 |                2 |                 2 |                 0 |           2 |                    24%/14% |
 |---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
-| R       |      10 |                1 |            2.8571 |                 2 |           3 |                    10%/21% |
+| R       |      10 |                3 |            5.5000 |                 0 |           3 |                    48%/21% |
 |---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
-| I       |       6 |                0 |                 6 |                 1 |           1 |                      6%/7% |
+| I       |       6 |                1 |            4.5000 |                 0 |           1 |                     29%/7% |
 +---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
 
 Distributing 2 seats for the party D:
