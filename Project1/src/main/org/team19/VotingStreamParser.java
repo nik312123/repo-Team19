@@ -209,7 +209,7 @@ public final class VotingStreamParser {
         //Import the ballots header, throwing an exception if there was an issue in reading or parsing the candidates header
         final int ballotsHeaderSize = votingSystem.getBallotHeaderSize();
         final String[] ballotsHeader = readLines(inReader, lineNumber, ballotsHeaderSize);
-        throwParseExceptionIfEofLines(candidatesHeader, lineNumber);
+        throwParseExceptionIfEofLines(ballotsHeader, lineNumber);
         votingSystem.importBallotsHeader(ballotsHeader, lineNumber);
         
         lineNumber += ballotsHeaderSize;
