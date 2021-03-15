@@ -234,7 +234,7 @@ final class VotingStreamParserTest {
             Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
                 () -> Assertions.assertEquals(openPartyListSystem.getNumCandidates(), 6),
-                //Check that the candidates themmselves were correcly parsed
+                //Check that the candidates themselves were correctly parsed
                 () -> Assertions.assertEquals(openPartyListSystem.getCandidates(), List.of(
                     new Candidate("Pike", "D"),
                     new Candidate("Foster", "D"),
