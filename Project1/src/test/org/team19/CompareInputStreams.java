@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Objects;
 
+/**
+ * A utility class that contains method to compare the contents of input streams
+ */
 public class CompareInputStreams {
     
     /**
@@ -21,6 +24,13 @@ public class CompareInputStreams {
         throw new ParseException(String.format("Error on line %d: %s", lineNumber, message), lineNumber);
     }
     
+    /**
+     * Compares two input streams
+     *
+     * @param inputStream1  an {@link InputStream} to compare
+     * @param inputStream2  another {@link InputStream} to compare
+     * @throws ParseException thrown when there is an error on a line
+     */
     public static void compareFiles(final InputStream inputStream1, final InputStream inputStream2) throws ParseException {
         final BufferedReader reader1 = new BufferedReader(new InputStreamReader(inputStream1));
         final BufferedReader reader2 = new BufferedReader(new InputStreamReader(inputStream2));
