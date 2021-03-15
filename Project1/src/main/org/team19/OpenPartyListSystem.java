@@ -13,7 +13,6 @@ package org.team19;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -371,7 +370,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
             ), line);
         }
-        
+
         //If there are no 1s for the ballot, then throw an exception
         if(oneLocationZeroBased == null) {
             VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", line);
@@ -505,7 +504,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 party.getValue().numSeats
             );
 
-            auditWriter.printf("Remaining ballots: %s%n",
+            auditWriter.printf("Remaining ballots: %s\n",
                 getRemainingBallots(party.getValue()));
             auditWriter.println();
         }
@@ -641,7 +640,7 @@ public class OpenPartyListSystem extends VotingSystem {
 
         final String remainingBallots = getRemainingBallots(partyToPartyInformation.get(chosenParty));
 
-        auditWriter.printf("Allocating seat %d:%n",
+        auditWriter.printf("Allocating seat %d:\n",
             seatNumber);
         if(tieBreakMessage != null) {
             auditWriter.print(tieBreakMessage);
@@ -816,7 +815,7 @@ public class OpenPartyListSystem extends VotingSystem {
             int numSeatsRemaining = partyInformation.numSeats;
 
             if(numSeatsRemaining > 0) {
-                auditWriter.printf("Distributing %d seats for the party %s:\n%n",
+                auditWriter.printf("Distributing %d seats for the party %s:\n\n",
                     numSeatsRemaining,
                     party
                 );
@@ -878,12 +877,12 @@ public class OpenPartyListSystem extends VotingSystem {
                 numSeatsRemaining--;
 
                 if(highestRemainingCandidatesSize > 1) {
-                    auditWriter.printf("Candidates %s have equivalent ballot counts of %d.%n",
+                    auditWriter.printf("Candidates %s have equivalent ballot counts of %d.\n",
                         highestNames.substring(1,
                             highestNames.length() - 1),
                         nextHighestCandidateBallots.getValue()
                     );
-                    auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.%n",
+                    auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.\n",
                         selected,
                         selected
                     );
@@ -907,18 +906,9 @@ public class OpenPartyListSystem extends VotingSystem {
         reportWriter.println("Final Seats:");
         System.out.println("Final Seats");
         for(final Candidate candidate : finalSeats) {
-            auditWriter.printf("%s (%s)\n",
-                candidate.getName(),
-                candidate.getParty()
-            );
-            reportWriter.printf("%s (%s)\n",
-                candidate.getName(),
-                candidate.getParty()
-            );
-            System.out.printf("%s (%s)\n",
-                candidate.getName(),
-                candidate.getParty()
-            );
+            auditWriter.println(candidate);
+            reportWriter.println(candidate);
+            System.out.println(candidate);
         }
         return finalSeats;
     }
@@ -948,11 +938,11 @@ public class OpenPartyListSystem extends VotingSystem {
     private void printPartyGrouping() {
         auditWriter.println("Grouping by Party:");
         for(final String party : partyToCandidateCounts.keySet()) {
-            auditWriter.printf("Party: %s%n",
+            auditWriter.printf("Party: %s\n",
                 party
             );
             for(final Candidate candidate : partyToCandidateCounts.get(party).keySet()) {
-                auditWriter.printf("    %s%n",
+                auditWriter.printf("    %s\n",
                     candidate.getName()
                 );
             }
