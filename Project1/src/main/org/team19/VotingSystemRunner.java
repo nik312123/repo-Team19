@@ -30,6 +30,8 @@ import java.util.Map;
 /**
  * Runs the election for a {@link VotingSystem} given a path to a file, which can be absolute or relative to the current working directory
  * <p></p>
+ * If no file is given, then standard input will be used as the source
+ * <p></p>
  * Creates an audit files that shows the steps, process, computations, etc., along with various statistics pertaining to the election
  * <p></p>
  * Creates a report file that shows a summary of various statistics pertaining to the election
