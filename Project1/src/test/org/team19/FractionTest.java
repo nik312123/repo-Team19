@@ -62,16 +62,16 @@ final class FractionTest {
             //Testing n1 or n2 is a multiple of the other
             () -> Assertions.assertEquals(20, Fraction.gcd(100, 20)),
             () -> Assertions.assertEquals(20, Fraction.gcd(20, 100)),
-            
+    
             //Testing the case where one of n1 and n2 is 0
             () -> Assertions.assertEquals(5, Fraction.gcd(5, 0)),
             () -> Assertions.assertEquals(5, Fraction.gcd(0, 5)),
-            
+    
             //Testing the case where one of n1 and n2 is 1
             () -> Assertions.assertEquals(1, Fraction.gcd(5, 1)),
             () -> Assertions.assertEquals(1, Fraction.gcd(1, 5)),
     
-            //Testing the property gcd(|n1 - n2|, min(n1, n2)) when n1 and n2 are odd
+            //Testing the property gcd(n1, n2) = gcd(|n1 - n2|, min(n1, n2)) when n1 and n2 are odd
             () -> Assertions.assertEquals(Fraction.gcd(Math.abs(121 - 37), Math.min(121, 37)), Fraction.gcd(121, 37)),
     
             //Testing the property gcd(n1, n2) = 2 * gcd(n1/2, n2/2) when n1 and n2 are even
@@ -81,7 +81,7 @@ final class FractionTest {
             () -> Assertions.assertEquals(Fraction.gcd(2 * 177, 159), Fraction.gcd(177, 159)),
     
             //Testing the property gcd(n1, n2) = gcd(n1, n2/2) when n1 is odd and n2 is even
-            () -> Assertions.assertEquals(Fraction.gcd(2 * 193, 123), Fraction.gcd(193, 123))
+            () -> Assertions.assertEquals(Fraction.gcd(193, 2 * 123), Fraction.gcd(193, 123))
         );
     }
     
