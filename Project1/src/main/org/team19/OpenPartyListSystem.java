@@ -350,29 +350,39 @@ public class OpenPartyListSystem extends VotingSystem {
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
     private Candidate parseBallot(final String ballotLine, final int line) throws ParseException {
+        //Split using a comma as a delimiter
         final String[] ballotStr = ballotLine.split(",", -1);
+    
+        //If the number of values for the current ballot is not equivalent to the number of candidates, then throw an exception
         if(ballotStr.length != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", ballotStr.length, numCandidates
             ), line);
         }
-        
+    
+        //The location of the last one found in the ballot
         Integer oneLocation = null;
+    
         for(int i = 1; i <= numCandidates; ++i) {
             final String value = ballotStr[i - 1].strip();
+        
+            //If a value is equal to 1 and oneLocation is not already set, then set it
             if(value.equals("1") && oneLocation == null) {
                 oneLocation = i;
             }
+            //Otherwise, if a value is equal to 1 and oneLocation is set, then throw an exception
             else if(value.equals("1")) {
                 VotingStreamParser.throwParseException("There can only be one choice for the OPL ballots", line);
             }
+            //Otherwise, if a value is equal to something other than 1 or an empty string, throw an exception
             else if(!value.isEmpty()) {
                 VotingStreamParser.throwParseException(String.format(
                     "Ballot values for OPL ballots can either be empty or 1, but \"%s\" was found", value
                 ), line);
             }
         }
-        
+    
+        //If there are no 1s for the ballot, then throw an exception
         if(oneLocation == null) {
             VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", line);
         }
