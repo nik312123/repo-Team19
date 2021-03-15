@@ -591,7 +591,7 @@ public class InstantRunoffSystem extends VotingSystem {
         
         //Initializes the lowest ballot count and the candidate(s) associated with it
         int lowestBallots = Integer.MAX_VALUE;
-        final ArrayList<Candidate> lowestCandidates = new ArrayList<>();
+        final List<Candidate> lowestCandidates = new ArrayList<>();
         
         for(final Candidate candidate : candidateBallotsMap.keySet()) {
             //Gets the number of ballots for each candidate
@@ -654,7 +654,7 @@ public class InstantRunoffSystem extends VotingSystem {
             //If there is a next ranked candidate that is not eliminated, transfer the ballot
             else {
                 candidateBallotsMap.get(nextCandidate).add(ballot);
-                auditWriter.printf("Ballot %d has their next choice as candidate %s. The ballot will be distributed to %s.\n%n", ballot.ballotNumber,
+                auditWriter.printf("Ballot %d has their next choice as candidate %s. The ballot will be distributed to %s.\n\n", ballot.ballotNumber,
                     nextCandidate, nextCandidate
                 );
             }
