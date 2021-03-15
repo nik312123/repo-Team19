@@ -15,7 +15,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.security.SecureRandom;
 import java.text.ParseException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -506,10 +505,10 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param quota             The total number of votes/candidates to calculate the initial seat allocations per party
      * @param numSeatsRemaining The number of seats remaining after the initial allocation
      */
-    protected void printAllocation(Fraction quota, int numSeatsRemaining) {
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+    protected void printAllocation(final Fraction quota, final int numSeatsRemaining) {
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             
-            String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
+            final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
             
             auditWriter.println(
                 party.getKey() + " initial allocation of seats: floor(" + party.getValue().numBallots + " / " + stringQuota + ") = " + party
@@ -528,9 +527,31 @@ public class OpenPartyListSystem extends VotingSystem {
             
             auditWriter.println();
         }
-        int numberOfSeatsAllocated = numSeats - numSeatsRemaining;
+        final int numberOfSeatsAllocated = numSeats - numSeatsRemaining;
         auditWriter.println(numberOfSeatsAllocated + " / " + numSeats + " have been allocates. " + numSeatsRemaining + " seats remaining");
         auditWriter.println();
+    }
+    
+    /**
+     * Returns a string representing the number of ballots a party has
+     *
+     * @param partyInformation a {@link PartyInformation} object containing data related to a party
+     * @return a string representing the number of ballots a party has
+     */
+    protected String getRemainingBallots(final PartyInformation partyInformation) {
+        final String remainingBallots;
+        if(partyInformation.numSeats > 0) {
+            if(partyInformation.remainder.denominator == 1) {
+                remainingBallots = partyInformation.remainder.numerator + "";
+            }
+            else {
+                remainingBallots = String.format("%.4f", partyInformation.remainder.getDoubleValue());
+            }
+        }
+        else {
+            remainingBallots = partyInformation.numBallots + "";
+        }
+        return remainingBallots;
     }
     
     /**
@@ -538,26 +559,16 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected void printInitialAllocations() {
         auditWriter.println("Initial Seat Allocation Results:");
-        ArrayList<String> parties = new ArrayList<>();
-        ArrayList<Integer> seats = new ArrayList<>();
-        ArrayList<String> remainingBallots = new ArrayList<>();
+        final ArrayList<String> parties = new ArrayList<>();
+        final ArrayList<Integer> seats = new ArrayList<>();
+        final ArrayList<String> remainingBallots = new ArrayList<>();
         
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             parties.add(party.getKey());
             seats.add(party.getValue().numSeats);
-            if(party.getValue().numSeats > 0) {
-                if(party.getValue().remainder.denominator == 1) {
-                    remainingBallots.add(party.getValue().remainder.numerator + "");
-                }
-                else {
-                    remainingBallots.add(String.format("%.4f", party.getValue().remainder.getDoubleValue()));
-                }
-            }
-            else {
-                remainingBallots.add(party.getValue().numBallots + "");
-            }
+            remainingBallots.add(getRemainingBallots(party.getValue()));
         }
-        String table = tableFormatter.formatAsTable(
+        final String table = tableFormatter.formatAsTable(
             Arrays.asList("Party", "Initial Seats", "Remaining Ballots"),
             Arrays.asList(parties, seats, remainingBallots),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT, TableFormatter.Alignment.RIGHT));
@@ -571,15 +582,17 @@ public class OpenPartyListSystem extends VotingSystem {
      * @return A {@link Pair} of number of seats remaining after initial allocation and {@link Set} of {@link String} representing parties
      * able to receive additional seats
      */
-    protected Pair<Integer, Set<String>> allocateInitialSeats(Fraction quota) {
+    protected Pair<Integer, Set<String>> allocateInitialSeats(final Fraction quota) {
         int numSeatsRemaining = numSeats;
-        Set<String> remainingParties = new HashSet<>();
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
-            PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
-            Fraction ballotQuotaMultiples = new Fraction(partyInformation.numBallots, 1).divide(quota);
+        final Set<String> remainingParties = new HashSet<>();
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+            final PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
+            final Fraction ballotQuotaMultiples = new Fraction(partyInformation.numBallots, 1).divide(quota);
             
             partyInformation.numSeats = Math.min((int) ballotQuotaMultiples.getWholePart(), partyInformation.numCandidates);
-            if(partyInformation.numSeats != partyInformation.numCandidates) { remainingParties.add(party.getKey()); }
+            if(partyInformation.numSeats != partyInformation.numCandidates) {
+                remainingParties.add(party.getKey());
+            }
             partyInformation.remainder =
                 new Fraction(partyInformation.numBallots, 1).subtract(new Fraction(partyInformation.numSeats, 1).multiply(quota));
             numSeatsRemaining -= partyInformation.numSeats;
@@ -596,8 +609,9 @@ public class OpenPartyListSystem extends VotingSystem {
      *
      * @param numSeatsRemaining number of seats remaining after no more candidates to which seats can be distributed
      */
-    protected void printNotEnoughCandidates(int numSeatsRemaining) {
-        String message = "There are " + numSeatsRemaining + " seats remaining, but there are no more candidates to which seats can be distributed\n";
+    protected void printNotEnoughCandidates(final int numSeatsRemaining) {
+        final String message = "There are " + numSeatsRemaining + " seats remaining, but there are no more candidates to which seats can be "
+            + "distributed\n";
         auditWriter.println(message);
         reportWriter.println(message);
         System.out.println(message);
@@ -608,12 +622,11 @@ public class OpenPartyListSystem extends VotingSystem {
      *
      * @param numSeatsRemaining number of seats remaining after remaining allocation
      * @param chosenParty       The party chosen to be allocated a remaining seat
-     * @param partyInformation  The {@link PartyInformation} associated the chosen party
      */
-    protected void printNextChosen(int numSeatsRemaining, String chosenParty, PartyInformation partyInformation) {
-        int seatNumber = (numSeats - numSeatsRemaining) + 1;
+    protected void printNextChosen(final int numSeatsRemaining, final String chosenParty) {
+        final int seatNumber = (numSeats - numSeatsRemaining) + 1;
         
-        String remainingBallots = "";
+        final String remainingBallots;
         if(partiesToPartyInformation.get(chosenParty).numSeats > 0) {
             if(partiesToPartyInformation.get(chosenParty).remainder.denominator == 1) {
                 remainingBallots = partiesToPartyInformation.get(chosenParty).remainder.numerator + "";
@@ -639,17 +652,21 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param numSeatsRemaining Number of seats remaining after initial allocation
      * @param remainingParties  Parties that still have enough candidates for additional seats
      */
-    protected void allocateRemainingSeats(int numSeatsRemaining, Set<String> remainingParties) {
+    protected void allocateRemainingSeats(int numSeatsRemaining, final Set<String> remainingParties) {
         List<Pair<String, Fraction>> partyRemainingSeats = new ArrayList<>();
-        for(String party : remainingParties) { partyRemainingSeats.add(new Pair<>(party, partiesToPartyInformation.get(party).remainder)); }
+        for(final String party : remainingParties) {
+            partyRemainingSeats.add(new Pair<>(party, partiesToPartyInformation.get(party).remainder));
+        }
         partyRemainingSeats.sort((el1, el2) -> el2.getSecond().compareTo(el1.getSecond()));
         List<Pair<String, Fraction>> highestRemainingParties = new ArrayList<>();
         int curIdx = 0;
         while(numSeatsRemaining > 0) {
             if(curIdx >= partyRemainingSeats.size() && highestRemainingParties.isEmpty()) {
-                List<Pair<String, Fraction>> partyRemainingSeatsTmp = new ArrayList<>();
-                for(Pair<String, Fraction> partyRemainderPair : partyRemainingSeats) {
-                    if(remainingParties.contains(partyRemainderPair.getFirst())) { partyRemainingSeatsTmp.add(partyRemainderPair); }
+                final List<Pair<String, Fraction>> partyRemainingSeatsTmp = new ArrayList<>();
+                for(final Pair<String, Fraction> partyRemainderPair : partyRemainingSeats) {
+                    if(remainingParties.contains(partyRemainderPair.getFirst())) {
+                        partyRemainingSeatsTmp.add(partyRemainderPair);
+                    }
                 }
                 partyRemainingSeats = partyRemainingSeatsTmp;
                 curIdx = 0;
@@ -659,23 +676,25 @@ public class OpenPartyListSystem extends VotingSystem {
                 }
             }
             if(highestRemainingParties.isEmpty()) {
-                Pair<Integer, List<Pair<String, Fraction>>> idxNextGroupPair =
+                final Pair<Integer, List<Pair<String, Fraction>>> idxNextGroupPair =
                     getNextEquivalentOrderedGroup(partyRemainingSeats, curIdx, Comparator.comparing(Pair::getSecond));
                 curIdx = idxNextGroupPair.getFirst();
                 highestRemainingParties = idxNextGroupPair.getSecond();
-                Collections.shuffle(highestRemainingParties);
+                Collections.shuffle(highestRemainingParties, RAND);
             }
-            String chosenParty = highestRemainingParties.get(highestRemainingParties.size() - 1).getFirst();
+            final String chosenParty = highestRemainingParties.get(highestRemainingParties.size() - 1).getFirst();
             highestRemainingParties.remove(highestRemainingParties.size() - 1);
-            PartyInformation partyInformation = partiesToPartyInformation.get(chosenParty);
+            final PartyInformation partyInformation = partiesToPartyInformation.get(chosenParty);
             
-            printNextChosen(numSeatsRemaining, chosenParty, partyInformation);
+            printNextChosen(numSeatsRemaining, chosenParty);
             
             partyInformation.numSeats++;
-            if(partyInformation.numSeats == partyInformation.numCandidates) { remainingParties.remove(chosenParty); }
+            if(partyInformation.numSeats == partyInformation.numCandidates) {
+                remainingParties.remove(chosenParty);
+            }
             numSeatsRemaining--;
             
-            int numberOfSeatsAllocated = numSeats - numSeatsRemaining;
+            final int numberOfSeatsAllocated = numSeats - numSeatsRemaining;
             auditWriter.println(numberOfSeatsAllocated + " / " + numSeats + " have been allocated. " + numSeatsRemaining + " seats remaining");
             auditWriter.println();
             
@@ -688,27 +707,29 @@ public class OpenPartyListSystem extends VotingSystem {
      * @return an {@link ArrayList} containing the candidates who received seats
      */
     protected ArrayList<Candidate> distributeSeatsToCandidates() {
-        ArrayList<Candidate> finalSeats = new ArrayList<>();
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
-            PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
+        final ArrayList<Candidate> finalSeats = new ArrayList<>();
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+            final PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
             int numSeatsRemaining = partyInformation.numSeats;
-    
-            if(numSeatsRemaining > 0) { auditWriter.println("Distributing " + numSeatsRemaining + " seats for the party " + party.getKey() + ":\n"); }
             
-            List<Map.Entry<Candidate, Integer>> orderedCandidateBallots = partyInformation.orderedCandidateBallots;
+            if(numSeatsRemaining > 0) {
+                auditWriter.println("Distributing " + numSeatsRemaining + " seats for the party " + party.getKey() + ":\n");
+            }
+            
+            final List<Map.Entry<Candidate, Integer>> orderedCandidateBallots = partyInformation.orderedCandidateBallots;
             int curIdx = 0;
             List<Map.Entry<Candidate, Integer>> highestRemainingCandidates = new ArrayList<>();
             while(numSeatsRemaining > 0) {
                 if(highestRemainingCandidates.isEmpty()) {
-                    Pair<Integer, List<Map.Entry<Candidate, Integer>>> idxNextGroupPair =
+                    final Pair<Integer, List<Map.Entry<Candidate, Integer>>> idxNextGroupPair =
                         getNextEquivalentOrderedGroup(orderedCandidateBallots, curIdx, Map.Entry.comparingByValue());
                     curIdx = idxNextGroupPair.getFirst();
                     highestRemainingCandidates = idxNextGroupPair.getSecond();
                     Collections.shuffle(highestRemainingCandidates);
                 }
-                Map.Entry<Candidate, Integer> next = highestRemainingCandidates.get(highestRemainingCandidates.size() - 1);
+                final Map.Entry<Candidate, Integer> next = highestRemainingCandidates.get(highestRemainingCandidates.size() - 1);
                 highestRemainingCandidates.remove(highestRemainingCandidates.size() - 1);
-                Candidate selected = next.getKey();
+                final Candidate selected = next.getKey();
                 finalSeats.add(selected);
                 numSeatsRemaining--;
                 
@@ -723,7 +744,7 @@ public class OpenPartyListSystem extends VotingSystem {
         reportWriter.println("Final Seats:");
         System.out.println("Final Seats");
         
-        for(Candidate candidate : finalSeats) {
+        for(final Candidate candidate : finalSeats) {
             auditWriter.println(candidate.getName() + " (" + candidate.getParty() + ")");
             reportWriter.println(candidate.getName() + " (" + candidate.getParty() + ")");
             System.out.println(candidate.getName() + " (" + candidate.getParty() + ")");
@@ -736,6 +757,7 @@ public class OpenPartyListSystem extends VotingSystem {
      * Given a sorted {@link List}, an index from which to begin, and a comparator for comparing elements in the {@link List},
      * returns the next group of equivalent elements as determined by the comparator in addition to the index after the last added element
      *
+     * @param <T>        Type of elements that the {@link List} contains
      * @param list       The sorted {@link List} from which to retrieve the next equivalent ordered group
      * @param idx        The index from which to begin retrieving the group
      * @param comparator The comparator used to compare elements when determining if elements are equivalent and should be added to the group
@@ -770,8 +792,8 @@ public class OpenPartyListSystem extends VotingSystem {
      *
      * @param quota The total number of votes/candidates to calculate the initial seat allocations per party
      */
-    protected void printQuotaInformation(Fraction quota) {
-        String ballotsPerSeat = quota.getWholePart() + " ballots per seat";
+    protected void printQuotaInformation(final Fraction quota) {
+        final String ballotsPerSeat = quota.getWholePart() + " ballots per seat";
         auditWriter.println("Quota: floor(" + quota.toString() + ") = " + ballotsPerSeat + "\n");
         reportWriter.println("Quota: " + ballotsPerSeat + "\n");
         System.out.println("Quota: " + ballotsPerSeat + "\n");
@@ -782,9 +804,11 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected void printPartyGrouping() {
         auditWriter.println("Grouping by Party:");
-        for(Map.Entry<String, Map<Candidate, Integer>> party : partyToCandidateCounts.entrySet()) {
+        for(final Map.Entry<String, Map<Candidate, Integer>> party : partyToCandidateCounts.entrySet()) {
             auditWriter.println("Party: " + party.getKey());
-            for(Map.Entry<Candidate, Integer> candidate : party.getValue().entrySet()) { auditWriter.println("\t" + candidate.getKey().name); }
+            for(final Map.Entry<Candidate, Integer> candidate : party.getValue().entrySet()) {
+                auditWriter.println("\t" + candidate.getKey().name);
+            }
         }
         auditWriter.println();
     }
@@ -794,13 +818,13 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected void printPartyBallots() {
         auditWriter.println("The ballot counts for each party are as follows:");
-        ArrayList<String> parties = new ArrayList<>();
-        ArrayList<Integer> ballots = new ArrayList<>();
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+        final ArrayList<String> parties = new ArrayList<>();
+        final ArrayList<Integer> ballots = new ArrayList<>();
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             parties.add(party.getKey());
             ballots.add(party.getValue().numBallots);
         }
-        String table = tableFormatter.formatAsTable(
+        final String table = tableFormatter.formatAsTable(
             Arrays.asList("Party", "Ballots"),
             Arrays.asList(parties, ballots),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT));
@@ -813,13 +837,13 @@ public class OpenPartyListSystem extends VotingSystem {
     protected void printFinalSeatAllocations() {
         auditWriter.println("Final Seat Allocations:");
         
-        ArrayList<String> parties = new ArrayList<>();
-        ArrayList<Integer> seats = new ArrayList<>();
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+        final ArrayList<String> parties = new ArrayList<>();
+        final ArrayList<Integer> seats = new ArrayList<>();
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             parties.add(party.getKey());
             seats.add(party.getValue().numSeats);
         }
-        String table = tableFormatter.formatAsTable(
+        final String table = tableFormatter.formatAsTable(
             Arrays.asList("Party", "Final Seats"),
             Arrays.asList(parties, seats),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT));
@@ -833,40 +857,30 @@ public class OpenPartyListSystem extends VotingSystem {
      *
      * @param initialSeats a Map of parties to the number of seats each received during the initial allocation
      */
-    protected void printSummaryTable(Map<String, Integer> initialSeats) {
-        ArrayList<String> parties = new ArrayList<>();
-        ArrayList<Integer> ballots = new ArrayList<>();
-        ArrayList<Integer> initialAllocation = new ArrayList<>();
-        ArrayList<String> remainingBallots = new ArrayList<>();
-        ArrayList<Integer> secondAllocation = new ArrayList<>();
-        ArrayList<Integer> finalSeats = new ArrayList<>();
-        ArrayList<String> percentOfBallotsToPercentOfSeats = new ArrayList<>();
+    protected void printSummaryTable(final Map<String, Integer> initialSeats) {
+        final ArrayList<String> parties = new ArrayList<>();
+        final ArrayList<Integer> ballots = new ArrayList<>();
+        final ArrayList<Integer> initialAllocation = new ArrayList<>();
+        final ArrayList<String> remainingBallots = new ArrayList<>();
+        final ArrayList<Integer> secondAllocation = new ArrayList<>();
+        final ArrayList<Integer> finalSeats = new ArrayList<>();
+        final ArrayList<String> percentOfBallotsToPercentOfSeats = new ArrayList<>();
         
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             parties.add(party.getKey());
             ballots.add(partiesToPartyInformation.get(party.getKey()).numBallots);
             initialAllocation.add(initialSeats.get(party.getKey()));
-            if(party.getValue().numSeats > 0) {
-                if(party.getValue().remainder.denominator == 1) {
-                    remainingBallots.add(party.getValue().remainder.numerator + "");
-                }
-                else {
-                    remainingBallots.add(String.format("%.4f", party.getValue().remainder.getDoubleValue()));
-                }
-            }
-            else {
-                remainingBallots.add(party.getValue().numBallots + "");
-            }
+            remainingBallots.add(getRemainingBallots(party.getValue()));
             secondAllocation.add(initialSeats.get(party.getKey()) - partiesToPartyInformation.get(party.getKey()).numSeats);
             finalSeats.add(partiesToPartyInformation.get(party.getKey()).numSeats);
             
-            int percentOfBallots = Math.round(partiesToPartyInformation.get(party.getKey()).numBallots / (float) numBallots * 100);
-            int percentOfSeats = Math.round(partiesToPartyInformation.get(party.getKey()).numSeats / (float) numSeats * 100);
+            final int percentOfBallots = Math.round(partiesToPartyInformation.get(party.getKey()).numBallots / (float) numBallots * 100);
+            final int percentOfSeats = Math.round(partiesToPartyInformation.get(party.getKey()).numSeats / (float) numSeats * 100);
             
             percentOfBallotsToPercentOfSeats.add(percentOfBallots + "%/" + percentOfSeats + "%");
         }
         
-        String table = tableFormatter.formatAsTable(
+        final String table = tableFormatter.formatAsTable(
             Arrays.asList("Parties", "Ballots", "First Allocation", "Remaining Ballots", "Second Allocation", "Final Seats", "% of Ballots to % of "
                 + "Seats"),
             Arrays.asList(parties, ballots, initialAllocation, remainingBallots, secondAllocation, finalSeats, percentOfBallotsToPercentOfSeats),
@@ -884,36 +898,34 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
-        for(Map.Entry<String, Map<Candidate, Integer>> party : partyToCandidateCounts.entrySet()) {
-            PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
-            ArrayList<Map.Entry<Candidate, Integer>> orderedCandidateBallots = new ArrayList<>(partyToCandidateCounts.get(party.getKey()).entrySet());
+        for(final Map.Entry<String, Map<Candidate, Integer>> party : partyToCandidateCounts.entrySet()) {
+            final PartyInformation partyInformation = partiesToPartyInformation.get(party.getKey());
+            final ArrayList<Map.Entry<Candidate, Integer>> orderedCandidateBallots =
+                new ArrayList<>(partyToCandidateCounts.get(party.getKey()).entrySet());
             orderedCandidateBallots.sort(Map.Entry.comparingByValue());
             partyInformation.numCandidates = orderedCandidateBallots.size();
             partyInformation.orderedCandidateBallots = orderedCandidateBallots;
         }
-        Fraction quota = new Fraction(numBallots, numSeats);
+        final Fraction quota = new Fraction(numBallots, numSeats);
         
         printQuotaInformation(quota);
         printPartyGrouping();
         printPartyBallots();
         
-        Pair<Integer, Set<String>> initialAllocationResults = allocateInitialSeats(quota);
+        final Pair<Integer, Set<String>> initialAllocationResults = allocateInitialSeats(quota);
         
-        Map<String, Integer> partiesToInitialSeats = new HashMap<>();
+        final Map<String, Integer> partiesToInitialSeats = new HashMap<>();
         
-        for(Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
+        for(final Map.Entry<String, PartyInformation> party : partiesToPartyInformation.entrySet()) {
             partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
         }
         
-        ArrayDeque<Pair<String, Integer>> initialAllocations = new ArrayDeque<>();
-        for(Map.Entry<String, Map<Candidate, Integer>> party : partyToCandidateCounts.entrySet()) {
-            initialAllocations.add(new Pair(party, partiesToPartyInformation.get(party.getKey()).numSeats));
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
+        
+        if(numSeatsRemaining != 0) {
+            allocateRemainingSeats(numSeatsRemaining, remainingParties);
         }
-        
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
-        
-        if(numSeatsRemaining != 0) { allocateRemainingSeats(numSeatsRemaining, remainingParties); }
         
         printFinalSeatAllocations();
         printSummaryTable(partiesToInitialSeats);
