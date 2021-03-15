@@ -19,7 +19,7 @@ final class BallotTest {
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+    
             //Test that getBallotNumber returns the ballot number passed into the constructor
             final Ballot ballot = (Ballot) ballotConstructor.newInstance(23, new Candidate[0]);
             Assertions.assertEquals(23, ballot.getBallotNumber());
@@ -45,7 +45,7 @@ final class BallotTest {
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+    
             //Test that getRankedCandidates returns the candidates array passed into the constructor
             final Ballot ballot = (Ballot) ballotConstructor.newInstance(
                 23,
@@ -74,12 +74,12 @@ final class BallotTest {
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+    
             final Ballot ballot = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
-        
+    
             Assertions.assertAll(
                 //Check that the first call to getNextCandidate returns the first element of the candidates passed in
                 () -> Assertions.assertEquals(new Candidate("C0", "P0"), ballot.getNextCandidate()),
@@ -110,11 +110,11 @@ final class BallotTest {
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+    
             //Test toString for Ballot with a sample ballot
             final Candidate c0 = new Candidate("C0", "P0");
             final Candidate c1 = new Candidate("C1", "P1");
-        
+    
             final Ballot ballot = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {c0, c1}
@@ -142,38 +142,38 @@ final class BallotTest {
             final Class<?> ballotClass = Class.forName("org.team19.InstantRunoffSystem$Ballot");
             final Constructor<?> ballotConstructor = ballotClass.getDeclaredConstructor(int.class, Candidate[].class);
             ballotConstructor.setAccessible(true);
-        
+    
             //Creates typical ballot
             final Ballot ballot = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
-        
+    
             //Creates copy of ballot
             final Ballot ballotDoppleganger = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
-        
+    
             //Creates copy of ballot but advances the position to the next candidate
             final Ballot ballotDifferentPosition = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
             ballotDifferentPosition.getNextCandidate();
-        
+    
             //Creates copy of ballot but with a modified candidates array
             final Ballot sameNumber = (Ballot) ballotConstructor.newInstance(
                 23,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C2", "P2")}
             );
-        
+    
             //Creates copy of ballot but with a modified ballot number
             final Ballot sameRankings = (Ballot) ballotConstructor.newInstance(
                 24,
                 new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
             );
-        
+    
             Assertions.assertAll(
                 //Test that ballots with equal ballot numbers, equal ranked candidates array, and equal positions in array are equal
                 () -> Assertions.assertEquals(ballotDoppleganger, ballot),

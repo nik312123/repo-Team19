@@ -306,13 +306,12 @@ public class InstantRunoffSystem extends VotingSystem {
              * of candidates
              */
             try {
+                //noinspection ResultOfMethodCallIgnored
+                candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
             }
             //If, for some inexplicable reason, there exists a candidate string that doesn't properly match the format, then throw an exception
             catch(IllegalStateException | IndexOutOfBoundsException e) {
-                VotingStreamParser.throwParseException(String.format(
-                    "The number of ballots provided in the ballots header \"%s\" was not a valid integer", numBallots
-                ), line + 1);
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[candidate1] ([party1]),[candidate2] ([party2]), ...\"",
                     candidatesLine
@@ -431,7 +430,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 //Update the minimum, maximum, and ranked candidates map
                 minRank = Math.min(minRank, currentRank);
                 maxRank = Math.max(maxRank, currentRank);
-                rankedCandidateMap.put(currentRank, candidates[currentRank - 1]);
+                rankedCandidateMap.put(currentRank, candidates[i]);
             }
             //If the current rank is not a valid integer, throw an exception
             catch(NumberFormatException e) {
@@ -548,7 +547,7 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public int getNumBallots() {
-        return 0;
+        return numBallots;
     }
     
     @Override
