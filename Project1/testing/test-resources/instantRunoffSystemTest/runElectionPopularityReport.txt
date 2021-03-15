@@ -11,10 +11,6 @@ First-choice ballots:
 | Royce (L)     |       1 |
 +---------------+---------+
 
-No candidate has a majority. Eliminating the candidate with the lowest ballots: Kleinberg (R)
-
-Kleinberg (R) has no ballots to distribute.
-
 Ballots after Kleinberg (R) was eliminated:
 +-----------+---------+
 | Candidate | Ballots |
@@ -26,10 +22,6 @@ Ballots after Kleinberg (R) was eliminated:
 | Royce (L) |       1 |
 +-----------+---------+
 
-No candidate has a majority. Eliminating the candidate with the lowest ballots: Royce (L)
-
-Ballot 6 associated with Royce (L) did not have any other candidates ranked. As such, their ballot will not be distributed.
-
 Ballots after Royce (L) was eliminated:
 +-----------+---------+
 | Candidate | Ballots |
@@ -39,4 +31,4 @@ Ballots after Royce (L) was eliminated:
 | Chou (I)  |       2 |
 +-----------+---------+
 
-Rosen (D) had received 3/6, votes giving them a greatest popularity with 50.00%
+Rosen (D) has received 3/6 ballots, votes giving them the greatest popularity with 50.00% of the ballots
