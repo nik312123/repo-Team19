@@ -519,7 +519,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 party.getValue().numSeats
             );
 
-            auditWriter.println("Remaining ballots: " + getRemainingBallots(party.getValue()));
+            auditWriter.printf("Remaining ballots: %s%n", getRemainingBallots(party.getValue()));
             auditWriter.println();
         }
         final int numSeatsAllocated = numSeats - numSeatsRemaining;
@@ -534,7 +534,7 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected String getRemainingBallots(final PartyInformation partyInformation) {
         final String remainingBallots;
-        
+
         //If a candidate has been allocated seats
         if(partyInformation.numSeats > 0) {
             //If the remaining value is a whole number
@@ -650,8 +650,8 @@ public class OpenPartyListSystem extends VotingSystem {
 
         final String remainingBallots = getRemainingBallots(partyToPartyInformation.get(chosenParty));
 
-        auditWriter.println("Allocating seat " + seatNumber + ":");
-        if(tieBreakMessage.length() > 0) {
+        auditWriter.printf("Allocating seat %d:%n", seatNumber);
+        if(tieBreakMessage != null) {
             auditWriter.print(tieBreakMessage);
         }
         else {
@@ -765,7 +765,7 @@ public class OpenPartyListSystem extends VotingSystem {
             //Get the next highest party from the end so its removal will be constant time
             final String chosenParty = highestRemainingParties.get(highestRemainingParties.size() - 1).getFirst();
 
-            String tieBreakMessage = "";
+            String tieBreakMessage = null;
 
             // If multiple parties have the equivalent next largest ballot counts
             if(highestRemainingParties.size() > 1) {
@@ -773,10 +773,10 @@ public class OpenPartyListSystem extends VotingSystem {
                 for(Pair<String, Fraction> partyPairs : highestRemainingParties) {
                     parties.add(partyPairs.getFirst());
                 }
-                tieBreakMessage = ("Parties " + parties.toString().substring(1, parties.toString().length() - 1) + " have the equivalent next "
-                    + "largest ballot "
-                    + "counts.\n");
-                tieBreakMessage += ("Randomly chosen party from above: " + chosenParty + "\n");
+                String partyNames = parties.toString();
+                tieBreakMessage = String.format("Parties %s have the equivalent next largest ballot counts.\n", partyNames.substring(1,
+                    partyNames.length() - 1));
+                tieBreakMessage += String.format("Randomly chosen party from above: %s\n", chosenParty);
             }
 
             highestRemainingParties.remove(highestRemainingParties.size() - 1);
@@ -818,7 +818,7 @@ public class OpenPartyListSystem extends VotingSystem {
             int numSeatsRemaining = partyInformation.numSeats;
 
             if(numSeatsRemaining > 0) {
-                auditWriter.println("Distributing " + numSeatsRemaining + " seats for the party " + party + ":\n");
+                auditWriter.printf("Distributing %d seats for the party %s:\n%n", numSeatsRemaining, party);
             }
 
             //The list of candidates ordered by ballot count
@@ -859,7 +859,8 @@ public class OpenPartyListSystem extends VotingSystem {
                     highestRemainingCandidatesNames.add(candidatePair.getKey());
                 }
 
-                String highestNames = highestRemainingCandidatesNames.toString().substring(1,highestRemainingCandidatesNames.toString().length()-1);
+                String highestNames =
+                    highestRemainingCandidatesNames.toString();
 
                 //Get the next highest candidate from the end so its removal will be constant time
                 final Map.Entry<Candidate, Integer> nextHighestCandidateBallots =
@@ -874,11 +875,9 @@ public class OpenPartyListSystem extends VotingSystem {
                 numSeatsRemaining--;
 
                 if(highestRemainingCandidatesSize > 1) {
-                    auditWriter.println("Candidates " +  highestNames +
-                        " have equivalent ballot "
-                        + "counts of " + nextHighestCandidateBallots.getValue()+".");
-                    auditWriter.println("Randomly chosen candidate from above: " + selected + ".\nAs such, " + selected + " will be allocated a "
-                        + "seat.");
+                    auditWriter.printf("Candidates %s have equivalent ballot counts of %d.%n", highestNames.substring(1,
+                        highestNames.length() - 1), nextHighestCandidateBallots.getValue());
+                    auditWriter.printf("Randomly chosen candidate from above: %s.\nAs such, %s will be allocated a seat.%n", selected, selected);
                 }
                 else {
                     auditWriter.printf(
@@ -924,9 +923,9 @@ public class OpenPartyListSystem extends VotingSystem {
     private void printPartyGrouping() {
         auditWriter.println("Grouping by Party:");
         for(final String party : partyToCandidateCounts.keySet()) {
-            auditWriter.println("Party: " + party);
+            auditWriter.printf("Party: %s%n", party);
             for(final Candidate candidate : partyToCandidateCounts.get(party).keySet()) {
-                auditWriter.println("    " + candidate.getName());
+                auditWriter.printf("    %s%n", candidate.getName());
             }
         }
         auditWriter.println();
