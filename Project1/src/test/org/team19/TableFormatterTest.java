@@ -17,6 +17,7 @@ import org.team19.TableFormatter.Alignment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -254,7 +255,7 @@ final class TableFormatterTest {
             ),
             List.of(Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT)
         );
-        
+    
         //Creating arbitrary data table for testing
         final List<String> randomTopics = List.of("Numbers", "Fruit", "Names");
         final List<List<?>> randomTopicData = List.of(
@@ -262,14 +263,14 @@ final class TableFormatterTest {
             List.of("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
             List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary")
         );
-        
+    
         //Testing left alignment with arbitrary data
         final Supplier<String> allLeft = () -> tableFormatter.formatAsTable(
             randomTopics,
             randomTopicData,
             List.of(Alignment.LEFT, Alignment.LEFT, Alignment.LEFT)
         );
-        
+    
         //Testing right alignment with arbitrary data
         final Supplier<String> allRight = () -> tableFormatter.formatAsTable(
             randomTopics,
