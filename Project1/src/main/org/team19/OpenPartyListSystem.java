@@ -3,7 +3,7 @@
  * OpenPartyListSystem.java
  *
  * Author:
- * Nikunj Chawla
+ * Nikunj Chawla and Aaron Kandikatla
  *
  * Purpose:
  * Represents the open party list voting system

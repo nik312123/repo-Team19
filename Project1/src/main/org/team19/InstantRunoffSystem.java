@@ -3,7 +3,7 @@
  * InstantRunoffSystem.java
  *
  * Author:
- * Nikunj Chawla
+ * Nikunj Chawla and Jack Fornaro
  *
  * Purpose:
  * Represents the instant runoff voting system
