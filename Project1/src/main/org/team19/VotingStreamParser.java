@@ -26,12 +26,12 @@ import java.util.Objects;
  * Parses an {@link InputStream} and returns a {@link VotingSystem}
  */
 public final class VotingStreamParser {
-    
+
     /**
      * A private constructor for the utility class {@link VotingStreamParser} to prevent instantiation
      */
     private VotingStreamParser() {}
-    
+
     /**
      * Throws a {@link ParseException} with the message in the form "Error on line [lineNumber]: [message]", replacing [lineNumber] and [message]
      * with the corresponding parameters
@@ -43,7 +43,7 @@ public final class VotingStreamParser {
     static void throwParseException(final String message, final int lineNumber) throws ParseException {
         throw new ParseException(String.format("Error on line %d: %s", lineNumber, message), lineNumber);
     }
-    
+
     /**
      * Returns the next line from the {@link BufferedReader}
      *
@@ -61,7 +61,7 @@ public final class VotingStreamParser {
         }
         return null;
     }
-    
+
     /**
      * Returns an array of the number of lines specified from the provided {@link BufferedReader}
      *
@@ -79,7 +79,7 @@ public final class VotingStreamParser {
         }
         return lines;
     }
-    
+
     /**
      * Throws a {@link ParseException} if the given line is null, meaning the file ends earlier than anticipated
      *
@@ -92,7 +92,7 @@ public final class VotingStreamParser {
             throwParseException("Expected line to exist but the file ended early", lineNumber);
         }
     }
-    
+
     /**
      * Throws a {@link ParseException} if any of the given lines is null, meaning the file ends earlier than anticipated
      *
@@ -105,7 +105,7 @@ public final class VotingStreamParser {
             throwParseExceptionIfEofLine(lines[i], lineNumber + i);
         }
     }
-    
+
     /**
      * Parses an {@link InputStream} and returns a {@link VotingSystem} constructed from the given stream
      *
@@ -123,26 +123,26 @@ public final class VotingStreamParser {
         Objects.requireNonNull(input);
         Objects.requireNonNull(auditStream);
         Objects.requireNonNull(reportStream);
-        
+
         //Use a BufferedReader to read from the input stream and PrintWriters to write to the output streams
         final BufferedReader inReader = new BufferedReader(new InputStreamReader(input));
-        final PrintWriter auditWriter = new PrintWriter(auditStream);
-        final PrintWriter reportWriter = new PrintWriter(reportStream);
-    
+        final PrintWriter auditWriter = new PrintWriter(auditStream, true);
+        final PrintWriter reportWriter = new PrintWriter(reportStream, true);
+
         int lineNumber = 1;
-    
+
         VotingSystem votingSystem = null;
-    
+
         //Attempt to read the first line of the file
         String firstLine = readLine(inReader, lineNumber);
-    
+
         //Throw an exception if the file has 0 lines (if such a file exists)
         throwParseExceptionIfEofLine(firstLine, lineNumber);
-    
+
         //Strip any whitespace from the beginning or end of the line
         //noinspection ConstantConditions
         firstLine = firstLine.strip();
-    
+
         //If the election file's header does not match one of the headers from the headerSystemMap, then throw an exception
         if(!headerSystemMap.containsKey(firstLine)) {
             String headers = headerSystemMap.keySet().toString();
@@ -160,7 +160,7 @@ public final class VotingStreamParser {
                 votingSystem = headerSystemMap.get(firstLine)
                     .getConstructor(OutputStream.class, OutputStream.class)
                     .newInstance(auditStream, reportStream);
-    
+
                 //Output the election type to the audit, report, and summary
                 final String electionTypeOutput = String.format("Election type: %s\n", firstLine);
                 auditWriter.println(electionTypeOutput);
@@ -175,17 +175,17 @@ public final class VotingStreamParser {
                 ), lineNumber);
             }
         }
-        
+
         lineNumber++;
-        
+
         //Import the candidates header, throwing an exception if there was an issue in reading or parsing the candidates header
         final int candidateHeaderSize = votingSystem.getCandidateHeaderSize();
         final String[] candidatesHeader = readLines(inReader, lineNumber, candidateHeaderSize);
         throwParseExceptionIfEofLines(candidatesHeader, lineNumber);
         votingSystem.importCandidatesHeader(candidatesHeader, lineNumber);
-        
+
         lineNumber += candidateHeaderSize;
-        
+
         /*
          * Parse and add the candidates, throwing an exception if there was an issue in reading or parsing the candidates or if there is a
          * difference in the number of candidates parsed and the number of candidates mentioned in the candidates header
@@ -194,7 +194,7 @@ public final class VotingStreamParser {
         final String candidatesLine = readLine(inReader, lineNumber);
         throwParseExceptionIfEofLine(candidatesLine, lineNumber);
         votingSystem.addCandidates(candidatesLine, lineNumber);
-        
+
         //Throw an exception if the number of candidates parsed does not match the number of candidates provided in the candidates header
         if(votingSystem.getCandidates().size() != numCandidates) {
             throwParseException(String.format(
@@ -203,17 +203,17 @@ public final class VotingStreamParser {
                 numCandidates
             ), lineNumber);
         }
-        
+
         lineNumber++;
-        
+
         //Import the ballots header, throwing an exception if there was an issue in reading or parsing the candidates header
         final int ballotsHeaderSize = votingSystem.getBallotHeaderSize();
         final String[] ballotsHeader = readLines(inReader, lineNumber, ballotsHeaderSize);
         throwParseExceptionIfEofLines(ballotsHeader, lineNumber);
         votingSystem.importBallotsHeader(ballotsHeader, lineNumber);
-        
+
         lineNumber += ballotsHeaderSize;
-        
+
         /*
          * Parse and add the ballots, throwing an exception if there was an issue in reading or parsing the ballots or if there is a
          * difference in the number of ballots parsed and the number of ballots mentioned in the ballots header
@@ -221,14 +221,14 @@ public final class VotingStreamParser {
         final int numBallots = votingSystem.getNumBallots();
         int ballotNumber = 1;
         String nextBallot;
-    
+
         //Read in ballots until the end of the file is reached
         while((nextBallot = readLine(inReader, lineNumber)) != null) {
             votingSystem.addBallot(ballotNumber, nextBallot, lineNumber);
             lineNumber++;
             ballotNumber++;
         }
-    
+
         //Throw an exception if the number of ballots parsed does not match the number of ballots provided in the ballots header
         if(ballotNumber - 1 != numBallots) {
             throwParseException(String.format(
@@ -237,8 +237,8 @@ public final class VotingStreamParser {
                 numBallots
             ), lineNumber);
         }
-    
+
         return votingSystem;
     }
-    
+
 }
