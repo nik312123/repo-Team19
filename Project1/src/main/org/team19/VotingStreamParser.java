@@ -128,7 +128,7 @@ public final class VotingStreamParser {
         final BufferedReader inReader = new BufferedReader(new InputStreamReader(input));
         final PrintWriter auditWriter = new PrintWriter(auditStream, true);
         final PrintWriter reportWriter = new PrintWriter(reportStream, true);
-
+        
         int lineNumber = 1;
 
         VotingSystem votingSystem = null;
