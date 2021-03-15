@@ -42,7 +42,7 @@ final class BallotTest {
             23,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
         );
-    
+        
         Assertions.assertAll(
             //Check that the first call to getNextCandidate returns the first element of the candidates passed in
             () -> Assertions.assertEquals(new Candidate("C0", "P0"), ballot.getNextCandidate()),
@@ -58,7 +58,7 @@ final class BallotTest {
         //Test toString for Ballot with a sample ballot
         final Candidate c0 = new Candidate("C0", "P0");
         final Candidate c1 = new Candidate("C1", "P1");
-    
+        
         final Ballot ballot = new Ballot(
             23,
             new Candidate[] {c0, c1}
@@ -73,32 +73,32 @@ final class BallotTest {
             23,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
         );
-    
+        
         //Creates copy of ballot
         final Ballot ballotDoppelganger = new Ballot(
             23,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
         );
-    
+        
         //Creates copy of ballot but advances the position to the next candidate
         final Ballot ballotDifferentPosition = new Ballot(
             23,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
         );
         ballotDifferentPosition.getNextCandidate();
-    
+        
         //Creates copy of ballot but with a modified candidates array
         final Ballot sameNumber = new Ballot(
             23,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C2", "P2")}
         );
-    
+        
         //Creates copy of ballot but with a modified ballot number
         final Ballot sameRankings = new Ballot(
             24,
             new Candidate[] {new Candidate("C0", "P0"), new Candidate("C1", "P1")}
         );
-    
+        
         Assertions.assertAll(
             //Test that ballots with equal ballot numbers, equal ranked candidates array, and equal positions in array are equal
             () -> Assertions.assertEquals(ballotDoppelganger, ballot),

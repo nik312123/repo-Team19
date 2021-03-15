@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.team19.TableFormatter.Alignment;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,13 +27,13 @@ final class TableFormatterTest {
     //Date class made for testing
     final static class Date {
         private final int year, month, day;
-    
+        
         private Date(final int year, final int month, final int day) {
             this.day = day;
             this.month = month;
             this.year = year;
         }
-    
+        
         @Override
         public String toString() {
             return String.format("%d/%02d/%02d", year, month, day);
@@ -44,7 +43,7 @@ final class TableFormatterTest {
     @Test
     void testObjColTableToStrRowTable() {
         final TableFormatter tableFormatter = new TableFormatter('+', '-', '|');
-    
+        
         //Creating arbitrary data table for testing
         final List<String> randomTopics = List.of("Numbers", "Fruit", "Names");
         final List<List<?>> randomTopicData = List.of(
@@ -52,7 +51,7 @@ final class TableFormatterTest {
             List.of("Apple", "Banana", "Cantaloupe", "Date", "Eggplant", "Fig", "Guava"),
             List.of("Adam", "Ben", "Craig", "Dan", "Edward", "Fred", "Gary")
         );
-    
+        
         Assertions.assertAll(
             //Testing for empty table
             () -> Assertions.assertEquals(
@@ -94,10 +93,10 @@ final class TableFormatterTest {
     @Test
     void testGetColumnLengths() {
         final TableFormatter tableFormatter = new TableFormatter('+', '-', '|');
-    
+        
         //Creating arbitrary data table for testing
         final List<String> randomTopics = List.of("Numbers", "Fruit", "Names");
-    
+        
         Assertions.assertAll(
             //Testing for empty table
             () -> Assertions.assertArrayEquals(
@@ -135,7 +134,7 @@ final class TableFormatterTest {
     @Test
     void testGetTableFormat() {
         final TableFormatter tableFormatter = new TableFormatter('+', '-', '|');
-    
+        
         Assertions.assertAll(
             //Testing for empty table
             () -> Assertions.assertEquals(
@@ -167,7 +166,7 @@ final class TableFormatterTest {
     @Test
     void testGetHorizontalDivider() {
         final TableFormatter tableFormatter = new TableFormatter('+', '-', '|');
-    
+        
         Assertions.assertAll(
             //Testing for empty table
             () -> Assertions.assertEquals(
@@ -283,33 +282,33 @@ final class TableFormatterTest {
             randomTopicData,
             List.of(Alignment.LEFT, Alignment.RIGHT, Alignment.LEFT)
         );
-    
+        
         //Testing table with alternate symbols
         final TableFormatter tableFormatter2 = new TableFormatter('┼', '─', '│');
-    
+        
         final Supplier<String> randomCandidateData = () -> tableFormatter2.formatAsTable(
             randomTopics,
             randomTopicData,
             List.of(Alignment.RIGHT, Alignment.LEFT, Alignment.LEFT)
         );
-    
+        
         //Testing for empty table
         final Supplier<String> emptyTable = () ->
             tableFormatter.formatAsTable(Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
-    
+        
         //Testing for single-item table
         final Supplier<String> oneItem = () -> tableFormatter.formatAsTable(
             Collections.singletonList("Name"),
             Collections.singletonList(Collections.singletonList("Nikunj Chawla")),
             Collections.singletonList(Alignment.LEFT)
         );
-    
+        
         Assertions.assertAll(
             //Testing NullPointerException thrown for null parameters
             () -> Assertions.assertThrows(NullPointerException.class, nullHeader::get),
             () -> Assertions.assertThrows(NullPointerException.class, nullTable::get),
             () -> Assertions.assertThrows(NullPointerException.class, nullAlignments::get),
-        
+            
             //Testing for incorrect differences in sizes between headers, columns, and alignments
             () -> Assertions.assertThrows(IllegalArgumentException.class, undersizedHeader::get),
             () -> Assertions.assertThrows(IllegalArgumentException.class, oversizedHeader::get),
@@ -405,14 +404,14 @@ final class TableFormatterTest {
                     + "┼─────────┼────────────┼────────┼",
                 randomCandidateData.get()
             ),
-        
+            
             //Testing for empty table
             () -> Assertions.assertEquals(
                 "+--+\n"
                     + "+--+",
                 emptyTable.get()
             ),
-        
+            
             //Testing for single-item table
             () -> Assertions.assertEquals(
                 "+---------------+\n"

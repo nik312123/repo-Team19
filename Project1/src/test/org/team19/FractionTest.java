@@ -463,7 +463,7 @@ final class FractionTest {
             //Special case: division by 0
             () -> Assertions.assertThrows(ArithmeticException.class, () -> zero.divide(zero))
         );
-    
+        
     }
     
     @Test

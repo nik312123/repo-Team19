@@ -128,7 +128,7 @@ public final class VotingSystemRunner {
     public static void main(final String... args) {
         //The input stream from which to read input
         InputStream input = null;
-    
+        
         //If there are no arguments provided, then assume standard input is being used
         if(args.length == 0) {
             System.out.println("Reading from standard input");
@@ -213,7 +213,7 @@ public final class VotingSystemRunner {
             final int dataFormattingExitCode = 65;
             System.exit(dataFormattingExitCode);
         }
-    
+        
         try {
             auditOutput.close();
         }

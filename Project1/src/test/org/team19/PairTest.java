@@ -165,10 +165,10 @@ final class PairTest {
             () -> Assertions.assertEquals(new Pair<>(null, "Democrat"), nullDemocrat),
             //Special case: null value
             () -> Assertions.assertEquals(new Pair<>("Obama", null), obamaNull),
-    
+            
             //Testing that having equivalent keys but differing values does not result in equal pairs
             () -> Assertions.assertNotEquals(twoSix, twoHi),
-    
+            
             //Testing that having equivalent values but differing keys does not result in equal pairs
             () -> Assertions.assertNotEquals(cSix, twoSix)
         );
