@@ -19,7 +19,7 @@ import java.text.ParseException;
 import java.util.Objects;
 
 /**
- * A utility class that contains method to compare the contents of {@link InputStream}
+ * A utility class that contains method to compare the contents of {@link InputStream}s
  */
 public class CompareInputStreams {
     
