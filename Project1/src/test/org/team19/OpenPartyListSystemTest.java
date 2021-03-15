@@ -304,82 +304,41 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsTypical() {
+       
         
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+       final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+       final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+       final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        assert partyInformation != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
         
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
         
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -403,18 +362,18 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         // General test case with standard conditions
         // There should be only one seat remaining after initial allocation
@@ -431,81 +390,39 @@ final class OpenPartyListSystemTest {
     @Test
     void testAllocateInitialSeatsTypicalOutput(){
     
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+    
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+    
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+    
+        final Candidate smithI = new Candidate("Smith", "I");
         
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    
-        assert partyInformation != null;
-    
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-    
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-    
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-        
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-    
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-    
-        Candidate smith_i = new Candidate("Smith", "I");
-    
-        assert partyD != null;
-    
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
     
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-    
-        assert partyR != null;
-    
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+        
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
     
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-    
-        assert partyI != null;
-    
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+        
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
     
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
     
         OpenPartyListSystem opl = null;
         try {
@@ -529,18 +446,16 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
     
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
     
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
     
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
-    
-        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
@@ -556,81 +471,37 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsSingleCandidateHasAllVotes() {
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 0;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 0));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 0));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 0));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 0));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 0;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 0));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 0));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 100;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 100));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         OpenPartyListSystem opl = null;
         try {
@@ -654,18 +525,18 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 0);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 0);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 0);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 0);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 0);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 0);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 0);
+        opl.partyToCandidateCounts.get("R").put(borgR, 0);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 100);
+        opl.partyToCandidateCounts.get("I").put(smithI, 100);
         
-        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         // Test to ensure partyI only receives 1 seat b/c it only has one candidate
         // despite receiving all the votes
@@ -687,81 +558,37 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsSingleCandidateHasAllVotesOutput(){
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+    
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    
-        assert partyInformation != null;
-    
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-    
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-    
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-        
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-    
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-    
-        Candidate smith_i = new Candidate("Smith", "I");
-    
-        assert partyD != null;
-    
         partyD.numCandidates = 2;
         partyD.numBallots = 0;
     
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 0));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 0));
-    
-        assert partyR != null;
-    
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 0));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 0));
+        
         partyR.numCandidates = 3;
         partyR.numBallots = 0;
     
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 0));
-    
-        assert partyI != null;
-    
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 0));
+        
         partyI.numCandidates = 1;
         partyI.numBallots = 100;
     
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 100));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
     
         OpenPartyListSystem opl = null;
         try {
@@ -785,19 +612,19 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
     
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 0);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 0);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 0);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 0);
     
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 0);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 0);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 0);
+        opl.partyToCandidateCounts.get("R").put(borgR, 0);
     
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 100);
+        opl.partyToCandidateCounts.get("I").put(smithI, 100);
     
-        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        
+        opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+    
         // Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/allocateInitialSeatsSingleCandidateHasAllVotes.txt"),
@@ -813,81 +640,37 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsBallotsNotEvenlyDivisibleByQuota() {
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 3;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 1));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 1));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 5;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 2));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 5;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 5));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 5));
         
         OpenPartyListSystem opl = null;
         try {
@@ -911,18 +694,18 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 1);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 1);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 1);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 2);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 1);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 2);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 5);
+        opl.partyToCandidateCounts.get("I").put(smithI, 5);
         
-        Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+         opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         
         // Comparing expected output vs actual output
@@ -940,82 +723,38 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateRemainingSeatsTypical() {
+    
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1039,21 +778,21 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
@@ -1071,81 +810,37 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateRemainingSeatsSingleCandidateHasAllVotes() {
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 0;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 0));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 0));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 0));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 0));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 0;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 0));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 0));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 100;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 100));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1169,21 +864,21 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 0);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 0);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 0);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 0);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 0);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 0);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 0);
+        opl.partyToCandidateCounts.get("R").put(borgR, 0);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 100);
+        opl.partyToCandidateCounts.get("I").put(smithI, 100);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
@@ -1207,82 +902,38 @@ final class OpenPartyListSystemTest {
         
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+    
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1306,21 +957,21 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
@@ -1342,81 +993,37 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
     
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+    
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    
-        assert partyInformation != null;
-    
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-    
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-    
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-        
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-    
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-    
-        Candidate smith_i = new Candidate("Smith", "I");
-    
-        assert partyD != null;
-    
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
     
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 2));
-    
-        assert partyR != null;
-    
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+        
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
     
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-    
-        assert partyI != null;
-    
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+        
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
     
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
     
         OpenPartyListSystem opl = null;
         try {
@@ -1440,21 +1047,21 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
     
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
     
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
     
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
     
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
     
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
     
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
     
@@ -1477,85 +1084,41 @@ final class OpenPartyListSystemTest {
         
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
-        
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
     
-        assert partyD != null;
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+        
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         partyD.numSeats = 0;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         partyR.numSeats = 0;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         partyI.numSeats = 0;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1579,21 +1142,21 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
@@ -1619,85 +1182,41 @@ final class OpenPartyListSystemTest {
     void testDistributeSeatsToCandidatesTieBreaks() {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+    
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         partyD.numSeats = 0;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 2;
         partyR.numSeats = 0;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         partyI.numSeats = 0;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1721,27 +1240,27 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(borg_r, 1);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
+        opl.partyToCandidateCounts.get("R").put(borgR, 1);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
     
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
         opl.printFinalSeatAllocations();
         
-        ArrayList<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
+        final ArrayList<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
         
         System.out.println(candidatesWithSeats);
         
@@ -1763,85 +1282,41 @@ final class OpenPartyListSystemTest {
     void testPrintSummaryTable() {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+    
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
         
-        Class<?> partyInformation = null;
-        try {
-            partyInformation = Class.forName("org.team19.OpenPartyListSystem$PartyInformation");
-            
-        }
-        catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        assert partyInformation != null;
-        
-        Constructor<?> partyInformationConstructor = null;
-        try {
-            partyInformationConstructor = partyInformation.getDeclaredConstructor();
-        }
-        catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        assert partyInformationConstructor != null;
-        partyInformationConstructor.setAccessible(true);
-        
-        OpenPartyListSystem.PartyInformation partyD = null;
-        OpenPartyListSystem.PartyInformation partyR = null;
-        OpenPartyListSystem.PartyInformation partyI = null;
-        
-        try {
-            try {
-                partyD = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            }
-            catch(IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            partyR = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            partyI = (OpenPartyListSystem.PartyInformation) partyInformationConstructor.newInstance();
-            
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        
-        Candidate foster_d = new Candidate("Foster", "D");
-        Candidate pike_d = new Candidate("Pike", "D");
-        
-        Candidate deutsch_r = new Candidate("Deutsch", "R");
-        Candidate jones_r = new Candidate("Jones", "R");
-        Candidate borg_r = new Candidate("Borg", "R");
-        
-        Candidate smith_i = new Candidate("Smith", "I");
-        
-        assert partyD != null;
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
         
         partyD.numCandidates = 2;
         partyD.numBallots = 5;
         partyD.numSeats = 0;
         
         partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pike_d, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(foster_d, 2));
-        
-        assert partyR != null;
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
         
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         partyR.numSeats = 0;
         
         partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borg_r, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jones_r, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutsch_r, 0));
-        
-        assert partyI != null;
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
         
         partyI.numCandidates = 1;
         partyI.numBallots = 1;
         partyI.numSeats = 0;
         
         partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smith_i, 1));
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         OpenPartyListSystem opl = null;
         try {
@@ -1865,27 +1340,27 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts = new LinkedHashMap<>();
         
         opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(foster_d, 3);
-        opl.partyToCandidateCounts.get("D").put(pike_d, 2);
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
         
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutsch_r, 0);
-        opl.partyToCandidateCounts.get("R").put(jones_r, 1);
-        opl.partyToCandidateCounts.get("R").put(borg_r, 2);
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smith_i, 1);
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
         
-        Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
-        Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        Set<String> remainingParties = initialAllocationResults.getSecond();
+        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+        final Set<String> remainingParties = initialAllocationResults.getSecond();
         
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
-        Map<String, Integer> partiesToInitialSeats = new HashMap<>();
+        final Map<String, Integer> partiesToInitialSeats = new HashMap<>();
         
-        for(Map.Entry<String, OpenPartyListSystem.PartyInformation> party : opl.partiesToPartyInformation.entrySet()) {
+        for(final Map.Entry<String, OpenPartyListSystem.PartyInformation> party : opl.partiesToPartyInformation.entrySet()) {
             partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
         }
         
@@ -1908,7 +1383,7 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testGetNextEquivalentOrderedGroupTypical() {
-        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 3, 3, 6, 7, 8, 9));
+       final  ArrayList<Integer> list = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 3, 3, 6, 7, 8, 9));
         // Test to check the group of 3's are returned
         assertEquals("Pair{6, [3, 3, 3]}", OpenPartyListSystem.getNextEquivalentOrderedGroup(list, 3, Integer::compareTo).toString());
         // Test to check only single 2 is returned
@@ -1919,7 +1394,7 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testGetNextEquivalentOrderedGroupOutOfBounds(){
-        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 3, 3, 6, 7, 8, 9));
+       final  ArrayList<Integer> list = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 3, 3, 6, 7, 8, 9));
     
         // Test for upper index out of bounds
         assertDoesNotThrow(() -> OpenPartyListSystem.getNextEquivalentOrderedGroup(list, 12, Integer::compareTo));
@@ -1927,4 +1402,177 @@ final class OpenPartyListSystemTest {
         assertThrows(IndexOutOfBoundsException.class, () -> OpenPartyListSystem.getNextEquivalentOrderedGroup(list, -1, Integer::compareTo));
     }
     
+    @Test
+    void runElectionTypical(){
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+    
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+    
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+    
+        final Candidate smithI = new Candidate("Smith", "I");
+    
+        partyD.numCandidates = 2;
+        partyD.numBallots = 5;
+    
+        partyD.orderedCandidateBallots = new ArrayList<>();
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+    
+        partyR.numCandidates = 3;
+        partyR.numBallots = 3;
+    
+        partyR.orderedCandidateBallots = new ArrayList<>();
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+    
+        partyI.numCandidates = 1;
+        partyI.numBallots = 1;
+    
+        partyI.orderedCandidateBallots = new ArrayList<>();
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+    
+        OpenPartyListSystem opl = null;
+        try {
+            opl = new OpenPartyListSystem(
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit1.txt"),
+                new FileOutputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport1.txt")
+            );
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert opl != null;
+        opl.numSeats = 3;
+        opl.numBallots = 9;
+    
+        opl.partiesToPartyInformation = new LinkedHashMap<>();
+        opl.partiesToPartyInformation.put("D", partyD);
+        opl.partiesToPartyInformation.put("R", partyR);
+        opl.partiesToPartyInformation.put("I", partyI);
+    
+        opl.partyToCandidateCounts = new LinkedHashMap<>();
+    
+        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+    
+        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+        opl.partyToCandidateCounts.get("R").put(borgR, 2);
+    
+        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("I").put(smithI, 1);
+        
+        opl.runElection();
+        
+        opl.auditWriter.close();
+        opl.reportWriter.close();
+    
+        // Comparing expected output vs actual output of Audit file
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit.txt"),
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit1.txt"))
+        );
+    
+        // Comparing expected output vs actual output of report file
+        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport.txt"),
+            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport1.txt"))
+        );
+    
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalAudit1.txt".replace('/', FILE_SEP)).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File("Project1/testing/test-resources/openPartyListSystemTest/testRunElectionTypicalReport1.txt".replace('/', FILE_SEP)).delete();
+    
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void runElectionSingleCandidateHasAllVotes(){
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+    
+        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+    
+        final Candidate fosterD = new Candidate("Foster", "D");
+        final Candidate pikeD = new Candidate("Pike", "D");
+        final Candidate deutschR = new Candidate("Deutsch", "R");
+        final Candidate jonesR = new Candidate("Jones", "R");
+        final Candidate borgR = new Candidate("Borg", "R");
+        final Candidate smithI = new Candidate("Smith", "I");
+    
+        partyD.numCandidates = 2;
+        partyD.numBallots = 0;
+    
+        partyD.orderedCandidateBallots = new ArrayList<>();
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 0));
+        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 0));
+    
+        partyR.numCandidates = 3;
+        partyR.numBallots = 0;
+    
+        partyR.orderedCandidateBallots = new ArrayList<>();
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 0));
+        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 0));
+    
+        partyI.numCandidates = 1;
+        partyI.numBallots = 100;
+    
+        partyI.orderedCandidateBallots = new ArrayList<>();
+        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
+    
+        OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(),OutputStream.nullOutputStream());
+       
+        assert opl != null;
+        opl.numSeats = 4;
+        opl.numBallots = 100;
+    
+        opl.partiesToPartyInformation = new LinkedHashMap<>();
+        opl.partiesToPartyInformation.put("D", partyD);
+        opl.partiesToPartyInformation.put("R", partyR);
+        opl.partiesToPartyInformation.put("I", partyI);
+    
+        opl.partyToCandidateCounts = new LinkedHashMap<>();
+    
+        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("D").put(fosterD, 0);
+        opl.partyToCandidateCounts.get("D").put(pikeD, 0);
+    
+        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+        opl.partyToCandidateCounts.get("R").put(jonesR, 0);
+        opl.partyToCandidateCounts.get("R").put(borgR, 0);
+    
+        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+        opl.partyToCandidateCounts.get("I").put(smithI, 100);
+    
+        opl.runElection();
+    
+        opl.auditWriter.close();
+        opl.reportWriter.close();
+        
+    
+        System.setOut(originalSystemOut);
+    }
+    
+    
+    @Test
+    void testToString() {
+    
+    }
 }
