@@ -510,8 +510,10 @@ public class OpenPartyListSystem extends VotingSystem {
                 party.getValue().numSeats
             );
             
-            auditWriter.printf("Remaining ballots: %s\n",
-                getRemainingBallots(party.getValue()));
+            auditWriter.printf(
+                "Remaining ballots: %s\n",
+                getRemainingBallots(party.getValue())
+            );
             auditWriter.println();
         }
         final int numSeatsAllocated = numSeats - numSeatsRemaining;
