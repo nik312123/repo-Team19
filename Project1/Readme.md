@@ -2,7 +2,7 @@
 
 ## Documentation
 
-See <a href="documentation/Documentation.md" target="_blank">Documentation.md</a> for the documentation resoources available for the project
+See <a href="documentation/Documentation.md" target="_blank">Documentation.md</a> for the documentation resources available for the project
 
 ## Shana notes
 
