@@ -531,7 +531,6 @@ final class InstantRunoffSystemTest {
     
     @Test
     void runElectionMajority() {
-        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
@@ -609,7 +608,6 @@ final class InstantRunoffSystemTest {
     
     @Test
     void runElectionPopularity() {
-        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));

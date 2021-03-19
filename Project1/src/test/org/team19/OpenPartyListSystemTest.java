@@ -278,7 +278,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testGetRemainingBallots() {
-        
         OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
         
         OpenPartyListSystem.PartyInformation testParty = new OpenPartyListSystem.PartyInformation();
@@ -305,7 +304,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsTypical() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -394,7 +392,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsTypicalOutput() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -481,7 +478,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsSingleCandidateHasAllVotes() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -573,7 +569,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsSingleCandidateHasAllVotesOutput() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -662,7 +657,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateInitialSeatsBallotsNotEvenlyDivisibleByQuota() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -751,7 +745,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateRemainingSeatsTypical() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -845,7 +838,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateRemainingSeatsSingleCandidateHasAllVotes() {
-        
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
         final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
@@ -942,7 +934,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testAllocateRemainingSeatsMoreSeatsThanCandidates() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1041,7 +1032,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void allocateRemainingSeatsMoreSeatsThanCandidatesOutput() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1142,7 +1132,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testDistributeSeatsToCandidatesTypical() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1250,7 +1239,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testDistributeSeatsToCandidatesTieBreaks() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1353,7 +1341,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void testPrintSummaryTable() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1485,7 +1472,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void runElectionTypical() {
-        
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
@@ -1587,7 +1573,6 @@ final class OpenPartyListSystemTest {
     
     @Test
     void runElectionMoreSeatsThenCandidates() {
-        
         //Redirects system.out
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(OutputStream.nullOutputStream()));
