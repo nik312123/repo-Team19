@@ -773,12 +773,15 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = "Project1/testing/test-resources/votingSystemRunnerTest/irStairsTest.txt".replace('/', File.separatorChar);
+        final File testFile = new File(
+            "Project1/testing/test-resources/votingSystemRunnerTest/irStairsTest.txt".replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
-            generateIrvTimeTestFileStairs(testFileLocation, 100000);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
+            generateIrTimeTestFileStairs(testFileLocation, 100000);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -786,7 +789,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -802,13 +805,16 @@ final class VotingSystemRunnerTest {
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create the IR stairs test file");
         }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
+        }
         finally {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
             
             /*
              * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
@@ -834,12 +840,15 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = "Project1/testing/test-resources/votingSystemRunnerTest/irDoubleStairsTest.txt".replace('/', File.separatorChar);
+        final File testFile = new File(
+            "Project1/testing/test-resources/votingSystemRunnerTest/irDoubleStairsTest.txt".replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
-            generateIrvTimeTestFileDoubleStairs(testFileLocation, 100000);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
+            generateIrTimeTestFileDoubleStairs(testFileLocation, 100000);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -847,7 +856,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -867,13 +876,16 @@ final class VotingSystemRunnerTest {
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create the IR double stairs test file");
         }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
+        }
         finally {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
             
             /*
              * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
@@ -929,15 +941,18 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = String.format(
-            "Project1/testing/test-resources/votingSystemRunnerTest/oplTest%d.txt",
-            currentCandidatePartySize
-        ).replace('/', File.separatorChar);
+        final File testFile = new File(
+            String.format(
+                "Project1/testing/test-resources/votingSystemRunnerTest/oplTest%d.txt",
+                currentCandidatePartySize
+            ).replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
             generateOplTimeTestFile(testFileLocation, 100000, currentCandidatePartySize);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -945,7 +960,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -966,13 +981,16 @@ final class VotingSystemRunnerTest {
         catch(FileNotFoundException e) {
             Assertions.fail(String.format("Unable to create the OPL test file for a size of %d", currentCandidatePartySize));
         }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
+        }
         finally {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
             
             /*
              * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the runs of the multiple
