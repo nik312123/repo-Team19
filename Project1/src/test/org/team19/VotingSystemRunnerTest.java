@@ -801,6 +801,9 @@ final class VotingSystemRunnerTest {
             if(runtime > timeLimitSeconds) {
                 Assertions.fail(String.format("testIrStairs took %.2f seconds but a maximum of %d seconds was expected", runtime, timeLimitSeconds));
             }
+            else {
+                originalSystemOut.printf("IR stairs runtime: %f\n", runtime);
+            }
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create the IR stairs test file");
@@ -871,6 +874,9 @@ final class VotingSystemRunnerTest {
                     runtime,
                     timeLimitSeconds)
                 );
+            }
+            else {
+                originalSystemOut.printf("IR double stairs runtime: %f\n", runtime);
             }
         }
         catch(FileNotFoundException e) {
@@ -976,6 +982,9 @@ final class VotingSystemRunnerTest {
                     currentCandidatePartySize,
                     timeLimitSeconds)
                 );
+            }
+            else {
+                originalSystemOut.printf("OPL runtime w/ %d candidates/party: %f\n", currentCandidatePartySize, runtime);
             }
         }
         catch(FileNotFoundException e) {
