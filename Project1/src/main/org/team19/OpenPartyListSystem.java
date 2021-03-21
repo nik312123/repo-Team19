@@ -227,12 +227,14 @@ public class OpenPartyListSystem extends VotingSystem {
                 ), line);
             }
             
-            //Removes the right bracket for the last candidate's party
+            //Removes the right bracket if the last candidate's party
             if(i == candidatesArr.length - 1) {
                 final String party = candidate[1];
                 candidate[1] = party.substring(0, party.length() - 1);
             }
+    
             candidatesArr[i] = new Candidate(candidate[0].strip(), candidate[1].strip());
+    
             final String candidateStr = candidatesArr[i].toString();
             auditWriter.println(candidateStr);
             reportWriter.println(candidateStr);
@@ -670,8 +672,8 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     protected static <T> int indexAfterEquivalentGroup(final List<T> list, int idx, final Comparator<T> comparator) {
         final int len = list.size();
-        
-        //If the index is beyond the last index of the list, then return the length
+    
+        //If the index is beyond the last index of the list, then return the length, which is the last possible exclusive "index"
         if(len - idx <= 0) {
             return len;
         }
@@ -682,8 +684,8 @@ public class OpenPartyListSystem extends VotingSystem {
         
         for(; idx < len; idx++) {
             final T curValue = list.get(idx);
-            
-            //If the current value is not equivalent to firstValue, then we are past the next equivalent group
+    
+            //If the current value is not equivalent to firstValue, then we are at the index after next equivalent group
             if(comparator.compare(firstValue, curValue) != 0) {
                 break;
             }
@@ -708,24 +710,24 @@ public class OpenPartyListSystem extends VotingSystem {
             .map(party -> new Pair<>(party, partyToPartyInformation.get(party).remainder))
             .sorted(pairSecondComparatorReversed)
             .collect(Collectors.toList());
-        
-        //The index after the current group of parties with equivalent remaining ballots
+    
+        //The index after the current group of parties with the highest equivalent remaining ballots
         int indexAfterCurrentGroup = 0;
         
         //The current index we are at in partyRemainingBallots
         int curIdx = 0;
-        
-        //The string representing the comma-separated parties who have the same number of remaining ballots
+    
+        //The string representing the comma-space-separated parties that have the same number of remaining ballots
         String curGroupStr = "";
         
         //While there are seats remaining to distribute
         while(numSeatsRemaining > 0) {
             //If we have gone through all of the parties and still have seats remaining to distribute
             if(curIdx >= partyRemainingBallots.size()) {
-                
+    
                 /*
-                 * Create a list, copy all parties that still have candidates without seats and their remainders to it, and replace
-                 * partyRemainingBallots with it
+                 * Creates a list, copies all parties that still have candidates without seats and their remainders to it in the same order as
+                 * partyRemainingBallots, and replaces partyRemainingBallots with it
                  */
                 final List<Pair<String, Fraction>> partyRemainingBallotsTmp = new ArrayList<>();
                 for(final Pair<String, Fraction> partyRemainderPair : partyRemainingBallots) {
@@ -747,14 +749,16 @@ public class OpenPartyListSystem extends VotingSystem {
             //If the current group of parties with the highest remaining ballots is finished, get the index after the next group
             if(curIdx >= indexAfterCurrentGroup) {
                 indexAfterCurrentGroup = indexAfterEquivalentGroup(partyRemainingBallots, curIdx, Comparator.comparing(Pair::getSecond));
-                
+    
+                //The view of the group of parties with the highest remaining ballot counts
                 final List<Pair<String, Fraction>> currentPartiesGroupView = partyRemainingBallots.subList(curIdx, indexAfterCurrentGroup);
                 
                 //Shuffle the group of next highest remaining parties for tie breaking
                 Collections.shuffle(currentPartiesGroupView, rand);
-                
+    
+                //Store the group of next highest remaining parties' names in a comma-space-separated string
                 curGroupStr = currentPartiesGroupView.stream()
-                    .map(partyRemainingBallotsPair -> partyRemainingBallotsPair.getFirst().toString())
+                    .map(Pair::getFirst)
                     .collect(Collectors.joining(", "));
                 curGroupStr = ", " + curGroupStr;
             }
@@ -766,9 +770,13 @@ public class OpenPartyListSystem extends VotingSystem {
             
             //If multiple parties have the equivalent next largest ballot counts
             if(indexAfterCurrentGroup - curIdx > 1) {
+                /*
+                 * Get the index of the first comma in the party group string, and then replace curGroupStr with the parties after the comma space
+                 * if the comma index exists to get the remaining parties after the previous allocation
+                 */
                 final int firstCommaIndex = curGroupStr.indexOf(',');
                 curGroupStr = firstCommaIndex == -1 ? curGroupStr : curGroupStr.substring(firstCommaIndex + 2);
-                
+    
                 tieBreakMessage = String.format(
                     "The next highest parties have equivalent ballot counts of %s and were randomized in the following order: %s.\n",
                     getRemainingBallots(partyToPartyInformation.get(chosenParty)),
@@ -837,8 +845,8 @@ public class OpenPartyListSystem extends VotingSystem {
             
             //The current index we are at in orderedCandidateBallots
             int curIdx = 0;
-            
-            //The string representing the comma-separated candidates who have the same number of ballots
+    
+            //The string representing the comma-space-separated candidates that have the same number of ballots
             String curGroupStr = "";
             
             //While there are seats remaining to distribute for the party
@@ -846,13 +854,15 @@ public class OpenPartyListSystem extends VotingSystem {
                 //If the current group of candidates with the highest remaining ballots is finished, get the index after the next group
                 if(curIdx >= indexAfterCurrentGroup) {
                     indexAfterCurrentGroup = indexAfterEquivalentGroup(orderedCandidateBallots, curIdx, Map.Entry.comparingByValue());
-                    
+    
+                    //The view of the group of candidates with the highest remaining ballot counts
                     final List<Map.Entry<Candidate, Integer>> currentCandidatesGroupView =
                         orderedCandidateBallots.subList(curIdx, indexAfterCurrentGroup);
                     
                     //Shuffle the group of next highest remaining parties for tie breaking
                     Collections.shuffle(currentCandidatesGroupView, rand);
-                    
+    
+                    //Store the group of next highest remaining candidates' names in a comma-space-separated string
                     curGroupStr = currentCandidatesGroupView.stream()
                         .map(candidateBallotsPair -> candidateBallotsPair.getKey().toString())
                         .collect(Collectors.joining(", "));
@@ -870,9 +880,13 @@ public class OpenPartyListSystem extends VotingSystem {
                 
                 //Print the candidate(s) chosen
                 if(indexAfterCurrentGroup - curIdx > 1) {
+                    /*
+                     * Get the index of the first comma in the candidate group string, and then replace curGroupStr with the candidates after the
+                     * comma space if the comma index exists to get the remaining candidates after the previous allocation
+                     */
                     final int firstCommaIndex = curGroupStr.indexOf(',');
                     curGroupStr = firstCommaIndex == -1 ? curGroupStr : curGroupStr.substring(firstCommaIndex + 2);
-                    
+    
                     auditWriter.printf(
                         "The next highest candidates have equivalent ballot counts of %d and were randomized in the following order: %s.\n",
                         currentHighestBallots,

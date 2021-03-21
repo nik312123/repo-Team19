@@ -293,6 +293,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 //noinspection ResultOfMethodCallIgnored
                 candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
+    
                 final String candidateStr = candidatesArr[i].toString();
                 auditWriter.println(candidateStr);
                 reportWriter.println(candidateStr);
@@ -365,15 +366,15 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Retrieves the index of the string after the positive integer
      *
-     * @param str The string from which to retrieve the positive integer
-     * @param pos The position at which to retrieve the positive integer
+     * @param str The string from which to find the index after the positive integer
+     * @param pos The position at which to find the index after the positive integer
      * @return The index of the string after the positive integer
      */
     private int getIndexAfterPositiveInteger(final String str, int pos) {
         //We can already include the current character in the integer or this method would not be called
         pos++;
-        
-        //Adds the other characters after the current characters if they are digits
+    
+        //Continues iteration through the indices of the string only if the current character is a digit
         for(; pos < str.length(); pos++) {
             if(!Character.isDigit(str.charAt(pos))) {
                 break;
