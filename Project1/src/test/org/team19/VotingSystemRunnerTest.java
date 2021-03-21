@@ -809,6 +809,12 @@ final class VotingSystemRunnerTest {
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
             new File(testFilePath).delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests
+             */
+            System.gc();
         }
     }
     
@@ -868,6 +874,12 @@ final class VotingSystemRunnerTest {
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
             new File(testFilePath).delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests
+             */
+            System.gc();
         }
     }
     
@@ -985,6 +997,12 @@ final class VotingSystemRunnerTest {
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
             new File(testFilePath).delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the runs of the multiple
+             * OPL tests, which would otherwise result in grotesquely large swapfile usage
+             */
+            System.gc();
         }
     }
 }
