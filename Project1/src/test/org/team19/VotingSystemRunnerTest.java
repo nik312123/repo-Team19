@@ -884,53 +884,29 @@ final class VotingSystemRunnerTest {
     }
     
     /**
-     * Returns an iterator that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
-     * maxSize
+     * Returns a {@link Collection} that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
+     * the number of ballots
      *
-     * @return An iterator that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
-     * maxSize
+     * @return An {@link Collection} that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
+     * the number of ballots
      */
-    private static Iterator<Arguments> provideOplTimeGroupSizes() {
-        final int maxSize = 100000;
+    private static Deque<Arguments> provideOplTimeGroupSizes() {
+        //The number of ballots being tested
+        final int ballotsSize = 100000;
         
-        return new Iterator<>() {
-            /**
-             * The current size to return going from 1, 4, 16, ..., until the number just greater that or equal to maxSize
-             */
-            private int currentCandidatePartySize = 1;
-            
-            /**
-             * True if the next number is the last number, which is the case for the number that is just greater than or equal to maxSize
-             */
-            private boolean oneMoreLeft = false;
-            
-            /**
-             * Returns true if there is another size to provide
-             *
-             * @return True if there is another size to provide
-             */
-            @Override
-            public boolean hasNext() {
-                return currentCandidatePartySize <= maxSize || oneMoreLeft;
-            }
-            
-            /**
-             * Returns the next size as an {@link Arguments}
-             *
-             * @return The next size as an {@link Arguments}
-             * @throws NoSuchElementException Thrown after the sizes have been gone through
-             */
-            @Override
-            public Arguments next() throws NoSuchElementException {
-                if(hasNext()) {
-                    int returnValue = currentCandidatePartySize;
-                    currentCandidatePartySize <<= 2;
-                    oneMoreLeft = returnValue < maxSize && currentCandidatePartySize >= maxSize;
-                    return Arguments.of(returnValue);
-                }
-                throw new NoSuchElementException("The size limit has already been reached");
-            }
-        };
+        //The list of arguments from 4^0, 4^1, ..., 4^n where 4^n >= ballotsSize and 4^(n - 1) < ballotsSize
+        final Deque<Arguments> result = new ArrayDeque<>();
+        
+        //Adds the above-specified numbers from 4^0 to 4^(n-1) to result
+        int currentCandidatePartySize = 1;
+        for(; currentCandidatePartySize < ballotsSize; currentCandidatePartySize <<= 2) {
+            result.add(Arguments.of(currentCandidatePartySize));
+        }
+        
+        //Adds 4^n to the result
+        result.add(Arguments.of(currentCandidatePartySize));
+        
+        return result;
     }
     
     /*
