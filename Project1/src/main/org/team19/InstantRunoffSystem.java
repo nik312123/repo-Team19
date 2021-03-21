@@ -720,8 +720,10 @@ public class InstantRunoffSystem extends VotingSystem {
                 final Candidate[] topTwo = candidateBallotsMap.keySet().toArray(new Candidate[0]);
                 
                 //Compare the candidates' ballot counts
-                final int firstSecondCandidateComparison =
-                    candidateBallotsMap.get(topTwo[0]).size() - candidateBallotsMap.get(topTwo[1]).size();
+                final int firstSecondCandidateComparison = Integer.compare(
+                    candidateBallotsMap.get(topTwo[0]).size(),
+                    candidateBallotsMap.get(topTwo[1]).size()
+                );
                 
                 if(firstSecondCandidateComparison > 0) {
                     winner = topTwo[0];
