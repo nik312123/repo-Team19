@@ -49,6 +49,11 @@ public class Fraction implements Comparable<Fraction> {
     protected Fraction reciprocal;
     
     /**
+     * The result of calling {@link #toString()} on this {@link Fraction}, set on the first call to {@link #toString()}
+     */
+    protected String fractionStr;
+    
+    /**
      * Initializes a {@link Fraction} given a numerator and denominator in the form of a simplified fraction
      *
      * @param numerator   The numerator of the {@link Fraction}
@@ -273,7 +278,10 @@ public class Fraction implements Comparable<Fraction> {
      */
     @Override
     public String toString() {
-        return String.format("%d / %d", numerator, denominator);
+        if(fractionStr == null) {
+            fractionStr = String.format("%d / %d", numerator, denominator);
+        }
+        return fractionStr;
     }
     
     /**
