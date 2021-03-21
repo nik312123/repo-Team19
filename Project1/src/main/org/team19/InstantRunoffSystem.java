@@ -293,6 +293,10 @@ public class InstantRunoffSystem extends VotingSystem {
                 //noinspection ResultOfMethodCallIgnored
                 candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
+                final String candidateStr = candidatesArr[i].toString();
+                auditWriter.println(candidateStr);
+                reportWriter.println(candidateStr);
+                System.out.println(candidateStr);
             }
             //If the candidates line does not match the regular expression for a valid candidates line, then throw an exception
             catch(IllegalStateException | IndexOutOfBoundsException e) {
@@ -314,19 +318,12 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addCandidates(final String candidatesLine, final int line) throws ParseException {
-        candidates = parseCandidates(candidatesLine, line);
-        
         //Print the output corresponding to the candidates
         auditWriter.println("Candidates:");
         reportWriter.println("Candidates:");
         System.out.println("Candidates:");
         
-        for(final Candidate candidate : candidates) {
-            final String candidateStr = candidate.toString();
-            auditWriter.println(candidateStr);
-            reportWriter.println(candidateStr);
-            System.out.println(candidateStr);
-        }
+        candidates = parseCandidates(candidatesLine, line);
         
         auditWriter.println();
         reportWriter.println();
