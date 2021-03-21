@@ -38,7 +38,7 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Used for randomization in breaking ties
      */
-    protected final static Random RAND = new SecureRandom();
+    protected static Random rand = new SecureRandom();
     
     /**
      * The number of candidates in this election

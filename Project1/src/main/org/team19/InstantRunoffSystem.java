@@ -38,7 +38,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Used for randomization for breaking ties
      */
-    protected static final Random RAND = new SecureRandom();
+    protected static Random rand = new SecureRandom();
     
     /**
      * The number of candidates in this election
@@ -736,7 +736,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 else {
                     //Picks winner by choosing a random index
                     randomSelectionRequired = true;
-                    winner = topTwo[RAND.nextInt(2)];
+                    winner = topTwo[rand.nextInt(2)];
                 }
                 
                 //If there is a tie
@@ -786,7 +786,7 @@ public class InstantRunoffSystem extends VotingSystem {
                     final List<Candidate> lowestCandidates = lowestCandidateBallots.getSecond();
                     
                     //Randomly picks a candidate from the lowest candidates to eliminate
-                    final Candidate lowest = lowestCandidates.get(RAND.nextInt(lowestCandidates.size()));
+                    final Candidate lowest = lowestCandidates.get(rand.nextInt(lowestCandidates.size()));
                     
                     //If no tie breaking was required
                     if(lowestCandidates.size() == 1) {
