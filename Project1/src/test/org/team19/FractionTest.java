@@ -170,16 +170,29 @@ final class FractionTest {
         final Fraction negativeSevenSixths = new Fraction(-7, 6);
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
-        
+    
         //Epsilon used to determine that two doubles are essentially equal (within epsilon)
         final double epsilon = 1E-6;
-        
-        //Testing the double values of the above fraction
+    
+        //Testing the double values of the above fractions
+        final String doubleComparisonFailFormatStr = "Attempted comparison between %s and %d.0 / %d";
         Assertions.assertAll(
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(twoNinths.getDoubleValue(), 2.0 / 9, epsilon)),
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(fiveFourths.getDoubleValue(), 5.0 / 4, epsilon)),
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSixSevenths.getDoubleValue(), -6.0 / 7, epsilon)),
-            () -> Assertions.assertTrue(doubleEqualsEpsilon(negativeSevenSixths.getDoubleValue(), -7.0 / 6, epsilon)),
+            () -> Assertions.assertTrue(
+                doubleEqualsEpsilon(twoNinths.getDoubleValue(), 2.0 / 9, epsilon),
+                String.format(doubleComparisonFailFormatStr, twoNinths, 2, 9)
+            ),
+            () -> Assertions.assertTrue(
+                doubleEqualsEpsilon(fiveFourths.getDoubleValue(), 5.0 / 4, epsilon),
+                String.format(doubleComparisonFailFormatStr, fiveFourths, 5, 4)
+            ),
+            () -> Assertions.assertTrue(
+                doubleEqualsEpsilon(negativeSixSevenths.getDoubleValue(), -6.0 / 7, epsilon),
+                String.format(doubleComparisonFailFormatStr, negativeSixSevenths, -6, 7)
+            ),
+            () -> Assertions.assertTrue(doubleEqualsEpsilon(
+                negativeSevenSixths.getDoubleValue(), -7.0 / 6, epsilon),
+                String.format(doubleComparisonFailFormatStr, negativeSevenSixths, -7, 6)
+            ),
             () -> Assertions.assertEquals(one.getDoubleValue(), 1.0),
             () -> Assertions.assertEquals(zero.getDoubleValue(), 0.0)
         );
