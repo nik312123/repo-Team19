@@ -363,30 +363,24 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Retrieves the positive integer at the current position of the {@link String} and the position after the integer
+     * Retrieves the index of the string after the positive integer
      *
      * @param str The string from which to retrieve the positive integer
      * @param pos The position at which to retrieve the positive integer
-     * @return The positive integer at the current position of the {@link String} and the position after the integer
+     * @return The index of the string after the positive integer
      */
-    private Pair<Integer, Integer> getNumber(final String str, int pos) {
-        //The StringBuilder in which the number string will be built
-        final StringBuilder numberBuilder = new StringBuilder();
-        
-        //Adds the current character as it is a digit
-        numberBuilder.append(str.charAt(pos));
+    private int getIndexAfterPositiveInteger(final String str, int pos) {
+        //We can already include the current character in the integer or this method would not be called
         pos++;
         
         //Adds the other characters after the current characters if they are digits
         for(; pos < str.length(); pos++) {
-            final char curChar = str.charAt(pos);
-            if(!Character.isDigit(curChar)) {
+            if(!Character.isDigit(str.charAt(pos))) {
                 break;
             }
-            numberBuilder.append(curChar);
         }
         
-        return new Pair<>(Integer.parseInt(numberBuilder.toString()), pos);
+        return pos;
     }
     
     /**
@@ -416,10 +410,11 @@ public class InstantRunoffSystem extends VotingSystem {
                 numCommas++;
             }
             else if(Character.isDigit(curChar)) {
-                //Retrieve the number at the current position of the string and the position after the number
-                final Pair<Integer, Integer> rankNewPos = getNumber(ballotLine, i);
+                //Retrieve the index after the full integer rank
+                final int posAfterRank = getIndexAfterPositiveInteger(ballotLine, i);
                 
-                final int rank = rankNewPos.getFirst();
+                //Retrieve the rank by parsing the integer rank string
+                final int rank = Integer.parseInt(ballotLine.substring(i, posAfterRank));
                 
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
                 if(rank < 1 || rank > numCandidates) {
@@ -435,7 +430,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 rankedCandidateMap.put(rank, candidates[numCommas]);
                 
                 //Change the current index i to the position of the last character of the rank number
-                i = rankNewPos.getSecond() - 1;
+                i = posAfterRank - 1;
             }
             else if(!Character.isWhitespace(curChar)) {
                 VotingStreamParser.throwParseException(String.format(
