@@ -37,6 +37,7 @@ import java.util.stream.IntStream;
 
 //TODO: Add the final keyword where applicable (see CheckStyle)
 //TODO: Add tests for the case of ties by setting the rand field to a Random with a specific seed so tests don't change
+//TODO: Modify generated filenames to use the same name format as in Project1/testing/test-resources/votingStreamParserTest
 
 final class VotingSystemRunnerTest {
     
