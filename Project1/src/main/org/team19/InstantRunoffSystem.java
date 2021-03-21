@@ -19,6 +19,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * The mapping of {@link Candidate}s to their current corresponding {@link Ballot}s
      */
-    protected Map<Candidate, ArrayDeque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
+    protected Map<Candidate, Deque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
     
     /**
      * The writer to an output stream for the audit file to write detailed information about the running of the election
@@ -625,7 +626,7 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     protected void eliminateLowest(final Candidate lowest) {
         //Eliminates candidate from map
-        final ArrayDeque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
+        final Deque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
         
         //Candidate has 0 ballots to distribute
         if(ballotsToRedistribute.isEmpty()) {
@@ -674,7 +675,7 @@ public class InstantRunoffSystem extends VotingSystem {
             Arrays.asList(
                 candidateBallotsMap.keySet(),
                 //Get the ballot counts for each of the candidates
-                candidateBallotsMap.values().stream().map(ArrayDeque::size).collect(Collectors.toList())
+                candidateBallotsMap.values().stream().map(Deque::size).collect(Collectors.toList())
             ),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
         ) + "\n";
@@ -702,7 +703,7 @@ public class InstantRunoffSystem extends VotingSystem {
             //If there is only 1 candidate, they are automatically declared the winner
             if(candidateBallotsMapLen == 1) {
                 final Candidate winner = candidateBallotsMap.keySet().iterator().next();
-                final ArrayDeque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
+                final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
                 strToWriteToAll = String.format(
                     "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
                     winner,
