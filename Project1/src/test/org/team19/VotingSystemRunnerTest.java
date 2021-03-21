@@ -234,201 +234,6 @@ final class VotingSystemRunnerTest {
         }
     }
     
-    /**
-     * Generates an IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., 1 with numCommasBefore commas before the numbering and
-     * (candidateSize - groupNum - numCommasBefore) commas after
-     *
-     * @param candidateSize   The number of candidates in the sample election
-     * @param groupNum        The candidate number that should be the last ranked from candidates endNumExclusive + 1 to groupNum
-     * @param numCommasBefore The exclusive ending candidate number for the ballot line
-     * @return An IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., endNumExclusive + 1 and then commas for the remaining spots
-     */
-    private static String generateIrvTestBallotLine(final int candidateSize, final int groupNum, int numCommasBefore) {
-        return ",".repeat(numCommasBefore)
-            + IntStream.iterate(groupNum, v -> v - 1)
-            .limit(groupNum)
-            .mapToObj(Integer::toString)
-            .collect(Collectors.joining(","))
-            + ",".repeat(candidateSize - groupNum - numCommasBefore);
-    }
-    
-    /**
-     * Generates an IR file with the provided number of ballots and candidates, designed to make the IR process very slow with candidate 1 having
-     * 50% of the ballots, candidate 2 having 25% of the ballots, etc., and having each ballot be redistributed to the candidate with the number
-     * one less than its current number until we reach the point where we have candidate 1 having 50% of the ballots and ballot 2 having 50% of the
-     * ballots
-     *
-     * @param outputStream           The outputStream to write the IR election file contents
-     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
-     */
-    private static void generateIrvTimeTestFileStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
-        final PrintWriter outputWriter = new PrintWriter(outputStream);
-        
-        //Writing the election file header
-        outputWriter.println("IR");
-        
-        //Writing the number of candidates for the candidates header
-        outputWriter.println(candidateAndBallotSize);
-        
-        //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
-            outputWriter.printf("C%d (P%d),", i, i);
-        }
-        outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
-        
-        //Writing the number of ballots for the ballots header
-        outputWriter.println(candidateAndBallotSize);
-        
-        /*
-         * Writing each ballot as mentioned in the JavaDoc such that candidate 1 having 50% of the ballots, candidate 2 having 50% of the ballots,
-         * etc.
-         */
-        int nextSize = candidateAndBallotSize >> 1;
-        int groupNum = 1;
-        int numAdded = 0;
-        while(nextSize != 0) {
-            numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
-            }
-            nextSize >>= 1;
-            ++groupNum;
-        }
-        
-        //Writes any missing ballots as just having the next single candidate as the ranking
-        for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
-        }
-        outputWriter.close();
-    }
-    
-    /**
-     * Generates an IR file with the provided number of candidates and ballots, designed to make the IR process very slow with candidate 1 having
-     * 25% of the ballots, candidate 2 having 12.5% of the ballots, etc., and then having candidate n/2 + 1 having 25% of the votes, candidate n/2
-     * + 2 having 12.5% of the votes, etc., and having  each ballot be redistributed to the candidate with the number one  less than
-     * its current number until we reach the point where we have candidate 1 having 50% of the ballots and ballot n/2 having 50% of the ballots
-     *
-     * @param outputStream           The outputStream to write the IR election file contents
-     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
-     */
-    private static void generateIrvTimeTestFileDoubleStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
-        final PrintWriter outputWriter = new PrintWriter(outputStream);
-        
-        //Writing the election file header
-        outputWriter.println("IR");
-        
-        //Writing the number of candidates for the candidates header
-        outputWriter.println(candidateAndBallotSize);
-        
-        //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
-            outputWriter.printf("C%d (P%d),", i, i);
-        }
-        outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
-        
-        //Writing the number of ballots for the ballots header
-        outputWriter.println(candidateAndBallotSize);
-        
-        /*
-         * Writing each ballot as mentioned in the JavaDoc such that candidate 1 having 25% of the ballots, candidate 2 having 12.5% of the
-         * ballots, etc., and candidate n/2 + 1 having 25% of the ballots, candidate n/2 + 2 having 12.5% of the ballots, etc.
-         */
-        int leftSize = candidateAndBallotSize >> 1;
-        int rightSize = leftSize + (candidateAndBallotSize % 2 == 0 ? 0 : 1);
-        
-        //Fills the "left" side of the ballots (1 to n/2)
-        int nextSize = leftSize >> 1;
-        int groupNum = 1;
-        int numAdded = 0;
-        while(nextSize != 0) {
-            numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
-            }
-            nextSize >>= 1;
-            ++groupNum;
-        }
-        
-        //Writes any missing ballots as just having the next single candidate as the ranking for the left side
-        for(int i = numAdded + 1; i <= leftSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
-        }
-        
-        //Fills the "right" side of the ballots (n/2 + 1 to n)
-        nextSize = rightSize >> 1;
-        numAdded = 0;
-        int leftGroupNum = groupNum - 1;
-        while(nextSize != 0) {
-            numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
-            }
-            nextSize >>= 1;
-            ++groupNum;
-        }
-        
-        //Writes any missing ballots as just having the next single candidate as the ranking for the right side
-        for(int i = numAdded + 1; i <= rightSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
-            ++groupNum;
-        }
-        outputWriter.close();
-    }
-    
-    /**
-     * Generates an OPL ballot line by inserting a 1 at the position for the candidate in the provided comma string
-     *
-     * @param candidateNum The candidate number that the voter selected for the ballot
-     * @param commaString  The string that consists of commas to insert the 1 into
-     * @return The OPL ballot line by inserting a 1 at the position for the candidate in the provided comma string
-     */
-    private static String generateOplTestBallotLine(final int candidateNum, final String commaString) {
-        return new StringBuilder(commaString).insert(candidateNum - 1, 1).toString();
-    }
-    
-    /**
-     * Generates an OPL file with the provided number of candidates and ballots and the provided number of candidates per party
-     *
-     * @param outputStream           The outputStream to write the OPL election file contents
-     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
-     * @param candidatesPerParty     The number of candidates per party
-     */
-    private static void generateOplTimeTestFile(final OutputStream outputStream, final int candidateAndBallotSize, final int candidatesPerParty) {
-        final PrintWriter outputWriter = new PrintWriter(outputStream);
-        
-        //Writing the election file header
-        outputWriter.println("OPL");
-        
-        //Writing the number of candidates for the candidates header
-        outputWriter.println(candidateAndBallotSize);
-        
-        //Write each candidate and its party, each having
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
-            outputWriter.printf("[C%d, P%d],", i, (int) Math.ceil((double) i / candidatesPerParty));
-        }
-        outputWriter.printf("[C%d, P%d]\n", candidateAndBallotSize, (int) Math.ceil((double) candidateAndBallotSize / candidatesPerParty));
-        
-        //Writing the number of seats for the ballots header
-        outputWriter.println(candidateAndBallotSize);
-        
-        //Writing the number of ballots for the ballots header
-        outputWriter.println(candidateAndBallotSize);
-        
-        //The string of commas for each ballot line in which the 1 will be inserted
-        final String commaString = ",".repeat(candidateAndBallotSize - 1);
-        
-        //The random object used for creating random ballots
-        final Random rand = new Random();
-        
-        //Write ballots with random candidates selected
-        for(int i = 1; i <= candidateAndBallotSize; ++i) {
-            outputWriter.println(generateOplTestBallotLine(rand.nextInt(candidateAndBallotSize) + 1, commaString));
-        }
-        outputWriter.close();
-    }
-    
     @Test
     void testIrMajority() {
         //Store the original STDOUT and redirect it to go to a null device print stream
@@ -754,7 +559,202 @@ final class VotingSystemRunnerTest {
         System.setOut(originalSystemOut);
     }
     
-    //Tests that a 100,000-line IR election file in the format generated by generateIrvTimeTestFileStairs runs under 8 minutes
+    /**
+     * Generates an IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., 1 with numCommasBefore commas before the numbering and
+     * (candidateSize - groupNum - numCommasBefore) commas after
+     *
+     * @param candidateSize   The number of candidates in the sample election
+     * @param groupNum        The candidate number that should be the last ranked from candidates endNumExclusive + 1 to groupNum
+     * @param numCommasBefore The exclusive ending candidate number for the ballot line
+     * @return An IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., endNumExclusive + 1 and then commas for the remaining spots
+     */
+    private static String generateIrTestBallotLine(final int candidateSize, final int groupNum, final int numCommasBefore) {
+        return ",".repeat(numCommasBefore)
+            + IntStream.iterate(groupNum, v -> v - 1)
+            .limit(groupNum)
+            .mapToObj(Integer::toString)
+            .collect(Collectors.joining(","))
+            + ",".repeat(candidateSize - groupNum - numCommasBefore);
+    }
+    
+    /**
+     * Generates an IR file with the provided number of ballots and candidates, designed to make the IR process very slow with candidate 1 having
+     * 50% of the ballots, candidate 2 having 25% of the ballots, etc., and having each ballot be redistributed to the candidate with the number
+     * one less than its current number until we reach the point where we have candidate 1 having 50% of the ballots and ballot 2 having 50% of the
+     * ballots
+     *
+     * @param outputStream           The outputStream to write the IR election file contents
+     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
+     */
+    private static void generateIrTimeTestFileStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
+        final PrintWriter outputWriter = new PrintWriter(outputStream);
+        
+        //Writing the election file header
+        outputWriter.println("IR");
+        
+        //Writing the number of candidates for the candidates header
+        outputWriter.println(candidateAndBallotSize);
+        
+        //Write each candidate and its party, each having a unique party
+        for(int i = 1; i < candidateAndBallotSize; ++i) {
+            outputWriter.printf("C%d (P%d),", i, i);
+        }
+        outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
+        
+        //Writing the number of ballots for the ballots header
+        outputWriter.println(candidateAndBallotSize);
+        
+        /*
+         * Writing each ballot as mentioned in the JavaDoc such that candidate 1 having 50% of the ballots, candidate 2 having 50% of the ballots,
+         * etc.
+         */
+        int nextSize = candidateAndBallotSize >> 1;
+        int groupNum = 1;
+        int numAdded = 0;
+        while(nextSize != 0) {
+            numAdded += nextSize;
+            for(int i = 0; i < nextSize; ++i) {
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            }
+            nextSize >>= 1;
+            ++groupNum;
+        }
+        
+        //Writes any missing ballots as just having the next single candidate as the ranking
+        for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            ++groupNum;
+        }
+        outputWriter.close();
+    }
+    
+    /**
+     * Generates an IR file with the provided number of candidates and ballots, designed to make the IR process very slow with candidate 1 having
+     * 25% of the ballots, candidate 2 having 12.5% of the ballots, etc., and then having candidate n/2 + 1 having 25% of the votes, candidate n/2
+     * + 2 having 12.5% of the votes, etc., and having  each ballot be redistributed to the candidate with the number one  less than
+     * its current number until we reach the point where we have candidate 1 having 50% of the ballots and ballot n/2 having 50% of the ballots
+     *
+     * @param outputStream           The outputStream to write the IR election file contents
+     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
+     */
+    private static void generateIrTimeTestFileDoubleStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
+        final PrintWriter outputWriter = new PrintWriter(outputStream);
+        
+        //Writing the election file header
+        outputWriter.println("IR");
+        
+        //Writing the number of candidates for the candidates header
+        outputWriter.println(candidateAndBallotSize);
+        
+        //Write each candidate and its party, each having a unique party
+        for(int i = 1; i < candidateAndBallotSize; ++i) {
+            outputWriter.printf("C%d (P%d),", i, i);
+        }
+        outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
+        
+        //Writing the number of ballots for the ballots header
+        outputWriter.println(candidateAndBallotSize);
+        
+        /*
+         * Writing each ballot as mentioned in the JavaDoc such that candidate 1 having 25% of the ballots, candidate 2 having 12.5% of the
+         * ballots, etc., and candidate n/2 + 1 having 25% of the ballots, candidate n/2 + 2 having 12.5% of the ballots, etc.
+         */
+        final int leftSize = candidateAndBallotSize >> 1;
+        final int rightSize = leftSize + (candidateAndBallotSize % 2 == 0 ? 0 : 1);
+        
+        //Fills the "left" side of the ballots (1 to n/2)
+        int nextSize = leftSize >> 1;
+        int groupNum = 1;
+        int numAdded = 0;
+        while(nextSize != 0) {
+            numAdded += nextSize;
+            for(int i = 0; i < nextSize; ++i) {
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            }
+            nextSize >>= 1;
+            ++groupNum;
+        }
+        
+        //Writes any missing ballots as just having the next single candidate as the ranking for the left side
+        for(int i = numAdded + 1; i <= leftSize; ++i) {
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            ++groupNum;
+        }
+        
+        //Fills the "right" side of the ballots (n/2 + 1 to n)
+        nextSize = rightSize >> 1;
+        numAdded = 0;
+        final int leftGroupNum = groupNum - 1;
+        while(nextSize != 0) {
+            numAdded += nextSize;
+            for(int i = 0; i < nextSize; ++i) {
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+            }
+            nextSize >>= 1;
+            ++groupNum;
+        }
+        
+        //Writes any missing ballots as just having the next single candidate as the ranking for the right side
+        for(int i = numAdded + 1; i <= rightSize; ++i) {
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+            ++groupNum;
+        }
+        outputWriter.close();
+    }
+    
+    /**
+     * Generates an OPL ballot line by inserting a 1 at the position for the candidate in the provided comma string
+     *
+     * @param candidateNum The candidate number that the voter selected for the ballot
+     * @param commaString  The string that consists of commas to insert the 1 into
+     * @return The OPL ballot line by inserting a 1 at the position for the candidate in the provided comma string
+     */
+    private static String generateOplTestBallotLine(final int candidateNum, final String commaString) {
+        return new StringBuilder(commaString).insert(candidateNum - 1, 1).toString();
+    }
+    
+    /**
+     * Generates an OPL file with the provided number of candidates and ballots and the provided number of candidates per party
+     *
+     * @param outputStream           The outputStream to write the OPL election file contents
+     * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
+     * @param candidatesPerParty     The number of candidates per party
+     */
+    private static void generateOplTimeTestFile(final OutputStream outputStream, final int candidateAndBallotSize, final int candidatesPerParty) {
+        final PrintWriter outputWriter = new PrintWriter(outputStream);
+        
+        //Writing the election file header
+        outputWriter.println("OPL");
+        
+        //Writing the number of candidates for the candidates header
+        outputWriter.println(candidateAndBallotSize);
+        
+        //Write each candidate and its party, each having
+        for(int i = 1; i < candidateAndBallotSize; ++i) {
+            outputWriter.printf("[C%d, P%d],", i, (int) Math.ceil((double) i / candidatesPerParty));
+        }
+        outputWriter.printf("[C%d, P%d]\n", candidateAndBallotSize, (int) Math.ceil((double) candidateAndBallotSize / candidatesPerParty));
+        
+        //Writing the number of seats for the ballots header
+        outputWriter.println(candidateAndBallotSize);
+        
+        //Writing the number of ballots for the ballots header
+        outputWriter.println(candidateAndBallotSize);
+        
+        //The string of commas for each ballot line in which the 1 will be inserted
+        final String commaString = ",".repeat(candidateAndBallotSize - 1);
+        
+        //The random object used for creating random ballots
+        final Random rand = new Random();
+        
+        //Write ballots with random candidates selected
+        for(int i = 1; i <= candidateAndBallotSize; ++i) {
+            outputWriter.println(generateOplTestBallotLine(rand.nextInt(candidateAndBallotSize) + 1, commaString));
+        }
+        outputWriter.close();
+    }
+    
+    //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileStairs runs under 8 minutes
     @Test
     void testIrStairsTime() {
         //Store the original STDOUT and redirect it to go to a null device print stream
