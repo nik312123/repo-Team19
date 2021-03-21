@@ -214,31 +214,41 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
         //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
-        final String[] candidatesStr = candidatesLine.split("]\\s*,", -1);
-        final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
+        final String[] candidatesStrArr = candidatesLine.split("]\\s*,", -1);
+        final Candidate[] candidatesArr = new Candidate[candidatesStrArr.length];
         for(int i = 0; i < candidatesArr.length; ++i) {
+            final String candidateStr = candidatesStrArr[i].strip();
+        
+            //Thrown an exception if the starting bracket is missing
+            if(candidateStr.isEmpty() || !candidateStr.startsWith("[")) {
+                VotingStreamParser.throwParseException(String.format(
+                    "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
+                    candidatesLine
+                ), line);
+            }
+        
             //Substring starting on 1 before splitting to get rid of the left bracket
-            final String[] candidate = candidatesStr[i].strip().substring(1).split(",");
-            
+            final String[] candidate = candidatesStrArr[i].strip().substring(1).split(",");
+        
             if(candidate.length != 2) {
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
                     candidatesLine
                 ), line);
             }
-            
+        
             //Removes the right bracket if the last candidate's party
             if(i == candidatesArr.length - 1) {
                 final String party = candidate[1];
                 candidate[1] = party.substring(0, party.length() - 1);
             }
-    
+        
             candidatesArr[i] = new Candidate(candidate[0].strip(), candidate[1].strip());
-    
-            final String candidateStr = candidatesArr[i].toString();
-            auditWriter.println(candidateStr);
-            reportWriter.println(candidateStr);
-            System.out.println(candidateStr);
+        
+            final String candidateToStr = candidatesArr[i].toString();
+            auditWriter.println(candidateToStr);
+            reportWriter.println(candidateToStr);
+            System.out.println(candidateToStr);
         }
         return candidatesArr;
     }
