@@ -699,10 +699,14 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param remainingParties  Parties that still have enough candidates for additional seats
      */
     protected void allocateRemainingSeats(int numSeatsRemaining, final Set<String> remainingParties) {
+        //Compares using Pair::getSecond but in reverse order (highest to lowest)
+        Comparator<Pair<String, Fraction>> pairSecondComparatorReversed = Comparator.comparing(Pair::getSecond);
+        pairSecondComparatorReversed = pairSecondComparatorReversed.reversed();
+        
         //Get a list of the remaining ballots for each party, sort it, and collect it
         List<Pair<String, Fraction>> partyRemainingBallots = remainingParties.stream()
             .map(party -> new Pair<>(party, partyToPartyInformation.get(party).remainder))
-            .sorted((el1, el2) -> el2.getSecond().compareTo(el1.getSecond()))
+            .sorted(pairSecondComparatorReversed)
             .collect(Collectors.toList());
         
         //The index after the current group of parties with equivalent remaining ballots
@@ -1047,10 +1051,14 @@ public class OpenPartyListSystem extends VotingSystem {
         for(final String party : partyToCandidateCounts.keySet()) {
             final PartyInformation partyInformation = partyToPartyInformation.get(party);
             
+            //Compares using Map.Entry::getValue but in reverse order (highest to lowest)
+            Comparator<Map.Entry<Candidate, Integer>> mapValueComparatorReversed = Map.Entry.comparingByValue();
+            mapValueComparatorReversed = mapValueComparatorReversed.reversed();
+            
             final List<Map.Entry<Candidate, Integer>> orderedCandidateBallots = new ArrayList<>(
                 partyToCandidateCounts.get(party).entrySet()
             );
-            orderedCandidateBallots.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+            orderedCandidateBallots.sort(mapValueComparatorReversed);
             
             partyInformation.numCandidates = orderedCandidateBallots.size();
             partyInformation.orderedCandidateBallots = orderedCandidateBallots;
