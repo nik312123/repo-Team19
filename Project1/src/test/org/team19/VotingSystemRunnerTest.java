@@ -774,7 +774,7 @@ final class VotingSystemRunnerTest {
         
         //The file upon which this test will be run
         final File testFile = new File(
-            "Project1/testing/test-resources/votingSystemRunnerTest/irStairsTest.txt".replace('/', File.separatorChar)
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar)
         );
         
         try {
@@ -844,7 +844,7 @@ final class VotingSystemRunnerTest {
         
         //The file upon which this test will be run
         final File testFile = new File(
-            "Project1/testing/test-resources/votingSystemRunnerTest/irDoubleStairsTest.txt".replace('/', File.separatorChar)
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar)
         );
         
         try {
@@ -949,7 +949,7 @@ final class VotingSystemRunnerTest {
         //The file upon which this test will be run
         final File testFile = new File(
             String.format(
-                "Project1/testing/test-resources/votingSystemRunnerTest/oplTest%d.txt",
+                "Project1/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
                 currentCandidatePartySize
             ).replace('/', File.separatorChar)
         );
