@@ -12,7 +12,6 @@
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,11 +28,15 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+//TODO: Add the final keyword where applicable (see CheckStyle)
+//TODO: Add tests for the case of ties by setting the rand field to a Random with a specific seed so tests don't change
 
 final class VotingSystemRunnerTest {
     
@@ -431,19 +434,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        //TODO: Change audit and report comparison file names to test-specific names
         String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
         String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityAudit.txt".replace('/', FILE_SEP);
+        String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityAudit.txt"
+            .replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityReport.txt".replace('/', FILE_SEP);
+        String expectedReport = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityReport.txt"
+            .replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv".replace('/', FILE_SEP);
+        String inputCSV = "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
+            .replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
@@ -466,18 +470,19 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
         
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
             new FileInputStream(auditOutputPath))
         );
         
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
         
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -494,6 +499,7 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        //TODO: Change audit and report comparison file names to test-specific names
         String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
         String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
         
@@ -529,18 +535,19 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
         
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
             new FileInputStream(auditOutputPath))
         );
         
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
         
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -557,6 +564,7 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        //TODO: Change audit and report comparison file names to test-specific names
         String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
         String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
         
@@ -592,18 +600,19 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
         
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
             new FileInputStream(auditOutputPath))
         );
         
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
         
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -620,6 +629,7 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        //TODO: Change audit and report comparison file names to test-specific names
         String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
         String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
         
@@ -655,18 +665,19 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
         
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
             new FileInputStream(auditOutputPath))
         );
         
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
         
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -683,6 +694,7 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        //TODO: Change audit and report comparison file names to test-specific names
         String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
         String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
         
@@ -718,18 +730,19 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
         
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
             new FileInputStream(auditOutputPath))
         );
         
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
         
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
