@@ -416,7 +416,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 final int posAfterRank = getIndexAfterPositiveInteger(ballotLine, i);
                 
                 //Retrieve the rank by parsing the integer rank string
-                final int rank = Integer.parseInt(ballotLine.substring(i, posAfterRank));
+                final int rank = Integer.parseUnsignedInt(ballotLine.substring(i, posAfterRank));
                 
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
                 if(rank < 1 || rank > numCandidates) {
@@ -467,6 +467,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 ), line);
             }
             rankedCandidates[i - 1] = rankedCandidateMap.get(i);
+            auditWriter.printf("    %d – %s\n", i, rankedCandidates[i - 1]);
         }
         
         return new Ballot(ballotNumber, rankedCandidates);
@@ -482,18 +483,14 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+        //Writes the output for this ballot to the audit output
+        auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
+        
         final Ballot ballot = parseBallot(ballotNumber, ballotLine, line);
         
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
-        //Writes the output for this ballot to the audit output
-        auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
-        
-        final Candidate[] rankedCandidates = ballot.getRankedCandidates();
-        for(int i = 0; i < rankedCandidates.length; i++) {
-            auditWriter.printf("    %d – %s\n", i + 1, rankedCandidates[i]);
-        }
         auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
         
         //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
