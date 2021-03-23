@@ -28,7 +28,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * The {@link VotingSystem} representing the instant runoff voting system
@@ -776,7 +775,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 }
                 //If no candidate has the majority, then eliminate a candidate
                 else {
-                    final Pair<Integer, List<Candidate>> lowestCandidateBallots = getLowestHighestCandidates().getFirst();
+                    final Pair<Integer, List<Candidate>> lowestCandidateBallots = lowestHighestCandidates.getFirst();
                     final List<Candidate> lowestCandidates = lowestCandidateBallots.getSecond();
                     
                     //Randomly picks a candidate from the lowest candidates to eliminate
