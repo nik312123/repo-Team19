@@ -683,25 +683,28 @@ public class InstantRunoffSystem extends VotingSystem {
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
         
+        //If there is only 1 candidate, they are automatically declared the winner
+        if(candidateBallotsMap.size() == 1) {
+            final Candidate winner = candidateBallotsMap.keySet().iterator().next();
+            final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
+            strToWriteToAll = String.format(
+                "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
+                winner,
+                winnerBallots.size(),
+                numBallots,
+                String.format("%.2f", 100.0 * winnerBallots.size() / numBallots)
+            );
+            auditWriter.println(strToWriteToAll);
+            reportWriter.println(strToWriteToAll);
+            System.out.println(strToWriteToAll);
+            auditWriter.close();
+            reportWriter.close();
+            return;
+        }
+        
         while(true) {
             final int candidateBallotsMapLen = candidateBallotsMap.size();
             
-            //If there is only 1 candidate, they are automatically declared the winner
-            if(candidateBallotsMapLen == 1) {
-                final Candidate winner = candidateBallotsMap.keySet().iterator().next();
-                final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
-                strToWriteToAll = String.format(
-                    "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
-                    winner,
-                    winnerBallots.size(),
-                    numBallots,
-                    String.format("%.2f", 100.0 * winnerBallots.size() / numBallots)
-                );
-                auditWriter.println(strToWriteToAll);
-                reportWriter.println(strToWriteToAll);
-                System.out.println(strToWriteToAll);
-                break;
-            }
             //If there are 2 candidates remaining, the winner is decided by whose votes are greater
             if(candidateBallotsMapLen == 2) {
                 //Stores the winner of the election
