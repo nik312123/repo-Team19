@@ -801,11 +801,13 @@ public class InstantRunoffSystem extends VotingSystem {
                     }
                     //If there were multiple lowest candidates
                     else {
-                        auditWriter.print("No candidate has a majority. There is a tie for lowest ballots between ");
-                        for(int i = 0; i < lowestCandidates.size() - 1; ++i) {
-                            auditWriter.print(lowestCandidates.get(i) + ", ");
-                        }
-                        auditWriter.println(lowestCandidates.get(lowestCandidates.size() - 1));
+                        String lowestCandidatesStr = lowestCandidates.toString();
+                        lowestCandidatesStr = lowestCandidatesStr.substring(1, lowestCandidatesStr.length() - 1);
+                        
+                        auditWriter.printf(
+                            "No candidate has a majority. There is a tie for lowest ballots between the following: %s\n",
+                            lowestCandidatesStr
+                        );
                         
                         auditWriter.println("Random choice from the above for elimination: " + lowest);
                         auditWriter.println();
