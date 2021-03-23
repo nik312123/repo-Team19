@@ -28,7 +28,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * The {@link VotingSystem} representing the instant runoff voting system
@@ -74,11 +73,6 @@ public class InstantRunoffSystem extends VotingSystem {
      * The writer to an output stream for the report file to write a summary about the running of the election.
      */
     protected PrintWriter reportWriter;
-    
-    /**
-     * The {@link TableFormatter} used to produce tables as output
-     */
-    protected TableFormatter tableFormatter;
     
     /**
      * The pattern associated with a valid candidate of the form "[candidate1] ([party1])", replacing the corresponding bracketed items with the
@@ -216,8 +210,6 @@ public class InstantRunoffSystem extends VotingSystem {
         
         auditWriter = new PrintWriter(auditOutput);
         reportWriter = new PrintWriter(reportOutput);
-        
-        tableFormatter = new TableFormatter('+', '-', '|');
     }
     
     /**
@@ -280,6 +272,14 @@ public class InstantRunoffSystem extends VotingSystem {
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
     private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
+        //If the candidates line does not consist of any candidates
+        if(candidatesLine.isBlank()) {
+            VotingStreamParser.throwParseException(String.format(
+                "The given candidates line \"%s\" must consist of at least one candidate",
+                candidatesLine
+            ), line);
+        }
+        
         //Split the candidates line by comma delimiter and add each candidate to an array
         final String[] candidatesStr = candidatesLine.split(",", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
@@ -293,7 +293,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 //noinspection ResultOfMethodCallIgnored
                 candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
-    
+                
                 final String candidateStr = candidatesArr[i].toString();
                 auditWriter.println(candidateStr);
                 reportWriter.println(candidateStr);
@@ -373,7 +373,7 @@ public class InstantRunoffSystem extends VotingSystem {
     private int getIndexAfterPositiveInteger(final String str, int pos) {
         //We can already include the current character in the integer or this method would not be called
         pos++;
-    
+        
         //Continues iteration through the indices of the string only if the current character is a digit
         for(; pos < str.length(); pos++) {
             if(!Character.isDigit(str.charAt(pos))) {
@@ -403,7 +403,7 @@ public class InstantRunoffSystem extends VotingSystem {
         //Mapping of rankings to candidates for the ballot
         final Map<Integer, Candidate> rankedCandidateMap = new HashMap<>();
         
-        //IIterate through the characters of the ballot line
+        //Iterate through the characters of the ballot line
         for(int i = 0; i < ballotLine.length(); ++i) {
             final char curChar = ballotLine.charAt(i);
             
@@ -415,7 +415,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 final int posAfterRank = getIndexAfterPositiveInteger(ballotLine, i);
                 
                 //Retrieve the rank by parsing the integer rank string
-                final int rank = Integer.parseInt(ballotLine.substring(i, posAfterRank));
+                final int rank = Integer.parseUnsignedInt(ballotLine.substring(i, posAfterRank));
                 
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
                 if(rank < 1 || rank > numCandidates) {
@@ -466,6 +466,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 ), line);
             }
             rankedCandidates[i - 1] = rankedCandidateMap.get(i);
+            auditWriter.printf("    %d – %s\n", i, rankedCandidates[i - 1]);
         }
         
         return new Ballot(ballotNumber, rankedCandidates);
@@ -481,18 +482,14 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+        //Writes the output for this ballot to the audit output
+        auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
+        
         final Ballot ballot = parseBallot(ballotNumber, ballotLine, line);
         
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
-        //Writes the output for this ballot to the audit output
-        auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
-        
-        final Candidate[] rankedCandidates = ballot.getRankedCandidates();
-        for(int i = 0; i < rankedCandidates.length; i++) {
-            auditWriter.printf("    %d – %s\n", i + 1, rankedCandidates[i]);
-        }
         auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
         
         //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
@@ -635,7 +632,7 @@ public class InstantRunoffSystem extends VotingSystem {
             while(nextCandidate != null && !candidateBallotsMap.containsKey(nextCandidate)) {
                 auditWriter.printf(
                     "Ballot %d associated with %s has their next choice as candidate %s. but %s was already eliminated. Trying the next choice.\n\n",
-                    ballot.ballotNumber, lowest, nextCandidate, nextCandidate
+                    ballot.getBallotNumber(), lowest, nextCandidate, nextCandidate
                 );
                 nextCandidate = ballot.getNextCandidate();
             }
@@ -658,20 +655,16 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Returns a table formatted as a {@link String} with all non-eliminated candidates and their number of ballots
+     * Returns a {@link String} of all the non-eliminated candidates and their number of ballots
      *
-     * @return a table formatted as a {@link String} with all non-eliminated candidates and their number of ballots
+     * @return A {@link String} of all the non-eliminated candidates and their number of ballots
      */
     private String getCurrentChoiceBallots() {
-        return tableFormatter.formatAsTable(
-            Arrays.asList("Candidate", "Ballots"),
-            Arrays.asList(
-                candidateBallotsMap.keySet(),
-                //Get the ballot counts for each of the candidates
-                candidateBallotsMap.values().stream().map(Deque::size).collect(Collectors.toList())
-            ),
-            Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
-        ) + "\n";
+        final StringBuilder candidateBallotsBuilder = new StringBuilder();
+        for(final Candidate candidate : candidateBallotsMap.keySet()) {
+            candidateBallotsBuilder.append(String.format("%s: %d ballots\n", candidate, candidateBallotsMap.get(candidate).size()));
+        }
+        return candidateBallotsBuilder.toString();
     }
     
     /**
@@ -680,7 +673,7 @@ public class InstantRunoffSystem extends VotingSystem {
     @Override
     public void runElection() {
         //Write the first choice ballot counts for each candidate
-        String strToWriteToAll = "First-choice ballots:";
+        String strToWriteToAll = "First-choice ballots (excluding candidates with 0 ballots):";
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
@@ -690,25 +683,28 @@ public class InstantRunoffSystem extends VotingSystem {
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
         
+        //If there is only 1 candidate, they are automatically declared the winner
+        if(candidateBallotsMap.size() == 1) {
+            final Candidate winner = candidateBallotsMap.keySet().iterator().next();
+            final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
+            strToWriteToAll = String.format(
+                "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
+                winner,
+                winnerBallots.size(),
+                numBallots,
+                String.format("%.2f", 100.0 * winnerBallots.size() / numBallots)
+            );
+            auditWriter.println(strToWriteToAll);
+            reportWriter.println(strToWriteToAll);
+            System.out.println(strToWriteToAll);
+            auditWriter.close();
+            reportWriter.close();
+            return;
+        }
+        
         while(true) {
             final int candidateBallotsMapLen = candidateBallotsMap.size();
             
-            //If there is only 1 candidate, they are automatically declared the winner
-            if(candidateBallotsMapLen == 1) {
-                final Candidate winner = candidateBallotsMap.keySet().iterator().next();
-                final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
-                strToWriteToAll = String.format(
-                    "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
-                    winner,
-                    winnerBallots.size(),
-                    numBallots,
-                    String.format("%.2f", 100.0 * winnerBallots.size() / numBallots)
-                );
-                auditWriter.println(strToWriteToAll);
-                reportWriter.println(strToWriteToAll);
-                System.out.println(strToWriteToAll);
-                break;
-            }
             //If there are 2 candidates remaining, the winner is decided by whose votes are greater
             if(candidateBallotsMapLen == 2) {
                 //Stores the winner of the election
@@ -735,7 +731,6 @@ public class InstantRunoffSystem extends VotingSystem {
                 
                 //If the difference is 0, they share the same number of ballots, so randomization is needed to choose the candidate
                 else {
-                    //Picks winner by choosing a random index
                     randomSelectionRequired = true;
                     winner = topTwo[rand.nextInt(2)];
                 }
@@ -748,13 +743,24 @@ public class InstantRunoffSystem extends VotingSystem {
                 else {
                     final int winnerBallotCount = candidateBallotsMap.get(winner).size();
                     
-                    strToWriteToAll = String.format(
-                        "%s has received %d/%d ballots, giving them the greatest popularity with %s%% of the ballots",
-                        winner,
-                        winnerBallotCount,
-                        numBallots,
-                        String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
-                    );
+                    if(winnerBallotCount > halfNumBallots) {
+                        strToWriteToAll = String.format(
+                            "%s has received %d/%d ballots, giving them the majority with %s%% of the ballots",
+                            winner,
+                            winnerBallotCount,
+                            numBallots,
+                            String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
+                        );
+                    }
+                    else {
+                        strToWriteToAll = String.format(
+                            "%s has received %d/%d ballots, giving them the greater popularity with %s%% of the ballots",
+                            winner,
+                            winnerBallotCount,
+                            numBallots,
+                            String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
+                        );
+                    }
                     auditWriter.println(strToWriteToAll);
                     reportWriter.println(strToWriteToAll);
                     System.out.println(strToWriteToAll);
@@ -783,7 +789,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 }
                 //If no candidate has the majority, then eliminate a candidate
                 else {
-                    final Pair<Integer, List<Candidate>> lowestCandidateBallots = getLowestHighestCandidates().getFirst();
+                    final Pair<Integer, List<Candidate>> lowestCandidateBallots = lowestHighestCandidates.getFirst();
                     final List<Candidate> lowestCandidates = lowestCandidateBallots.getSecond();
                     
                     //Randomly picks a candidate from the lowest candidates to eliminate
@@ -795,11 +801,13 @@ public class InstantRunoffSystem extends VotingSystem {
                     }
                     //If there were multiple lowest candidates
                     else {
-                        auditWriter.print("No candidate has a majority. There is a tie for lowest ballots between ");
-                        for(int i = 0; i < lowestCandidates.size() - 1; ++i) {
-                            auditWriter.print(lowestCandidates.get(i) + ", ");
-                        }
-                        auditWriter.println(lowestCandidates.get(lowestCandidates.size() - 1));
+                        String lowestCandidatesStr = lowestCandidates.toString();
+                        lowestCandidatesStr = lowestCandidatesStr.substring(1, lowestCandidatesStr.length() - 1);
+                        
+                        auditWriter.printf(
+                            "No candidate has a majority. There is a tie for lowest ballots between the following: %s\n",
+                            lowestCandidatesStr
+                        );
                         
                         auditWriter.println("Random choice from the above for elimination: " + lowest);
                         auditWriter.println();

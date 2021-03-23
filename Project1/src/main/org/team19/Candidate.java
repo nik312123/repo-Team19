@@ -34,6 +34,11 @@ public class Candidate {
     protected final String candidateStr;
     
     /**
+     * The result of calling {@link #hashCode()} on this {@link Candidate}
+     */
+    protected final int hashCode;
+    
+    /**
      * Initializes a {@link Candidate}
      *
      * @param name  The name of the election candidate
@@ -44,6 +49,7 @@ public class Candidate {
         this.name = Objects.requireNonNull(name);
         this.party = Objects.requireNonNull(party);
         candidateStr = String.format("%s (%s)", name, party);
+        hashCode = Objects.hash(name, party);
     }
     
     /**
@@ -100,6 +106,6 @@ public class Candidate {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, party);
+        return hashCode;
     }
 }

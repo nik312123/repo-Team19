@@ -30,7 +30,9 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -47,8 +49,8 @@ final class VotingSystemRunnerTest {
     //The character for separating directories in the filesystem
     private static final char FILE_SEP = File.separatorChar;
     
-    //True if the tests for 100,000 ballots in 8 minutes should be run (will fail if this is false)
-    private static final boolean RUN_TIME_TESTS = true;
+    //True if the tests for 100,000 ballots in 8 minutes should be run (will pass automatically if this is false)
+    private static final boolean RUN_TIME_TESTS = false;
     
     private VotingSystemRunnerTest() {}
     
@@ -571,7 +573,7 @@ final class VotingSystemRunnerTest {
      * @param numCommasBefore The exclusive ending candidate number for the ballot line
      * @return An IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., endNumExclusive + 1 and then commas for the remaining spots
      */
-    private static String generateIrTestBallotLine(final int candidateSize, final int groupNum, final int numCommasBefore) {
+    private static String generateIrStairBallotLine(final int candidateSize, final int groupNum, final int numCommasBefore) {
         return ",".repeat(numCommasBefore)
             + IntStream.iterate(groupNum, v -> v - 1)
             .limit(groupNum)
@@ -617,7 +619,7 @@ final class VotingSystemRunnerTest {
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+                outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -625,7 +627,7 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking
         for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
-            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             ++groupNum;
         }
         outputWriter.close();
@@ -663,7 +665,7 @@ final class VotingSystemRunnerTest {
          * ballots, etc., and candidate n/2 + 1 having 25% of the ballots, candidate n/2 + 2 having 12.5% of the ballots, etc.
          */
         final int leftSize = candidateAndBallotSize >> 1;
-        final int rightSize = leftSize + (candidateAndBallotSize % 2 == 0 ? 0 : 1);
+        final int rightSize = leftSize + candidateAndBallotSize % 2;
         
         //Fills the "left" side of the ballots (1 to n/2)
         int nextSize = leftSize >> 1;
@@ -672,7 +674,7 @@ final class VotingSystemRunnerTest {
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+                outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -680,7 +682,7 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the left side
         for(int i = numAdded + 1; i <= leftSize; ++i) {
-            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             ++groupNum;
         }
         
@@ -691,7 +693,7 @@ final class VotingSystemRunnerTest {
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+                outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -699,7 +701,7 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the right side
         for(int i = numAdded + 1; i <= rightSize; ++i) {
-            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+            outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             ++groupNum;
         }
         outputWriter.close();
@@ -757,30 +759,59 @@ final class VotingSystemRunnerTest {
         outputWriter.close();
     }
     
-    //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileStairs runs under 8 minutes
-    @Test
-    void testIrStairsTime() {
-        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
+    /**
+     * Tests a timed test method that involves generating a file and comparing the runtime of CompuVote on the generated file to an expected
+     * maximum runtime
+     *
+     * @param generateFileMethod   The method used to generate the file used in testing with the first argument required to be the
+     *                             {@link OutputStream} to which the contents of the generated file are written
+     * @param generationParameters The parameters after the aforementioned {@link OutputStream} to pass to the generateFileMethod
+     * @param filePath             The output path to which the file contents created by generateFileMethod will be written
+     * @param testName             The name of the particular test calling this function
+     * @param timeLimitSeconds     The time limit that will cause the test to fail if exceeded
+     */
+    void runTimedTest(final Method generateFileMethod, final Collection<Object> generationParameters, final String filePath, final String testName,
+        final int timeLimitSeconds) {
+        //If RUN_TIME_TESTS is false, then timed tests should not run and instead automatically pass
         if(!RUN_TIME_TESTS) {
-            Assertions.fail("Timed tests are disabled");
+            System.out.printf("The timed test for %s did not run because RUN_TIME_TESTS is false\n", testName);
+            return;
         }
         
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Store the running time limit
-        final int timeLimitSeconds = 8 * 60;
-        
         //The file upon which this test will be run
-        final File testFile = new File(
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar)
-        );
+        final File testFile = new File(filePath);
         
         try {
-            //Generate the test file
+            //Create the output stream to which the file will be generated
             final FileOutputStream testFileLocation = new FileOutputStream(testFile);
-            generateIrTimeTestFileStairs(testFileLocation, 100000);
+            
+            //Create the parameters for the
+            final Object[] finalGenerationParameters = new Object[generationParameters.size() + 1];
+            finalGenerationParameters[0] = testFileLocation;
+            int i = 1;
+            for(final Object generationParameter : generationParameters) {
+                finalGenerationParameters[i] = generationParameter;
+                i++;
+            }
+            
+            //Generate the test file
+            try {
+                generateFileMethod.invoke(this, finalGenerationParameters);
+            }
+            catch(IllegalAccessException e) {
+                Assertions.fail(String.format("Unable to properly access %s: %s", generateFileMethod.getName(), e.getMessage()));
+            }
+            //Throw the underlying exception from the generation method if possible
+            catch(InvocationTargetException e) {
+                if(e.getCause() == null) {
+                    throw e;
+                }
+                throw e.getCause();
+            }
             testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
@@ -799,17 +830,20 @@ final class VotingSystemRunnerTest {
             //Get the runtime in seconds, and if it exceeds the time limit, then fail
             final double runtime = (double) (finalTime - initTime) / 1000000000;
             if(runtime > timeLimitSeconds) {
-                Assertions.fail(String.format("testIrStairs took %.2f seconds but a maximum of %d seconds was expected", runtime, timeLimitSeconds));
+                Assertions.fail(String.format("%s took %.2f seconds but a maximum of %d seconds was expected", testName, runtime, timeLimitSeconds));
             }
             else {
-                originalSystemOut.printf("IR stairs runtime: %f\n", runtime);
+                originalSystemOut.printf("%s runtime: %f\n", testName, runtime);
             }
         }
         catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create the IR stairs test file");
+            Assertions.fail(String.format("Unable to create the %s test file", testName));
         }
         catch(IOException e) {
-            Assertions.fail("Unable to close the test file");
+            Assertions.fail(String.format("Unable to close the %s test file", testName));
+        }
+        catch(Throwable e) {
+            Assertions.fail(String.format("Error in running the generation function for %s: %s", testName, e.getMessage()));
         }
         finally {
             //Redirect STDOUT back to STDOUT
@@ -827,77 +861,37 @@ final class VotingSystemRunnerTest {
         }
     }
     
+    //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileStairs runs under 8 minutes
+    @Test
+    void testIrStairsTime() {
+        try {
+            runTimedTest(
+                VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileStairs", OutputStream.class, int.class),
+                Collections.singletonList(100000),
+                "Project1/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
+                "testIrStairsTime",
+                8 * 60
+            );
+        }
+        catch(NoSuchMethodException e) {
+            Assertions.fail("Unable to retrieve generateIrTimeTestFileStairs");
+        }
+    }
+    
     //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileDoubleStairs runs under 8 minutes
     @Test
     void testIrDoubleStairsTime() {
-        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
-        if(!RUN_TIME_TESTS) {
-            Assertions.fail("Timed tests are disabled");
-        }
-        
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        //Store the running time limit
-        final int timeLimitSeconds = 8 * 60;
-        
-        //The file upon which this test will be run
-        final File testFile = new File(
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar)
-        );
-        
         try {
-            //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
-            generateIrTimeTestFileDoubleStairs(testFileLocation, 100000);
-            testFileLocation.close();
-            
-            //Setting the output sources to the null output stream as the generated files are massive
-            VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
-            VotingSystemRunner.reportOutputPotentialSource = NULL_OUTPUT;
-            
-            //Time the running of CompuVote with the current file
-            final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFile.toString());
-            final long finalTime = System.nanoTime();
-            
-            //Setting the output sources back to null so they are not changed for other tests
-            VotingSystemRunner.auditOutputPotentialSource = null;
-            VotingSystemRunner.reportOutputPotentialSource = null;
-            
-            //Get the runtime in seconds, and if it exceeds the time limit, then fail
-            final double runtime = (double) (finalTime - initTime) / 1000000000;
-            if(runtime > timeLimitSeconds) {
-                Assertions.fail(String.format(
-                    "testIrDoubleStairs took %.2f seconds but a maximum of %d seconds was expected",
-                    runtime,
-                    timeLimitSeconds)
-                );
-            }
-            else {
-                originalSystemOut.printf("IR double stairs runtime: %f\n", runtime);
-            }
+            runTimedTest(
+                VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileDoubleStairs", OutputStream.class, int.class),
+                Collections.singletonList(100000),
+                "Project1/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
+                "testIrDoubleStairsTime",
+                8 * 60
+            );
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create the IR double stairs test file");
-        }
-        catch(IOException e) {
-            Assertions.fail("Unable to close the test file");
-        }
-        finally {
-            //Redirect STDOUT back to STDOUT
-            System.setOut(originalSystemOut);
-            
-            //Delete the giant generated file
-            //noinspection ResultOfMethodCallIgnored
-            testFile.delete();
-            
-            /*
-             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
-             * with the other timed tests
-             */
-            System.gc();
+        catch(NoSuchMethodException e) {
+            Assertions.fail("Unable to retrieve generateIrTimeTestFileDoubleStairs");
         }
     }
     
@@ -934,78 +928,20 @@ final class VotingSystemRunnerTest {
     @ParameterizedTest(name = "{0} candidates per party")
     @MethodSource("org.team19.VotingSystemRunnerTest#provideOplTimeGroupSizes")
     void testOplTime(final int currentCandidatePartySize) {
-        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
-        if(!RUN_TIME_TESTS) {
-            Assertions.fail("Timed tests are disabled");
-        }
-        
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        //Store the running time limit
-        final int timeLimitSeconds = 8 * 60;
-        
-        //The file upon which this test will be run
-        final File testFile = new File(
-            String.format(
-                "Project1/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
-                currentCandidatePartySize
-            ).replace('/', File.separatorChar)
-        );
-        
         try {
-            //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
-            generateOplTimeTestFile(testFileLocation, 100000, currentCandidatePartySize);
-            testFileLocation.close();
-            
-            //Setting the output sources to the null output stream as the generated files are massive
-            VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
-            VotingSystemRunner.reportOutputPotentialSource = NULL_OUTPUT;
-            
-            //Time the running of CompuVote with the current file
-            final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFile.toString());
-            final long finalTime = System.nanoTime();
-            
-            //Setting the output sources back to null so they are not changed for other tests
-            VotingSystemRunner.auditOutputPotentialSource = null;
-            VotingSystemRunner.reportOutputPotentialSource = null;
-            
-            //Get the runtime in seconds, and if it exceeds the time limit, then fail
-            final double runtime = (double) (finalTime - initTime) / 1000000000;
-            if(runtime > timeLimitSeconds) {
-                Assertions.fail(String.format(
-                    "testOplTime took %.2f seconds for %d candidates per party but a maximum of %d seconds was expected",
-                    runtime,
-                    currentCandidatePartySize,
-                    timeLimitSeconds)
-                );
-            }
-            else {
-                originalSystemOut.printf("OPL runtime w/ %d candidates/party: %f\n", currentCandidatePartySize, runtime);
-            }
+            runTimedTest(
+                VotingSystemRunnerTest.class.getDeclaredMethod("generateOplTimeTestFile", OutputStream.class, int.class, int.class),
+                List.of(100000, currentCandidatePartySize),
+                String.format(
+                    "Project1/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
+                    currentCandidatePartySize
+                ).replace('/', File.separatorChar),
+                String.format("testOplTime%d", currentCandidatePartySize),
+                8 * 60
+            );
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(String.format("Unable to create the OPL test file for a size of %d", currentCandidatePartySize));
-        }
-        catch(IOException e) {
-            Assertions.fail("Unable to close the test file");
-        }
-        finally {
-            //Redirect STDOUT back to STDOUT
-            System.setOut(originalSystemOut);
-            
-            //Delete the giant generated file
-            //noinspection ResultOfMethodCallIgnored
-            testFile.delete();
-            
-            /*
-             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the runs of the multiple
-             * OPL tests, which would otherwise result in grotesquely large swapfile usage
-             */
-            System.gc();
+        catch(NoSuchMethodException e) {
+            Assertions.fail("Unable to retrieve generateOplTimeTestFile");
         }
     }
 }
