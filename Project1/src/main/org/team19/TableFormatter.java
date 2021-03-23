@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Creates the {@link String} form of a table from a list of string column headers, a list of lists with each list representing a column, and a
@@ -83,15 +81,16 @@ public final class TableFormatter {
     protected List<List<String>> objColTableToStrRowTable(final List<String> headers, final Collection<? extends Collection<?>> colTable,
         final int numRows, final int numCols) {
         //Creates the table of strings rows
-        final List<List<String>> strRowTable = IntStream.range(0, numRows)
-            .mapToObj(i -> new ArrayList<String>(numCols))
-            .collect(Collectors.toList());
-        
+        final List<List<String>> strRowTable = new ArrayList<>();
+        for(int i = 0; i < numRows; ++i) {
+            strRowTable.add(new ArrayList<>(numCols));
+        }
+    
         //Adds the headers to the table if there are a nonzero number of columns
         if(numCols != 0) {
-            headers.forEach(strRowTable.get(0)::add);
+            strRowTable.get(0).addAll(headers);
         }
-        
+    
         for(final Collection<?> col : colTable) {
             final Iterator<?> colIter = col.iterator();
             for(int rowIndex = 1; rowIndex < numRows; rowIndex++) {
