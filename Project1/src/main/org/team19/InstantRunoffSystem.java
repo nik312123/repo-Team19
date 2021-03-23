@@ -19,6 +19,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Used for randomization for breaking ties
      */
-    protected static final Random RAND = new SecureRandom();
+    protected static Random rand = new SecureRandom();
     
     /**
      * The number of candidates in this election
@@ -62,7 +63,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * The mapping of {@link Candidate}s to their current corresponding {@link Ballot}s
      */
-    protected Map<Candidate, ArrayDeque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
+    protected Map<Candidate, Deque<Ballot>> candidateBallotsMap = new LinkedHashMap<>();
     
     /**
      * The writer to an output stream for the audit file to write detailed information about the running of the election
@@ -292,6 +293,11 @@ public class InstantRunoffSystem extends VotingSystem {
                 //noinspection ResultOfMethodCallIgnored
                 candidateMatcher.find();
                 candidatesArr[i] = new Candidate(candidateMatcher.group(1).strip(), candidateMatcher.group(2).strip());
+    
+                final String candidateStr = candidatesArr[i].toString();
+                auditWriter.println(candidateStr);
+                reportWriter.println(candidateStr);
+                System.out.println(candidateStr);
             }
             //If the candidates line does not match the regular expression for a valid candidates line, then throw an exception
             catch(IllegalStateException | IndexOutOfBoundsException e) {
@@ -313,19 +319,12 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addCandidates(final String candidatesLine, final int line) throws ParseException {
-        candidates = parseCandidates(candidatesLine, line);
-        
         //Print the output corresponding to the candidates
         auditWriter.println("Candidates:");
         reportWriter.println("Candidates:");
         System.out.println("Candidates:");
         
-        for(final Candidate candidate : candidates) {
-            final String candidateStr = candidate.toString();
-            auditWriter.println(candidateStr);
-            reportWriter.println(candidateStr);
-            System.out.println(candidateStr);
-        }
+        candidates = parseCandidates(candidatesLine, line);
         
         auditWriter.println();
         reportWriter.println();
@@ -365,30 +364,24 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Retrieves the positive integer at the current position of the {@link String} and the position after the integer
+     * Retrieves the index of the string after the positive integer
      *
-     * @param str The string from which to retrieve the positive integer
-     * @param pos The position at which to retrieve the positive integer
-     * @return The positive integer at the current position of the {@link String} and the position after the integer
+     * @param str The string from which to find the index after the positive integer
+     * @param pos The position at which to find the index after the positive integer
+     * @return The index of the string after the positive integer
      */
-    private Pair<Integer, Integer> getNumber(final String str, int pos) {
-        //The StringBuilder in which the number string will be built
-        final StringBuilder numberBuilder = new StringBuilder();
-        
-        //Adds the current character as it is a digit
-        numberBuilder.append(str.charAt(pos));
+    private int getIndexAfterPositiveInteger(final String str, int pos) {
+        //We can already include the current character in the integer or this method would not be called
         pos++;
-        
-        //Adds the other characters after the current characters if they are digits
+    
+        //Continues iteration through the indices of the string only if the current character is a digit
         for(; pos < str.length(); pos++) {
-            final char curChar = str.charAt(pos);
-            if(!Character.isDigit(curChar)) {
+            if(!Character.isDigit(str.charAt(pos))) {
                 break;
             }
-            numberBuilder.append(curChar);
         }
         
-        return new Pair<>(Integer.parseInt(numberBuilder.toString()), pos);
+        return pos;
     }
     
     /**
@@ -418,10 +411,11 @@ public class InstantRunoffSystem extends VotingSystem {
                 numCommas++;
             }
             else if(Character.isDigit(curChar)) {
-                //Retrieve the number at the current position of the string and the position after the number
-                final Pair<Integer, Integer> rankNewPos = getNumber(ballotLine, i);
+                //Retrieve the index after the full integer rank
+                final int posAfterRank = getIndexAfterPositiveInteger(ballotLine, i);
                 
-                final int rank = rankNewPos.getFirst();
+                //Retrieve the rank by parsing the integer rank string
+                final int rank = Integer.parseInt(ballotLine.substring(i, posAfterRank));
                 
                 //If the current rank is less than 1 or greater than the number of candidates, then it is invalid, so throw an exception
                 if(rank < 1 || rank > numCandidates) {
@@ -437,7 +431,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 rankedCandidateMap.put(rank, candidates[numCommas]);
                 
                 //Change the current index i to the position of the last character of the rank number
-                i = rankNewPos.getSecond() - 1;
+                i = posAfterRank - 1;
             }
             else if(!Character.isWhitespace(curChar)) {
                 VotingStreamParser.throwParseException(String.format(
@@ -625,7 +619,7 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     protected void eliminateLowest(final Candidate lowest) {
         //Eliminates candidate from map
-        final ArrayDeque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
+        final Deque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest);
         
         //Candidate has 0 ballots to distribute
         if(ballotsToRedistribute.isEmpty()) {
@@ -674,7 +668,7 @@ public class InstantRunoffSystem extends VotingSystem {
             Arrays.asList(
                 candidateBallotsMap.keySet(),
                 //Get the ballot counts for each of the candidates
-                candidateBallotsMap.values().stream().map(ArrayDeque::size).collect(Collectors.toList())
+                candidateBallotsMap.values().stream().map(Deque::size).collect(Collectors.toList())
             ),
             Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
         ) + "\n";
@@ -702,7 +696,7 @@ public class InstantRunoffSystem extends VotingSystem {
             //If there is only 1 candidate, they are automatically declared the winner
             if(candidateBallotsMapLen == 1) {
                 final Candidate winner = candidateBallotsMap.keySet().iterator().next();
-                final ArrayDeque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
+                final Deque<Ballot> winnerBallots = candidateBallotsMap.get(winner);
                 strToWriteToAll = String.format(
                     "%s has received %d/%d votes giving them a majority of %s%% of the ballots. They have therefore won.",
                     winner,
@@ -727,8 +721,10 @@ public class InstantRunoffSystem extends VotingSystem {
                 final Candidate[] topTwo = candidateBallotsMap.keySet().toArray(new Candidate[0]);
                 
                 //Compare the candidates' ballot counts
-                final int firstSecondCandidateComparison =
-                    candidateBallotsMap.get(topTwo[0]).size() - candidateBallotsMap.get(topTwo[1]).size();
+                final int firstSecondCandidateComparison = Integer.compare(
+                    candidateBallotsMap.get(topTwo[0]).size(),
+                    candidateBallotsMap.get(topTwo[1]).size()
+                );
                 
                 if(firstSecondCandidateComparison > 0) {
                     winner = topTwo[0];
@@ -741,7 +737,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 else {
                     //Picks winner by choosing a random index
                     randomSelectionRequired = true;
-                    winner = topTwo[RAND.nextInt(2)];
+                    winner = topTwo[rand.nextInt(2)];
                 }
                 
                 //If there is a tie
@@ -791,7 +787,7 @@ public class InstantRunoffSystem extends VotingSystem {
                     final List<Candidate> lowestCandidates = lowestCandidateBallots.getSecond();
                     
                     //Randomly picks a candidate from the lowest candidates to eliminate
-                    final Candidate lowest = lowestCandidates.get(RAND.nextInt(lowestCandidates.size()));
+                    final Candidate lowest = lowestCandidates.get(rand.nextInt(lowestCandidates.size()));
                     
                     //If no tie breaking was required
                     if(lowestCandidates.size() == 1) {

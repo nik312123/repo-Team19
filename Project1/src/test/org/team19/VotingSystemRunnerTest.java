@@ -12,7 +12,6 @@
 package org.team19;
 
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,11 +28,16 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+//TODO: Add the final keyword where applicable (see CheckStyle)
+//TODO: Add tests for the case of ties by setting the rand field to a Random with a specific seed so tests don't change
+//TODO: Modify generated filenames to use the same name format as in Project1/testing/test-resources/votingStreamParserTest
 
 final class VotingSystemRunnerTest {
     
@@ -42,6 +46,9 @@ final class VotingSystemRunnerTest {
     
     //The character for separating directories in the filesystem
     private static final char FILE_SEP = File.separatorChar;
+    
+    //True if the tests for 100,000 ballots in 8 minutes should be run (will fail if this is false)
+    private static final boolean RUN_TIME_TESTS = true;
     
     private VotingSystemRunnerTest() {}
     
@@ -230,6 +237,331 @@ final class VotingSystemRunnerTest {
         }
     }
     
+    @Test
+    void testIrMajority() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //TODO: Change audit and report comparison file names to test-specific names
+        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
+        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityAudit.txt"
+            .replace('/', FILE_SEP);
+        //Path to expected report output
+        String expectedReport = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityReport.txt"
+            .replace('/', FILE_SEP);
+        
+        //Path to CSV file
+        String inputCSV = "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
+            .replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        //Runs main algorithm
+        VotingSystemRunner.main(inputCSV);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+        
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+        
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+        
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+        
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testIrPopularity() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //TODO: Change audit and report comparison file names to test-specific names
+        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
+        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityAudit.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityReport.txt".replace('/', FILE_SEP);
+        
+        //Path to CSV file
+        String inputCSV =
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        //Runs main algorithm
+        VotingSystemRunner.main(inputCSV);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+        
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+        
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+        
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+        
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testIrSingleCandidate() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //TODO: Change audit and report comparison file names to test-specific names
+        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
+        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateAudit.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateReport.txt".replace('/', FILE_SEP);
+        
+        //Path to CSV file
+        String inputCSV =
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        //Runs main algorithm
+        VotingSystemRunner.main(inputCSV);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+        
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+        
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+        
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+        
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testOplTypical() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //TODO: Change audit and report comparison file names to test-specific names
+        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
+        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalAudit.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalReport.txt".replace('/', FILE_SEP);
+        
+        //Path to CSV file
+        String inputCSV =
+            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        //Runs main algorithm
+        VotingSystemRunner.main(inputCSV);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+        
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+        
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+        
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+        
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testOplMoreSeatsThanCandidates() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //TODO: Change audit and report comparison file names to test-specific names
+        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
+        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesAudit.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesReport.txt".replace('/', FILE_SEP);
+        
+        //Path to CSV file
+        String inputCSV =
+            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        //Runs main algorithm
+        VotingSystemRunner.main(inputCSV);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+        
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+        
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+        
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+        
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
     /**
      * Generates an IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., 1 with numCommasBefore commas before the numbering and
      * (candidateSize - groupNum - numCommasBefore) commas after
@@ -239,7 +571,7 @@ final class VotingSystemRunnerTest {
      * @param numCommasBefore The exclusive ending candidate number for the ballot line
      * @return An IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., endNumExclusive + 1 and then commas for the remaining spots
      */
-    private static String generateIrvTestBallotLine(final int candidateSize, final int groupNum, int numCommasBefore) {
+    private static String generateIrTestBallotLine(final int candidateSize, final int groupNum, final int numCommasBefore) {
         return ",".repeat(numCommasBefore)
             + IntStream.iterate(groupNum, v -> v - 1)
             .limit(groupNum)
@@ -257,7 +589,7 @@ final class VotingSystemRunnerTest {
      * @param outputStream           The outputStream to write the IR election file contents
      * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
      */
-    private static void generateIrvTimeTestFileStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
+    private static void generateIrTimeTestFileStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
         final PrintWriter outputWriter = new PrintWriter(outputStream);
         
         //Writing the election file header
@@ -285,7 +617,7 @@ final class VotingSystemRunnerTest {
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -293,7 +625,7 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking
         for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
             ++groupNum;
         }
         outputWriter.close();
@@ -308,7 +640,7 @@ final class VotingSystemRunnerTest {
      * @param outputStream           The outputStream to write the IR election file contents
      * @param candidateAndBallotSize The size of both the number of candidates and number of ballots
      */
-    private static void generateIrvTimeTestFileDoubleStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
+    private static void generateIrTimeTestFileDoubleStairs(final OutputStream outputStream, final int candidateAndBallotSize) {
         final PrintWriter outputWriter = new PrintWriter(outputStream);
         
         //Writing the election file header
@@ -330,8 +662,8 @@ final class VotingSystemRunnerTest {
          * Writing each ballot as mentioned in the JavaDoc such that candidate 1 having 25% of the ballots, candidate 2 having 12.5% of the
          * ballots, etc., and candidate n/2 + 1 having 25% of the ballots, candidate n/2 + 2 having 12.5% of the ballots, etc.
          */
-        int leftSize = candidateAndBallotSize >> 1;
-        int rightSize = leftSize + (candidateAndBallotSize % 2 == 0 ? 0 : 1);
+        final int leftSize = candidateAndBallotSize >> 1;
+        final int rightSize = leftSize + (candidateAndBallotSize % 2 == 0 ? 0 : 1);
         
         //Fills the "left" side of the ballots (1 to n/2)
         int nextSize = leftSize >> 1;
@@ -340,7 +672,7 @@ final class VotingSystemRunnerTest {
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -348,18 +680,18 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the left side
         for(int i = numAdded + 1; i <= leftSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, 0));
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, 0));
             ++groupNum;
         }
         
         //Fills the "right" side of the ballots (n/2 + 1 to n)
         nextSize = rightSize >> 1;
         numAdded = 0;
-        int leftGroupNum = groupNum - 1;
+        final int leftGroupNum = groupNum - 1;
         while(nextSize != 0) {
             numAdded += nextSize;
             for(int i = 0; i < nextSize; ++i) {
-                outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+                outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             }
             nextSize >>= 1;
             ++groupNum;
@@ -367,7 +699,7 @@ final class VotingSystemRunnerTest {
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the right side
         for(int i = numAdded + 1; i <= rightSize; ++i) {
-            outputWriter.println(generateIrvTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
+            outputWriter.println(generateIrTestBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             ++groupNum;
         }
         outputWriter.close();
@@ -425,324 +757,14 @@ final class VotingSystemRunnerTest {
         outputWriter.close();
     }
     
-    @Test
-    void testIrMajority() {
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
-        
-        //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityAudit.txt".replace('/', FILE_SEP);
-        //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityReport.txt".replace('/', FILE_SEP);
-        
-        //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv".replace('/', FILE_SEP);
-        
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
-        
-        try {
-            auditOutput = new FileOutputStream(auditOutputPath);
-            reportOutput = new FileOutputStream(reportOutputPath);
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        //Sets audit and report outputs
-        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
-        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
-        
-        //Runs main algorithm
-        VotingSystemRunner.main(inputCSV);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
-        
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
-    }
-    
-    @Test
-    void testIrPopularity() {
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
-        
-        //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityAudit.txt".replace('/', FILE_SEP);
-        //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityReport.txt".replace('/', FILE_SEP);
-        
-        //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP);
-        
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
-        
-        try {
-            auditOutput = new FileOutputStream(auditOutputPath);
-            reportOutput = new FileOutputStream(reportOutputPath);
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        //Sets audit and report outputs
-        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
-        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
-        
-        //Runs main algorithm
-        VotingSystemRunner.main(inputCSV);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
-        
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
-    }
-    
-    @Test
-    void testIrSingleCandidate() {
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
-        
-        //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateAudit.txt".replace('/', FILE_SEP);
-        //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateReport.txt".replace('/', FILE_SEP);
-        
-        //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP);
-        
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
-        
-        try {
-            auditOutput = new FileOutputStream(auditOutputPath);
-            reportOutput = new FileOutputStream(reportOutputPath);
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        //Sets audit and report outputs
-        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
-        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
-        
-        //Runs main algorithm
-        VotingSystemRunner.main(inputCSV);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
-        
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
-    }
-    
-    @Test
-    void testOplTypical() {
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
-        
-        //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalAudit.txt".replace('/', FILE_SEP);
-        //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalReport.txt".replace('/', FILE_SEP);
-        
-        //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP);
-        
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
-        
-        try {
-            auditOutput = new FileOutputStream(auditOutputPath);
-            reportOutput = new FileOutputStream(reportOutputPath);
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        //Sets audit and report outputs
-        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
-        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
-        
-        //Runs main algorithm
-        VotingSystemRunner.main(inputCSV);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
-        
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
-    }
-    
-    @Test
-    void testOplMoreSeatsThanCandidates() {
-        //Store the original STDOUT and redirect it to go to a null device print stream
-        final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
-        
-        //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesAudit.txt".replace('/', FILE_SEP);
-        //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesReport.txt".replace('/', FILE_SEP);
-        
-        //Path to CSV file
-        String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP);
-        
-        FileOutputStream auditOutput = null;
-        FileOutputStream reportOutput = null;
-        
-        try {
-            auditOutput = new FileOutputStream(auditOutputPath);
-            reportOutput = new FileOutputStream(reportOutputPath);
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        //Sets audit and report outputs
-        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
-        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
-        
-        //Runs main algorithm
-        VotingSystemRunner.main(inputCSV);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        
-        // Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
-        
-        // Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
-    }
-    
-    //Tests that a 100,000-line IR election file in the format generated by generateIrvTimeTestFileStairs runs under 8 minutes
+    //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileStairs runs under 8 minutes
     @Test
     void testIrStairsTime() {
+        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
+        if(!RUN_TIME_TESTS) {
+            Assertions.fail("Timed tests are disabled");
+        }
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
@@ -751,12 +773,15 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = "Project1/testing/test-resources/votingSystemRunnerTest/irStairsTest.txt".replace('/', File.separatorChar);
+        final File testFile = new File(
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
-            generateIrvTimeTestFileStairs(testFileLocation, 100000);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
+            generateIrTimeTestFileStairs(testFileLocation, 100000);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -764,7 +789,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -776,9 +801,15 @@ final class VotingSystemRunnerTest {
             if(runtime > timeLimitSeconds) {
                 Assertions.fail(String.format("testIrStairs took %.2f seconds but a maximum of %d seconds was expected", runtime, timeLimitSeconds));
             }
+            else {
+                originalSystemOut.printf("IR stairs runtime: %f\n", runtime);
+            }
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create the IR stairs test file");
+        }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
         }
         finally {
             //Redirect STDOUT back to STDOUT
@@ -786,13 +817,24 @@ final class VotingSystemRunnerTest {
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests
+             */
+            System.gc();
         }
     }
     
-    //Tests that a 100,000-line IR election file in the format generated by generateIrvTimeTestFileDoubleStairs runs under 8 minutes
+    //Tests that a 100,000-line IR election file in the format generated by generateIrTimeTestFileDoubleStairs runs under 8 minutes
     @Test
     void testIrDoubleStairsTime() {
+        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
+        if(!RUN_TIME_TESTS) {
+            Assertions.fail("Timed tests are disabled");
+        }
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
@@ -801,12 +843,15 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = "Project1/testing/test-resources/votingSystemRunnerTest/irDoubleStairsTest.txt".replace('/', File.separatorChar);
+        final File testFile = new File(
+            "Project1/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
-            generateIrvTimeTestFileDoubleStairs(testFileLocation, 100000);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
+            generateIrTimeTestFileDoubleStairs(testFileLocation, 100000);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -814,7 +859,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -830,9 +875,15 @@ final class VotingSystemRunnerTest {
                     timeLimitSeconds)
                 );
             }
+            else {
+                originalSystemOut.printf("IR double stairs runtime: %f\n", runtime);
+            }
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create the IR double stairs test file");
+        }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
         }
         finally {
             //Redirect STDOUT back to STDOUT
@@ -840,58 +891,40 @@ final class VotingSystemRunnerTest {
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests
+             */
+            System.gc();
         }
     }
     
     /**
-     * Returns an iterator that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
-     * maxSize
+     * Returns a {@link Collection} that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
+     * the number of ballots
      *
-     * @return An iterator that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
-     * maxSize
+     * @return An {@link Collection} that starts at 1, is continually multiplied by 4, and ends at the number that is just greater than or equal to
+     * the number of ballots
      */
-    private static Iterator<Arguments> provideOplTimeGroupSizes() {
-        final int maxSize = 100000;
+    private static Deque<Arguments> provideOplTimeGroupSizes() {
+        //The number of ballots being tested
+        final int ballotsSize = 100000;
         
-        return new Iterator<>() {
-            /**
-             * The current size to return going from 1, 4, 16, ..., until the number just greater that or equal to maxSize
-             */
-            private int currentCandidatePartySize = 1;
-            
-            /**
-             * True if the next number is the last number, which is the case for the number that is just greater than or equal to maxSize
-             */
-            private boolean oneMoreLeft = false;
-            
-            /**
-             * Returns true if there is another size to provide
-             *
-             * @return True if there is another size to provide
-             */
-            @Override
-            public boolean hasNext() {
-                return currentCandidatePartySize <= maxSize || oneMoreLeft;
-            }
-            
-            /**
-             * Returns the next size as an {@link Arguments}
-             *
-             * @return The next size as an {@link Arguments}
-             * @throws NoSuchElementException Thrown after the sizes have been gone through
-             */
-            @Override
-            public Arguments next() throws NoSuchElementException {
-                if(hasNext()) {
-                    int returnValue = currentCandidatePartySize;
-                    currentCandidatePartySize <<= 2;
-                    oneMoreLeft = returnValue < maxSize && currentCandidatePartySize >= maxSize;
-                    return Arguments.of(returnValue);
-                }
-                throw new NoSuchElementException("The size limit has already been reached");
-            }
-        };
+        //The list of arguments from 4^0, 4^1, ..., 4^n where 4^n >= ballotsSize and 4^(n - 1) < ballotsSize
+        final Deque<Arguments> result = new ArrayDeque<>();
+        
+        //Adds the above-specified numbers from 4^0 to 4^(n-1) to result
+        int currentCandidatePartySize = 1;
+        for(; currentCandidatePartySize < ballotsSize; currentCandidatePartySize <<= 2) {
+            result.add(Arguments.of(currentCandidatePartySize));
+        }
+        
+        //Adds 4^n to the result
+        result.add(Arguments.of(currentCandidatePartySize));
+        
+        return result;
     }
     
     /*
@@ -901,6 +934,11 @@ final class VotingSystemRunnerTest {
     @ParameterizedTest(name = "{0} candidates per party")
     @MethodSource("org.team19.VotingSystemRunnerTest#provideOplTimeGroupSizes")
     void testOplTime(final int currentCandidatePartySize) {
+        //If RUN_TIME_TESTS is false, then timed tests should not run and instead fail
+        if(!RUN_TIME_TESTS) {
+            Assertions.fail("Timed tests are disabled");
+        }
+        
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
@@ -909,15 +947,18 @@ final class VotingSystemRunnerTest {
         final int timeLimitSeconds = 8 * 60;
         
         //The file upon which this test will be run
-        final String testFilePath = String.format(
-            "Project1/testing/test-resources/votingSystemRunnerTest/oplTest%d.txt",
-            currentCandidatePartySize
-        ).replace('/', File.separatorChar);
+        final File testFile = new File(
+            String.format(
+                "Project1/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
+                currentCandidatePartySize
+            ).replace('/', File.separatorChar)
+        );
         
         try {
             //Generate the test file
-            final FileOutputStream testFileLocation = new FileOutputStream(testFilePath);
+            final FileOutputStream testFileLocation = new FileOutputStream(testFile);
             generateOplTimeTestFile(testFileLocation, 100000, currentCandidatePartySize);
+            testFileLocation.close();
             
             //Setting the output sources to the null output stream as the generated files are massive
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
@@ -925,7 +966,7 @@ final class VotingSystemRunnerTest {
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFilePath);
+            VotingSystemRunner.main(testFile.toString());
             final long finalTime = System.nanoTime();
             
             //Setting the output sources back to null so they are not changed for other tests
@@ -942,9 +983,15 @@ final class VotingSystemRunnerTest {
                     timeLimitSeconds)
                 );
             }
+            else {
+                originalSystemOut.printf("OPL runtime w/ %d candidates/party: %f\n", currentCandidatePartySize, runtime);
+            }
         }
         catch(FileNotFoundException e) {
             Assertions.fail(String.format("Unable to create the OPL test file for a size of %d", currentCandidatePartySize));
+        }
+        catch(IOException e) {
+            Assertions.fail("Unable to close the test file");
         }
         finally {
             //Redirect STDOUT back to STDOUT
@@ -952,7 +999,13 @@ final class VotingSystemRunnerTest {
             
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
-            new File(testFilePath).delete();
+            testFile.delete();
+            
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the runs of the multiple
+             * OPL tests, which would otherwise result in grotesquely large swapfile usage
+             */
+            System.gc();
         }
     }
 }

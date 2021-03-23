@@ -3,7 +3,7 @@
  * InstantRunoffSystemTest.java
  *
  * Author:
- * Nikunj Chawla, Jack Fornaro, Aaron Kandikatla
+ * Nikunj Chawla, Jack Fornaro, and Aaron Kandikatla
  *
  * Purpose:
  * Tests the InstantRunoffSystem class
@@ -30,6 +30,10 @@ import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+//TODO: Add the final keyword where applicable (see CheckStyle)
+//TODO: Add tests for the case of ties by setting the rand field to a Random with a specific seed so tests don't change
+//TODO: Modify generated filenames to use the same name format as in Project1/testing/test-resources/votingStreamParserTest
 
 final class InstantRunoffSystemTest {
     
@@ -283,20 +287,20 @@ final class InstantRunoffSystemTest {
     
     @Test
     void testGetLowestHighestCandidatesSingleHighestSingleLowest() {
-        // Initializes InstantRunoffSystem with null OutputStreams
+        //Initializes InstantRunoffSystem with null OutputStreams
         final InstantRunoffSystem ir = createIrNullStreams();
         
         ir.numCandidates = 4;
         ir.numBallots = 6;
         ir.candidates = new Candidate[4];
-        
-        // Creates Candidates
+    
+        //Creates Candidates
         ir.candidates[0] = new Candidate("Rosen", "D");
         ir.candidates[1] = new Candidate("Kleinberg", "R");
         ir.candidates[2] = new Candidate("Chou", "I");
         ir.candidates[3] = new Candidate("Royce", "L");
-        
-        // Creates ballots
+    
+        //Creates ballots
         final Ballot ballot1 = new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]});
         final Ballot ballot2 = new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]});
         final Ballot ballot3 = new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]});
@@ -310,8 +314,8 @@ final class InstantRunoffSystemTest {
         ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballot4, ballot5)));
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
-        
-        // Tests that only 1 lowest and 1 highest are returned
+    
+        //Tests that only 1 lowest and 1 highest are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
     
@@ -348,8 +352,8 @@ final class InstantRunoffSystemTest {
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballot6)));
         ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>());
         ir.candidateBallotsMap.put(ir.candidates[5], new ArrayDeque<>());
-        
-        // Tests the multiple lowest candidates are returned
+    
+        //Tests the multiple lowest candidates are returned
         assertEquals("Pair{Pair{0, [Kleinberg (R), Loser (L), Bobster (I)]}, Pair{3, Rosen (D)}}", ir.getLowestHighestCandidates().toString());
     }
     
@@ -416,25 +420,25 @@ final class InstantRunoffSystemTest {
             new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
-        
+    
         for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
-        
+    
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        
+    
         //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
-        
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+    
         //Eliminates Kleinberg - 0 ballots
         ir.eliminateLowest(ir.candidates[1]);
-        
+    
         //Test to check that at eliminated candidate is removed from the map
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[1]));
-        
+    
         //Test to check that the other candidates' ballots are unchanged because
         //the eliminated candidate had no ballots to redistribute
         assertEquals(3, ir.candidateBallotsMap.get(ir.candidates[0]).size());
@@ -451,29 +455,33 @@ final class InstantRunoffSystemTest {
         //the eliminated candidate only had 1 ballot had not next candidate indicated
         assertEquals(3, ir.candidateBallotsMap.get(ir.candidates[0]).size());
         assertEquals(2, ir.candidateBallotsMap.get(ir.candidates[2]).size());
-        
+    
         //Eliminates Chou - 2 ballots
         ir.eliminateLowest(ir.candidates[2]);
-        
+    
         //Test to check that at eliminated candidate is removed from the map
         assertFalse(ir.candidateBallotsMap.containsKey(ir.candidates[2]));
-        
+    
         //Test to check that only Chou's ballot 4 is distributed to Rosen as indicated by the ballot
         assertTrue(ir.candidateBallotsMap.get(ir.candidates[0]).contains(ballots[3]));
+    
+        //TODO: What is this comment for? Fix placement if applicable, or add the corresponding test?
         //Chou's ballot 5 should not be distributed to Royce they have already been eliminated
     }
     
     @Test
     void testEliminateLowestOutput() {
-        //Initializes InstantRunoffSystem with audit OutputStream
+        //TODO: Change 1 at the end of the filename to something more appropriate such as Actual
         final String auditOutput =
             "Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutputAudit1.txt".replace('/', FILE_SEP);
-        
+    
+        //Initializes InstantRunoffSystem with audit OutputStream
         InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), OutputStream.nullOutputStream());
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
+            //TODO: Replace this catch with the appropriate call to Assertions.fail
             e.printStackTrace();
         }
         
@@ -496,35 +504,37 @@ final class InstantRunoffSystemTest {
             new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
-        
+    
         for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
-        
+    
         ir.candidateBallotsMap = new LinkedHashMap<>();
         //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
-        
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+    
         //Eliminates Kleinberg - 0 ballots
         ir.eliminateLowest(ir.candidates[1]);
-        
+    
         //Eliminates Royce - 1 ballot
         ir.eliminateLowest(ir.candidates[3]);
-        
+    
         //Eliminates Chou - 2 ballots
         ir.eliminateLowest(ir.candidates[2]);
-        
+    
         ir.auditWriter.close();
-        
+    
         //Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/testEliminateLowestOutput.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
-        
+    
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //TODO: Also, you already replace / with FILE_SEP earlier?
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
     }
@@ -534,7 +544,8 @@ final class InstantRunoffSystemTest {
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+    
+        //TODO: Change 1 at the end of the filename to something more appropriate such as Actual
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityAudit1.txt".replace('/', FILE_SEP);
         final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityReport1.txt".replace('/', FILE_SEP);
         
@@ -543,6 +554,7 @@ final class InstantRunoffSystemTest {
             ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
+            //TODO: Replace this catch with the appropriate call to Assertions.fail
             e.printStackTrace();
         }
         
@@ -569,39 +581,41 @@ final class InstantRunoffSystemTest {
             new Ballot(8, new Candidate[] {ir.candidates[1], ir.candidates[0]}),
             new Ballot(9, new Candidate[] {ir.candidates[1]})
         };
-        
+    
         for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
-        
+    
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        
+    
         //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2], ballots[8])));  // 4
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>(List.of(ballots[7])));                                      // 1
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));                          // 2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5], ballots[6])));                          // 2
-        
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2], ballots[8])));  //4
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>(List.of(ballots[7])));                                      //1
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));                          //2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5], ballots[6])));                          //2
+    
         ir.runElection();
-        
+    
         ir.auditWriter.close();
-        // Comparing expected output vs actual output of audit
+        //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityAudit.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
-        
-        // Comparing expected output vs actual output of report
+    
+        //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionMajorityReport.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
         );
-        
+    
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //TODO: Also, you already replace / with FILE_SEP earlier?
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
         new File(reportOutput.replace('/', FILE_SEP)).delete();
-        
+    
         //Redirect STDOUT back to STDOUT
         System.setOut(originalSystemOut);
     }
@@ -611,7 +625,8 @@ final class InstantRunoffSystemTest {
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
+    
+        //TODO: Change 1 at the end of the filename to something more appropriate such as Actual
         final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit1.txt".replace('/', FILE_SEP);
         final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport1.txt".replace('/', FILE_SEP);
         
@@ -620,6 +635,7 @@ final class InstantRunoffSystemTest {
             ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
+            //TODO: Replace this catch with the appropriate call to Assertions.fail
             e.printStackTrace();
         }
         
@@ -643,39 +659,41 @@ final class InstantRunoffSystemTest {
             new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
             new Ballot(6, new Candidate[] {ir.candidates[3]}),
         };
-        
+    
         for(Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
-        
+    
         ir.candidateBallotsMap = new LinkedHashMap<>();
-        
+    
         //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  // 3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             // 0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              // 2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          // 1
-        
+        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
+        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+    
         ir.runElection();
-        
+    
         ir.auditWriter.close();
-        // Comparing expected output vs actual output of audit
+        //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityAudit.txt".replace('/', FILE_SEP)),
             new FileInputStream(auditOutput))
         );
-        
-        // Comparing expected output vs actual output of report
+    
+        //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/runElectionPopularityReport.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
         );
-        
+    
+        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
+        //TODO: Also, you already replace / with FILE_SEP earlier?
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput.replace('/', FILE_SEP)).delete();
         //noinspection ResultOfMethodCallIgnored
         new File(reportOutput.replace('/', FILE_SEP)).delete();
-        
+    
         //Redirect STDOUT back to STDOUT
         System.setOut(originalSystemOut);
     }

@@ -29,6 +29,11 @@ public class Candidate {
     protected final String party;
     
     /**
+     * The result of calling {@link #toString()} on this {@link Candidate}
+     */
+    protected final String candidateStr;
+    
+    /**
      * Initializes a {@link Candidate}
      *
      * @param name  The name of the election candidate
@@ -38,6 +43,7 @@ public class Candidate {
     public Candidate(final String name, final String party) {
         this.name = Objects.requireNonNull(name);
         this.party = Objects.requireNonNull(party);
+        candidateStr = String.format("%s (%s)", name, party);
     }
     
     /**
@@ -66,7 +72,7 @@ public class Candidate {
      */
     @Override
     public String toString() {
-        return String.format("%s (%s)", name, party);
+        return candidateStr;
     }
     
     /**
