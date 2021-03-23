@@ -673,7 +673,7 @@ public class InstantRunoffSystem extends VotingSystem {
     @Override
     public void runElection() {
         //Write the first choice ballot counts for each candidate
-        String strToWriteToAll = "First-choice ballots:";
+        String strToWriteToAll = "First-choice ballots (excluding candidates with 0 ballots):";
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
@@ -740,13 +740,24 @@ public class InstantRunoffSystem extends VotingSystem {
                 else {
                     final int winnerBallotCount = candidateBallotsMap.get(winner).size();
                     
-                    strToWriteToAll = String.format(
-                        "%s has received %d/%d ballots, giving them the greatest popularity with %s%% of the ballots",
-                        winner,
-                        winnerBallotCount,
-                        numBallots,
-                        String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
-                    );
+                    if(winnerBallotCount > halfNumBallots) {
+                        strToWriteToAll = String.format(
+                            "%s has received %d/%d ballots, giving them the majority with %s%% of the ballots",
+                            winner,
+                            winnerBallotCount,
+                            numBallots,
+                            String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
+                        );
+                    }
+                    else {
+                        strToWriteToAll = String.format(
+                            "%s has received %d/%d ballots, giving them the greater popularity with %s%% of the ballots",
+                            winner,
+                            winnerBallotCount,
+                            numBallots,
+                            String.format("%.2f", 100.0 * winnerBallotCount / numBallots)
+                        );
+                    }
                     auditWriter.println(strToWriteToAll);
                     reportWriter.println(strToWriteToAll);
                     System.out.println(strToWriteToAll);
