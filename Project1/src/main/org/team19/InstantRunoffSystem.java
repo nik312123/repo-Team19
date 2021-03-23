@@ -76,11 +76,6 @@ public class InstantRunoffSystem extends VotingSystem {
     protected PrintWriter reportWriter;
     
     /**
-     * The {@link TableFormatter} used to produce tables as output
-     */
-    protected TableFormatter tableFormatter;
-    
-    /**
      * The pattern associated with a valid candidate of the form "[candidate1] ([party1])", replacing the corresponding bracketed items with the
      * actual candidate's name and party
      * <p></p>
@@ -216,8 +211,6 @@ public class InstantRunoffSystem extends VotingSystem {
         
         auditWriter = new PrintWriter(auditOutput);
         reportWriter = new PrintWriter(reportOutput);
-        
-        tableFormatter = new TableFormatter('+', '-', '|');
     }
     
     /**
@@ -666,20 +659,16 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Returns a table formatted as a {@link String} with all non-eliminated candidates and their number of ballots
+     * Returns a {@link String} of all the non-eliminated candidates and their number of ballots
      *
-     * @return a table formatted as a {@link String} with all non-eliminated candidates and their number of ballots
+     * @return A {@link String} of all the non-eliminated candidates and their number of ballots
      */
     private String getCurrentChoiceBallots() {
-        return tableFormatter.formatAsTable(
-            Arrays.asList("Candidate", "Ballots"),
-            Arrays.asList(
-                candidateBallotsMap.keySet(),
-                //Get the ballot counts for each of the candidates
-                candidateBallotsMap.values().stream().map(Deque::size).collect(Collectors.toList())
-            ),
-            Arrays.asList(TableFormatter.Alignment.LEFT, TableFormatter.Alignment.RIGHT)
-        ) + "\n";
+        final StringBuilder candidateBallotsBuilder = new StringBuilder();
+        for(final Candidate candidate : candidateBallotsMap.keySet()) {
+            candidateBallotsBuilder.append(String.format("%s: %d ballots\n", candidate, candidateBallotsMap.get(candidate).size()));
+        }
+        return candidateBallotsBuilder.toString();
     }
     
     /**
