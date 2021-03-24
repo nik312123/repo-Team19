@@ -807,6 +807,7 @@ final class VotingSystemRunnerTest {
             }
             //Throw the underlying exception from the generation method if possible
             catch(InvocationTargetException e) {
+                testFileLocation.close();
                 if(e.getCause() == null) {
                     throw e;
                 }
