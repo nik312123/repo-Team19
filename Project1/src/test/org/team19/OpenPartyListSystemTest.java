@@ -1646,8 +1646,7 @@ final class OpenPartyListSystemTest {
         final Candidate borgR = new Candidate("Borg", "R");
         final Candidate smithI = new Candidate("Smith", "I");
         final Candidate janeI = new Candidate("Jane", "I");
-    
-    
+        
         //Creates data for each party
         partyD.numCandidates = 3;
         partyD.numBallots = 3;
@@ -1656,8 +1655,7 @@ final class OpenPartyListSystemTest {
         partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 1));
         partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 1));
         partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(bidenD, 1));
-    
-    
+        
         partyR.numCandidates = 3;
         partyR.numBallots = 3;
         
@@ -1672,8 +1670,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 3));
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(janeI, 0));
-    
-    
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
@@ -1697,8 +1694,7 @@ final class OpenPartyListSystemTest {
         opl.partyToCandidateCounts.get("D").put(fosterD, 1);
         opl.partyToCandidateCounts.get("D").put(pikeD, 1);
         opl.partyToCandidateCounts.get("D").put(bidenD, 1);
-    
-    
+        
         opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
         opl.partyToCandidateCounts.get("R").put(deutschR, 1);
         opl.partyToCandidateCounts.get("R").put(jonesR, 1);
