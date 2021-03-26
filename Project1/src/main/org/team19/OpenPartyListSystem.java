@@ -224,9 +224,9 @@ public class OpenPartyListSystem extends VotingSystem {
         //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
         final String[] candidatesStrArr = candidatesLine.split("]\\s*,", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStrArr.length];
-        for(int i = 0; i < candidatesArr.length; ++i) {
+        for(int i = 0; i < candidatesArr.length; i++) {
             final String candidateStr = candidatesStrArr[i].strip();
-            
+    
             //Thrown an exception if the starting bracket is missing
             if(candidateStr.isEmpty() || !candidateStr.startsWith("[")) {
                 VotingStreamParser.throwParseException(String.format(
@@ -359,7 +359,7 @@ public class OpenPartyListSystem extends VotingSystem {
         int numCommas = 0;
         
         //Iterate through the characters of the ballot line
-        for(int i = 0; i < ballotLine.length(); ++i) {
+        for(int i = 0; i < ballotLine.length(); i++) {
             final char curChar = ballotLine.charAt(i);
             switch(curChar) {
                 case ',':

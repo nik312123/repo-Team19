@@ -601,7 +601,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("C%d (P%d),", i, i);
         }
         outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
@@ -618,17 +618,17 @@ final class VotingSystemRunnerTest {
         int numAdded = 0;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking
-        for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
+        for(int i = numAdded + 1; i <= candidateAndBallotSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
+            groupNum++;
         }
         outputWriter.close();
     }
@@ -652,7 +652,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("C%d (P%d),", i, i);
         }
         outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
@@ -673,17 +673,17 @@ final class VotingSystemRunnerTest {
         int numAdded = 0;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the left side
-        for(int i = numAdded + 1; i <= leftSize; ++i) {
+        for(int i = numAdded + 1; i <= leftSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
+            groupNum++;
         }
         
         //Fills the "right" side of the ballots (n/2 + 1 to n)
@@ -692,17 +692,17 @@ final class VotingSystemRunnerTest {
         final int leftGroupNum = groupNum - 1;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the right side
-        for(int i = numAdded + 1; i <= rightSize; ++i) {
+        for(int i = numAdded + 1; i <= rightSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
-            ++groupNum;
+            groupNum++;
         }
         outputWriter.close();
     }
@@ -735,7 +735,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("[C%d, P%d],", i, (int) Math.ceil((double) i / candidatesPerParty));
         }
         outputWriter.printf("[C%d, P%d]\n", candidateAndBallotSize, (int) Math.ceil((double) candidateAndBallotSize / candidatesPerParty));
@@ -753,7 +753,7 @@ final class VotingSystemRunnerTest {
         final Random rand = new Random();
         
         //Write ballots with random candidates selected
-        for(int i = 1; i <= candidateAndBallotSize; ++i) {
+        for(int i = 1; i <= candidateAndBallotSize; i++) {
             outputWriter.println(generateOplTestBallotLine(rand.nextInt(candidateAndBallotSize) + 1, commaString));
         }
         outputWriter.close();

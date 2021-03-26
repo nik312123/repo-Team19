@@ -705,19 +705,20 @@ final class InstantRunoffSystemTest {
         //Store the original STDOUT and redirect it to go to a null device print stream
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
-        
-        final String auditOutput =
-            "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutput =
-            "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_actual.txt".replace('/', FILE_SEP);
+    
+        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_actual.txt"
+            .replace('/', FILE_SEP);
     
         InstantRunoffSystem ir = null;
         try {
             ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create run_election_two_candidate_majority_audit_actual.txt or run_election_two_candidate_majority_report_actual.txt");
+            Assertions.fail(
+                "Unable to create run_election_two_candidate_majority_audit_actual.txt or run_election_two_candidate_majority_report_actual.txt"
+            );
         }
     
         ir.numCandidates = 4;
@@ -754,16 +755,20 @@ final class InstantRunoffSystemTest {
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
     
         ir.runElection();
-
+    
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_expected.txt".replace('/', FILE_SEP)),
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_expected.txt"
+                .replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput))
         );
     
         //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_expected.txt".replace('/', FILE_SEP)),
+            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_expected.txt"
+                .replace('/', FILE_SEP)
+            ),
             new FileInputStream(reportOutput))
         );
         
@@ -775,5 +780,4 @@ final class InstantRunoffSystemTest {
         //Redirect STDOUT back to STDOUT
         System.setOut(originalSystemOut);
     }
-    
 }
