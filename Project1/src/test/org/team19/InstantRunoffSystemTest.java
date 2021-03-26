@@ -767,13 +767,11 @@ final class InstantRunoffSystemTest {
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_expected.txt".replace('/', FILE_SEP)),
             new FileInputStream(reportOutput))
         );
-    
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
-        //TODO: Also, you already replace / with FILE_SEP earlier?
+        
         //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput.replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
         //noinspection ResultOfMethodCallIgnored
-        new File(reportOutput.replace('/', FILE_SEP)).delete();
+        new File(reportOutput).delete();
     
         //Redirect STDOUT back to STDOUT
         System.setOut(originalSystemOut);
