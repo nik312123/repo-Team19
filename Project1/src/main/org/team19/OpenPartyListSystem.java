@@ -688,7 +688,7 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param <T>        The type of elements the provided {@link List} contains
      * @return The index after the next group of equivalent {@link List} elements
      */
-    protected static <T> int indexAfterEquivalentGroup(final List<T> list, int idx, final Comparator<T> comparator) {
+    private static <T> int indexAfterEquivalentGroup(final List<T> list, int idx, final Comparator<T> comparator) {
         final int len = list.size();
         
         //If the index is beyond the last index of the list, then return the length, which is the last possible exclusive "index"
