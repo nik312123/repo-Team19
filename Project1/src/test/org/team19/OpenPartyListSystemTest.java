@@ -286,8 +286,8 @@ final class OpenPartyListSystemTest {
         testPartyInformation.numBallots = 10;
         
         /*
-        //Tests the case where a party has been allocated 0 seats.
-        //No ballots taken out from initial allocation
+         Tests the case where a party has been allocated 0 seats.
+         No ballots taken out from initial allocation
          */
         assertEquals("10", opl.getRemainingBallots(testPartyInformation));
         
