@@ -741,7 +741,7 @@ final class InstantRunoffSystemTest {
             new Ballot(6, new Candidate[] {ir.candidates[3], ir.candidates[0]}),
         };
     
-        for(Ballot ballot : ballots) {
+        for(final Ballot ballot : ballots) {
             ballot.getNextCandidate();
         }
     
@@ -754,8 +754,7 @@ final class InstantRunoffSystemTest {
         ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
     
         ir.runElection();
-    
-        ir.auditWriter.close();
+
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_expected.txt".replace('/', FILE_SEP)),
