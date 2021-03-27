@@ -241,10 +241,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt"
@@ -306,10 +306,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
@@ -371,8 +371,8 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt"
+            .replace('/', FILE_SEP);
         final String reportOutputPath =
             "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP);
         
@@ -436,10 +436,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
