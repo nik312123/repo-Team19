@@ -950,9 +950,12 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param quota The total number of votes/candidates to calculate the initial seat allocations per party
      */
     private void printQuotaInformation(final Fraction quota) {
-        final String ballotsPerSeat = quota.getWholePart() + " ballots per seat";
-        auditWriter.printf("Quota: floor(%s) = %s\n\n",
-            quota.toString(),
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
+        final String ballotsPerSeat = stringQuota + " ballots per seat";
+        
+        auditWriter.printf("Quota: %d / %d = %s\n\n",
+            numBallots,
+            numSeats,
             ballotsPerSeat
         );
         reportWriter.printf("Quota: %s\n\n",
