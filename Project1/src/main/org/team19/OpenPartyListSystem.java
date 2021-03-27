@@ -226,7 +226,7 @@ public class OpenPartyListSystem extends VotingSystem {
         final Candidate[] candidatesArr = new Candidate[candidatesStrArr.length];
         for(int i = 0; i < candidatesArr.length; i++) {
             final String candidateStr = candidatesStrArr[i].strip();
-    
+            
             //Thrown an exception if the starting bracket is missing
             if(candidateStr.isEmpty() || !candidateStr.startsWith("[")) {
                 VotingStreamParser.throwParseException(String.format(

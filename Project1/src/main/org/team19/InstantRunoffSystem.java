@@ -406,14 +406,14 @@ public class InstantRunoffSystem extends VotingSystem {
         //Iterate through the characters of the ballot line
         for(int i = 0; i < ballotLine.length(); i++) {
             final char curChar = ballotLine.charAt(i);
-        
+            
             if(curChar == ',') {
                 numCommas++;
             }
             else if(Character.isDigit(curChar)) {
                 //Retrieve the index after the full integer rank
                 final int posAfterRank = getIndexAfterPositiveInteger(ballotLine, i);
-            
+                
                 //Retrieve the rank by parsing the integer rank string
                 final int rank = Integer.parseUnsignedInt(ballotLine.substring(i, posAfterRank));
                 
