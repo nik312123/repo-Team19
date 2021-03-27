@@ -35,7 +35,7 @@ Ballot 18 chose Smith (I)
 Ballot 19 chose Smith (I)
 Ballot 20 chose Smith (I)
 Ballot 21 chose Smith (I)
-Quota: floor(3 / 2) = 1 ballots per seat
+Quota: 21 / 14 = (3 / 2) ballots per seat
 
 Grouping by Party:
 Party: D
