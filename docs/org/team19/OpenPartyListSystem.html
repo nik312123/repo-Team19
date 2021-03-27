@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -233,7 +233,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RAND">RAND</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rand">rand</a></span></code></th>
 <td class="colLast">
 <div class="block">Used for randomization in breaking ties</div>
 </td>
@@ -288,7 +288,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -362,51 +362,41 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="Pair.html" title="class in org.team19">Pair</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;T&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextEquivalentOrderedGroup(java.util.List,int,java.util.Comparator)">getNextEquivalentOrderedGroup</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;T&gt;&nbsp;list,
-                             int&nbsp;idx,
-                             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;T&gt;&nbsp;comparator)</code></th>
-<td class="colLast">
-<div class="block">Given a sorted <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a>, an index from which to begin, and a comparator for comparing elements in the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a>,
- returns the next group of equivalent elements as determined by the comparator in addition to the index after the last added element</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumBallots()">getNumBallots</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Precondition: <a href="#importCandidatesHeader(java.lang.String%5B%5D,int)"><code>importCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumCandidates()">getNumCandidates</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Precondition: <a href="#importCandidatesHeader(java.lang.String%5B%5D,int)"><code>importCandidatesHeader(String[], int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumSeats()">getNumSeats</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Precondition: <a href="#importBallotsHeader(java.lang.String%5B%5D,int)"><code>importBallotsHeader(String[], int)</code></a> has been executed successfully</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemainingBallots(org.team19.OpenPartyListSystem.PartyInformation)">getRemainingBallots</a></span>&#8203;(<a href="OpenPartyListSystem.PartyInformation.html" title="class in org.team19">OpenPartyListSystem.PartyInformation</a>&nbsp;partyInformation)</code></th>
 <td class="colLast">
 <div class="block">Returns a string representing the number of ballots a party has</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShortName()">getShortName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the short name for the voting system; that is, the name that appears at the top of an election file</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#importBallotsHeader(java.lang.String%5B%5D,int)">importBallotsHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
                    int&nbsp;line)</code></th>
@@ -414,7 +404,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <div class="block">Parses the lines corresponding to the header for the ballots</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#importCandidatesHeader(java.lang.String%5B%5D,int)">importCandidatesHeader</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;header,
                       int&nbsp;line)</code></th>
@@ -422,21 +412,21 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <div class="block">Parses the lines corresponding to the header for the candidates</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printFinalSeatAllocations()">printFinalSeatAllocations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Prints a table contains all parties and the number of final seats allocated to each to audit file</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printInitialAllocations()">printInitialAllocations</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printInitialAllocationResult(int)">printInitialAllocationResult</a></span>&#8203;(int&nbsp;numSeatsRemaining)</code></th>
 <td class="colLast">
 <div class="block">Prints a table with each party's initial allocation of seats and remaining ballots to the audit output</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#printSummaryTable(java.util.Map)">printSummaryTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;initialSeats)</code></th>
 <td class="colLast">
@@ -445,14 +435,14 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
  screen.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runElection()">runElection</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Runs the election for the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> and determines the winner</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
@@ -483,13 +473,13 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="RAND">
+<a id="rand">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>RAND</h4>
-<pre>protected static final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a> RAND</pre>
+<h4>rand</h4>
+<pre>protected static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a> rand</pre>
 <div class="block">Used for randomization in breaking ties</div>
 </li>
 </ul>
@@ -874,14 +864,18 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </dl>
 </li>
 </ul>
-<a id="printInitialAllocations()">
+<a id="printInitialAllocationResult(int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>printInitialAllocations</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;printInitialAllocations()</pre>
+<h4>printInitialAllocationResult</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;printInitialAllocationResult&#8203;(int&nbsp;numSeatsRemaining)</pre>
 <div class="block">Prints a table with each party's initial allocation of seats and remaining ballots to the audit output</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>numSeatsRemaining</code> - The number of seats remaining after the initial allocation</dd>
+</dl>
 </li>
 </ul>
 <a id="allocateInitialSeats(org.team19.Fraction)">
@@ -898,30 +892,6 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A <a href="Pair.html" title="class in org.team19"><code>Pair</code></a> that contains the number of seats remaining after initial allocation and a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Set</code></a> of <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>String</code></a> representing
  the parties that still have candidates without seats</dd>
-</dl>
-</li>
-</ul>
-<a id="getNextEquivalentOrderedGroup(java.util.List,int,java.util.Comparator)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNextEquivalentOrderedGroup</h4>
-<pre class="methodSignature">protected static&nbsp;&lt;T&gt;&nbsp;<a href="Pair.html" title="class in org.team19">Pair</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;T&gt;&gt;&nbsp;getNextEquivalentOrderedGroup&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;T&gt;&nbsp;list,
-                                                                               int&nbsp;idx,
-                                                                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html?is-external=true" title="class or interface in java.util" class="externalLink">Comparator</a>&lt;T&gt;&nbsp;comparator)</pre>
-<div class="block">Given a sorted <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a>, an index from which to begin, and a comparator for comparing elements in the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a>,
- returns the next group of equivalent elements as determined by the comparator in addition to the index after the last added element</div>
-<dl>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - Type of elements that the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> contains</dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>list</code> - The sorted <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> from which to retrieve the next equivalent ordered group</dd>
-<dd><code>idx</code> - The index from which to begin retrieving the group</dd>
-<dd><code>comparator</code> - The comparator used to compare elements when determining if elements are equivalent and should be added to the group</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>An <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> of equivalent elements in the provided <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>List</code></a> as determined by the provided comparator, starting at
- the provided index</dd>
 </dl>
 </li>
 </ul>
