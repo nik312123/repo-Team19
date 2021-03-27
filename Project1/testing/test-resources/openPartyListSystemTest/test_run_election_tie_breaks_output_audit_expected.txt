@@ -1,4 +1,4 @@
-Quota: 9 / 4 = (9 / 4) ballots per seat
+Quota: 9 / 4 = 9 / 4 ballots per seat
 
 Grouping by Party:
 Party: D
