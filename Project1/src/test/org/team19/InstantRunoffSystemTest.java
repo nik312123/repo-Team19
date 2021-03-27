@@ -527,6 +527,9 @@ final class InstantRunoffSystemTest {
             new FileInputStream(auditOutput))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
     }
@@ -604,6 +607,9 @@ final class InstantRunoffSystemTest {
             ),
             new FileInputStream(reportOutput))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -684,6 +690,9 @@ final class InstantRunoffSystemTest {
             new FileInputStream(reportOutput))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         //noinspection ResultOfMethodCallIgnored
@@ -761,6 +770,9 @@ final class InstantRunoffSystemTest {
             ),
             new FileInputStream(auditOutput))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -840,6 +852,9 @@ final class InstantRunoffSystemTest {
             ),
             new FileInputStream(reportOutput))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();

@@ -229,6 +229,9 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to retrieve the getFile method from VotingSystemRunner");
         }
         finally {
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
             //Remove the created test file after the test is completed to reset to the initial state of files
             //noinspection ResultOfMethodCallIgnored
             new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).delete();
@@ -289,6 +292,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
@@ -355,6 +361,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -419,6 +428,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
@@ -485,6 +497,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -550,6 +565,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
@@ -786,7 +804,7 @@ final class VotingSystemRunnerTest {
             //Create the output stream to which the file will be generated
             final FileOutputStream testFileLocation = new FileOutputStream(testFile);
             
-            //Create the parameters for the
+            //Create the parameters for the file generation method
             final Object[] finalGenerationParameters = new Object[generationParameters.size() + 1];
             finalGenerationParameters[0] = testFileLocation;
             int i = 1;
@@ -847,15 +865,15 @@ final class VotingSystemRunnerTest {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests and to properly allow deletion of the file on Windows
+             */
+            System.gc();
+            
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
             testFile.delete();
-            
-            /*
-             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
-             * with the other timed tests
-             */
-            System.gc();
         }
     }
     

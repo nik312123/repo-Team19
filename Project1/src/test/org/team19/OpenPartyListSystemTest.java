@@ -460,6 +460,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
     }
@@ -632,6 +635,9 @@ final class OpenPartyListSystemTest {
         
         ));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
     }
@@ -720,6 +726,9 @@ final class OpenPartyListSystemTest {
                     .replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -810,6 +819,9 @@ final class OpenPartyListSystemTest {
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1068,6 +1080,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         
@@ -1169,6 +1184,9 @@ final class OpenPartyListSystemTest {
                     .replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1366,6 +1384,9 @@ final class OpenPartyListSystemTest {
             new FileInputStream(auditOutput)
         ));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         
@@ -1466,6 +1487,9 @@ final class OpenPartyListSystemTest {
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(reportOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1580,6 +1604,9 @@ final class OpenPartyListSystemTest {
             new FileInputStream(reportOutput)
         ));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         //noinspection ResultOfMethodCallIgnored
@@ -1682,6 +1709,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)
         ));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
