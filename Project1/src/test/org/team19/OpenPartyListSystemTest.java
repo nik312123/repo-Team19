@@ -286,8 +286,8 @@ final class OpenPartyListSystemTest {
         testPartyInformation.numBallots = 10;
         
         /*
-         Tests the case where a party has been allocated 0 seats.
-         No ballots taken out from initial allocation
+         * Tests the case where a party has been allocated 0 seats.
+         * No ballots taken out from initial allocation
          */
         assertEquals("10", opl.getRemainingBallots(testPartyInformation));
         
@@ -341,7 +341,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         //Creates OPL system
-        final OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
+        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
         
         //Sets OPL data
         opl.numSeats = 3;
@@ -368,10 +368,10 @@ final class OpenPartyListSystemTest {
         
         //Performs the initial allocation of seats
         final Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-
+        
         /*
-        General test case with standard conditions
-        There should be only one seat remaining after initial allocation
+         * General test case with standard conditions
+         * There should be only one seat remaining after initial allocation
          */
         assertEquals(1, returnValue.getKey());
         
@@ -416,13 +416,14 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt".replace('/',
-                        FILE_SEP)), OutputStream.nullOutputStream());
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_initial_seats_typical_audit_actual.txt");
@@ -457,13 +458,10 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt".replace('/', FILE_SEP)),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt".replace('/', FILE_SEP))
-        ));
+            new FileInputStream(auditOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt".replace('/', FILE_SEP))
-            .delete();
+        new File(auditOutput).delete();
     }
     
     @Test
@@ -504,7 +502,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         //Creates OPL system
-        final OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
+        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
         
         opl.numSeats = 4;
         opl.numBallots = 100;
@@ -532,15 +530,15 @@ final class OpenPartyListSystemTest {
         final Pair<Integer, Set<String>> returnValue = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
         /*
-        Test to ensure partyI only receives 1 seat b/c it only has one candidate
-        despite receiving all the votes
+         * Test to ensure partyI only receives 1 seat b/c it only has one candidate
+         * despite receiving all the votes
          */
         assertEquals(1, partyI.numSeats);
-
+        
         
         /*
-        General test case with standard conditions
-        There should be only three seat remaining after initial allocation
+         * General test case with standard conditions
+         * There should be only three seat remaining after initial allocation
          */
         assertEquals(3, returnValue.getKey());
         
@@ -585,15 +583,15 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
+                .replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
-                        .replace('/', FILE_SEP)),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt");
@@ -628,17 +626,13 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
-                    .replace('/', FILE_SEP)
-            ),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
-                    .replace('/', FILE_SEP))
+                    .replace('/', FILE_SEP)),
+            new FileInputStream(auditOutput)
+        
         ));
         
         //noinspection ResultOfMethodCallIgnored
-        new File(
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
-                .replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
     }
     
     @Test
@@ -678,16 +672,15 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 5));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
+                .replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    ("Project1/testing/test-resources/openPartyListSystemTest"
-                        + "/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt")
-                        .replace('/', FILE_SEP)),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt");
@@ -725,16 +718,10 @@ final class OpenPartyListSystemTest {
                     + "/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt")
                     .replace('/', FILE_SEP)
             ),
-            new FileInputStream(
-                ("Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual"
-                    + ".txt")
-                    .replace('/', FILE_SEP))
-        ));
+            new FileInputStream(auditOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File(
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
-                .replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
     }
     
     @Test
@@ -774,15 +761,14 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/',
-                        FILE_SEP)),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_remaining_seats_typical_audit_actual.txt");
@@ -822,14 +808,10 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt".replace('/', FILE_SEP)),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/',
-                    FILE_SEP))
-        ));
+            new FileInputStream(auditOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP))
-            .delete();
+        new File(auditOutput).delete();
     }
     
     @Test
@@ -870,7 +852,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         //Creates OPL system
-        final OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
+        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
         
         opl.numSeats = 5;
         opl.numBallots = 100;
@@ -915,7 +897,7 @@ final class OpenPartyListSystemTest {
     void testAllocateRemainingSeatsMoreSeatsThanCandidates() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
@@ -952,7 +934,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
-        final OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
+        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
         
         opl.numSeats = 10;
         opl.numBallots = 9;
@@ -997,7 +979,7 @@ final class OpenPartyListSystemTest {
     void allocateRemainingSeatsMoreSeatsThanCandidatesOutput() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
@@ -1034,16 +1016,14 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
+                .replace('/', FILE_SEP);
+        
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    ("Project1/testing/test-resources/openPartyListSystemTest"
-                        + "/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt")
-                        .replace('/', FILE_SEP)
-                ),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt");
@@ -1085,14 +1065,10 @@ final class OpenPartyListSystemTest {
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP)
             ),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
-                    .replace('/', FILE_SEP))
-        ));
+            new FileInputStream(auditOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
-            .replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
         
         //Sets System.out back to original
         System.setOut(originalSystemOut);
@@ -1102,7 +1078,7 @@ final class OpenPartyListSystemTest {
     void testDistributeSeatsToCandidatesTypical() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
@@ -1142,16 +1118,14 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/',
-                        FILE_SEP)
-                ),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create distribute_seats_to_candidates_typical_audit_actual.txt");
@@ -1191,18 +1165,11 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
-                    .replace('/', FILE_SEP)
-            ),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt"
-                    .replace('/', FILE_SEP)
-            )
-        ));
+                    .replace('/', FILE_SEP)),
+            new FileInputStream(auditOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File(
-            "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP))
-            .delete();
+        new File(auditOutput).delete();
         
         //Sets System.out back to original
         System.setOut(originalSystemOut);
@@ -1213,7 +1180,7 @@ final class OpenPartyListSystemTest {
     void testDistributeSeatsToCandidatesTieBreaks() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
@@ -1254,7 +1221,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         //Creates OPL system
-        final OpenPartyListSystem opl = new OpenPartyListSystem(OutputStream.nullOutputStream(), OutputStream.nullOutputStream());
+        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
         
         opl.numSeats = 3;
         opl.numBallots = 8;
@@ -1299,7 +1266,7 @@ final class OpenPartyListSystemTest {
     void testPrintSummaryTable() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         //Creates parties
         final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
@@ -1339,15 +1306,14 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
+        
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
             opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP)
-                ),
-                OutputStream.nullOutputStream()
-            );
+                new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create test_print_summary_table_actual.txt");
@@ -1394,11 +1360,11 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt".replace('/', FILE_SEP)),
-            new FileInputStream("Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP))
+            new FileInputStream(auditOutput)
         ));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
         
         //Sets System.out to original
         System.setOut(originalSystemOut);
@@ -1408,19 +1374,17 @@ final class OpenPartyListSystemTest {
     void testRunElectionTypical() {
         //Redirects System.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        final String auditOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
+        final String reportOutput =
+            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP)
-                ),
-                new FileOutputStream(
-                    "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP)
-                )
-            );
+            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create run_election_typical_audit_actual.txt or run_election_typical_report_actual.txt");
@@ -1490,22 +1454,18 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt".replace('/', FILE_SEP)),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP))
-        ));
+            new FileInputStream(auditOutput)));
         
         //Comparing expected output vs actual output of report file
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt".replace('/', FILE_SEP)),
-            new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP))
-        ));
+            new FileInputStream(reportOutput)));
         
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP)).delete();
+        new File(auditOutput).delete();
         //noinspection ResultOfMethodCallIgnored
-        new File("Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP)).delete();
+        new File(reportOutput).delete();
         
         //Sets System.out back to original
         System.setOut(originalSystemOut);
@@ -1515,7 +1475,7 @@ final class OpenPartyListSystemTest {
     void testRunElectionMoreSeatsThenCandidates() {
         //Redirects system.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_audit_actual.txt"
             .replace('/', FILE_SEP);
@@ -1627,7 +1587,7 @@ final class OpenPartyListSystemTest {
     void testRunElectionTieBreaksOutput() {
         //Redirects system.out
         final PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
             .replace('/', FILE_SEP);
@@ -1674,7 +1634,7 @@ final class OpenPartyListSystemTest {
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), OutputStream.nullOutputStream());
+            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create test_run_election_tie_breaks_output_audit_actual.txt");

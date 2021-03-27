@@ -700,7 +700,7 @@ final class InstantRunoffSystemTest {
         
         InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), OutputStream.nullOutputStream());
+            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create run_election_tie_breaks_output_audit_actual.txt");
