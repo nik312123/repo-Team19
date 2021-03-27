@@ -416,14 +416,13 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
-        final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
+        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(
-                new FileOutputStream(auditOutput), NULL_OUTPUT);
+            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_initial_seats_typical_audit_actual.txt");
@@ -457,8 +456,12 @@ final class OpenPartyListSystemTest {
         //Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt".replace('/', FILE_SEP)),
+                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt".replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -626,10 +629,14 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
-                    .replace('/', FILE_SEP)),
+                    .replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)
         
         ));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -720,6 +727,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
     }
@@ -767,8 +777,7 @@ final class OpenPartyListSystemTest {
         //Creates OPL system
         OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(
-                new FileOutputStream(auditOutput), NULL_OUTPUT);
+            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_remaining_seats_typical_audit_actual.txt");
@@ -807,8 +816,12 @@ final class OpenPartyListSystemTest {
         //Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt".replace('/', FILE_SEP)),
+                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt".replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1067,6 +1080,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         
@@ -1165,8 +1181,12 @@ final class OpenPartyListSystemTest {
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
-                    .replace('/', FILE_SEP)),
+                    .replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1359,9 +1379,13 @@ final class OpenPartyListSystemTest {
         //Comparing expected output vs actual output for a typical seat distribution
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt".replace('/', FILE_SEP)),
+                "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt".replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)
         ));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1453,14 +1477,19 @@ final class OpenPartyListSystemTest {
         //Comparing expected output vs actual output of Audit file
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt".replace('/', FILE_SEP)),
+                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt".replace('/', FILE_SEP)
+            ),
             new FileInputStream(auditOutput)));
         
         //Comparing expected output vs actual output of report file
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt".replace('/', FILE_SEP)),
+                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt".replace('/', FILE_SEP)
+            ),
             new FileInputStream(reportOutput)));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
@@ -1575,6 +1604,9 @@ final class OpenPartyListSystemTest {
             new FileInputStream(reportOutput)
         ));
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();
         //noinspection ResultOfMethodCallIgnored
@@ -1677,6 +1709,9 @@ final class OpenPartyListSystemTest {
             ),
             new FileInputStream(auditOutput)
         ));
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutput).delete();

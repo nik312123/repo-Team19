@@ -6,7 +6,7 @@ Documentation files: <a href="./" target="_blank">Link</a>
 
 Bug list: <a href="../buglist.xlsx" target="_blank">Link</a>
 
-Test case list: <a href="../testing/Test Case List.xlsx" target="_blank">Link</a>
+Test case list (Note: Table filters do not work properly. Do not use them.): <a href="../testing/Test Case List.xlsx" target="_blank">Link</a>
 
 Test case logs: <a href="../testing/test-logs" target="_blank">Link</a>
 

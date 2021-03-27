@@ -82,15 +82,15 @@ public final class TableFormatter {
         final int numRows, final int numCols) {
         //Creates the table of strings rows
         final List<List<String>> strRowTable = new ArrayList<>();
-        for(int i = 0; i < numRows; ++i) {
+        for(int i = 0; i < numRows; i++) {
             strRowTable.add(new ArrayList<>(numCols));
         }
-    
+        
         //Adds the headers to the table if there are a nonzero number of columns
         if(numCols != 0) {
             strRowTable.get(0).addAll(headers);
         }
-    
+        
         for(final Collection<?> col : colTable) {
             final Iterator<?> colIter = col.iterator();
             for(int rowIndex = 1; rowIndex < numRows; rowIndex++) {

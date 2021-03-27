@@ -101,7 +101,7 @@ public final class VotingStreamParser {
      * @throws ParseException Thrown if any of the given lines is null, meaning that the file ended earlier than anticipated
      */
     private static void throwParseExceptionIfEofLines(final String[] lines, final int lineNumber) throws ParseException {
-        for(int i = 0; i < lines.length; ++i) {
+        for(int i = 0; i < lines.length; i++) {
             throwParseExceptionIfEofLine(lines[i], lineNumber + i);
         }
     }

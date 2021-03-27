@@ -283,7 +283,7 @@ public class InstantRunoffSystem extends VotingSystem {
         //Split the candidates line by comma delimiter and add each candidate to an array
         final String[] candidatesStr = candidatesLine.split(",", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStr.length];
-        for(int i = 0; i < candidatesArr.length; ++i) {
+        for(int i = 0; i < candidatesArr.length; i++) {
             final Matcher candidateMatcher = candidatePattern.matcher(candidatesStr[i]);
             /*
              * Using the matched groups the correspond to the candidate's name and party, strip the strings of whitespace and add them to the list
@@ -404,7 +404,7 @@ public class InstantRunoffSystem extends VotingSystem {
         final Map<Integer, Candidate> rankedCandidateMap = new HashMap<>();
         
         //Iterate through the characters of the ballot line
-        for(int i = 0; i < ballotLine.length(); ++i) {
+        for(int i = 0; i < ballotLine.length(); i++) {
             final char curChar = ballotLine.charAt(i);
             
             if(curChar == ',') {
@@ -459,7 +459,7 @@ public class InstantRunoffSystem extends VotingSystem {
         
         //For each of the ranked candidates, add it to an array, throwing an exception if there are any skipped ranks
         final Candidate[] rankedCandidates = new Candidate[maxRank];
-        for(int i = 1; i <= maxRank; ++i) {
+        for(int i = 1; i <= maxRank; i++) {
             if(!rankedCandidateMap.containsKey(i)) {
                 VotingStreamParser.throwParseException(String.format(
                     "A ballot must not skip rankings, but a ranking was not found for %d when there is a rank for %d", i, maxRank

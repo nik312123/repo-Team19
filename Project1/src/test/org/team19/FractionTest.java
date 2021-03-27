@@ -170,10 +170,10 @@ final class FractionTest {
         final Fraction negativeSevenSixths = new Fraction(-7, 6);
         final Fraction one = new Fraction(1, 1);
         final Fraction zero = new Fraction(0, 1);
-    
+        
         //Epsilon used to determine that two doubles are essentially equal (within epsilon)
         final double epsilon = 1E-6;
-    
+        
         //Testing the double values of the above fractions
         final String doubleComparisonFailFormatStr = "Attempted comparison between %s and %d.0 / %d";
         Assertions.assertAll(

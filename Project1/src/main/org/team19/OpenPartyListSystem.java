@@ -224,7 +224,7 @@ public class OpenPartyListSystem extends VotingSystem {
         //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
         final String[] candidatesStrArr = candidatesLine.split("]\\s*,", -1);
         final Candidate[] candidatesArr = new Candidate[candidatesStrArr.length];
-        for(int i = 0; i < candidatesArr.length; ++i) {
+        for(int i = 0; i < candidatesArr.length; i++) {
             final String candidateStr = candidatesStrArr[i].strip();
             
             //Thrown an exception if the starting bracket is missing
@@ -359,7 +359,7 @@ public class OpenPartyListSystem extends VotingSystem {
         int numCommas = 0;
         
         //Iterate through the characters of the ballot line
-        for(int i = 0; i < ballotLine.length(); ++i) {
+        for(int i = 0; i < ballotLine.length(); i++) {
             final char curChar = ballotLine.charAt(i);
             switch(curChar) {
                 case ',':
@@ -509,36 +509,28 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Prints the calculation of the initial allocation of seats using the quota
      *
-     * @param quota             The total number of votes/candidates to calculate the initial seat allocations per party
-     * @param numSeatsRemaining The number of seats remaining after the initial allocation
+     * @param party       The party for which to print the initial allocation of seats
+     * @param stringQuota The string form of the quota
      */
-    private void printInitialAllocation(final Fraction quota, final int numSeatsRemaining) {
-        //Prints the initial allocation of seats for each party
-        for(final Map.Entry<String, PartyInformation> party : partyToPartyInformation.entrySet()) {
-            //Gets the string format of the quota (parenthesized if it is a fraction)
-            final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
-            
-            //Prints initial allocation of seats for a party
-            auditWriter.printf(
-                "%s initial allocation of seats: floor(%d / %s) = %d\n",
-                party.getKey(),
-                party.getValue().numBallots,
-                stringQuota,
-                party.getValue().numSeats
-            );
-            
-            auditWriter.printf(
-                "Remaining ballots: %s\n",
-                getRemainingBallots(party.getValue())
-            );
-            auditWriter.println();
-        }
-        final int numSeatsAllocated = numSeats - numSeatsRemaining;
-        auditWriter.printf("%d / %d have been allocates. %d seats remaining\n\n",
-            numSeatsAllocated,
-            numSeats,
-            numSeatsRemaining
+    private void printInitialAllocation(final String party, final String stringQuota) {
+        final PartyInformation partyInformation = partyToPartyInformation.get(party);
+        
+        //Prints initial allocation of seats for a party
+        auditWriter.printf(
+            "%s initial allocation of seats: min(floor(%d / %s), %d) = %d\n",
+            party,
+            partyInformation.numBallots,
+            stringQuota,
+            partyInformation.numCandidates,
+            partyInformation.numSeats
         );
+        auditWriter.println("");
+        
+        auditWriter.printf(
+            "Remaining ballots: %s\n",
+            getRemainingBallots(partyInformation)
+        );
+        auditWriter.println();
     }
     
     /**
@@ -570,8 +562,17 @@ public class OpenPartyListSystem extends VotingSystem {
     
     /**
      * Prints a table with each party's initial allocation of seats and remaining ballots to the audit output
+     *
+     * @param numSeatsRemaining The number of seats remaining after the initial allocation
      */
-    protected void printInitialAllocations() {
+    protected void printInitialAllocationResult(final int numSeatsRemaining) {
+        final int numSeatsAllocated = numSeats - numSeatsRemaining;
+        auditWriter.printf("%d / %d have been allocated. %d seats remaining\n\n",
+            numSeatsAllocated,
+            numSeats,
+            numSeatsRemaining
+        );
+        
         auditWriter.println("Initial Seat Allocation Results:");
         
         //The list of the number of seats received by each party
@@ -607,6 +608,14 @@ public class OpenPartyListSystem extends VotingSystem {
         int numSeatsRemaining = numSeats;
         final Set<String> remainingParties = new HashSet<>();
         
+        auditWriter.println(
+            "Computing initial seats per party by the minimum of the number of ballots for the party divided by the quota and the number of "
+                + "candidates for the party\n"
+        );
+        
+        //Gets the string format of the quota (parenthesized if it is a fraction)
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
+        
         //Allocate initial votes for each party
         for(final String party : partyToPartyInformation.keySet()) {
             final PartyInformation partyInformation = partyToPartyInformation.get(party);
@@ -628,10 +637,11 @@ public class OpenPartyListSystem extends VotingSystem {
             
             //Decrements number of seats remaining by number of seats obtained by each party
             numSeatsRemaining -= partyInformation.numSeats;
+            
+            printInitialAllocation(party, stringQuota);
         }
         
-        printInitialAllocation(quota, numSeatsRemaining);
-        printInitialAllocations();
+        printInitialAllocationResult(numSeatsRemaining);
         
         //Returns number of seats remaining and remaining parties with candidate with no seats
         return new Pair<>(numSeatsRemaining, remainingParties);

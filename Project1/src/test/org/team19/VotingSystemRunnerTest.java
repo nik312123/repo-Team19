@@ -229,6 +229,9 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to retrieve the getFile method from VotingSystemRunner");
         }
         finally {
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
             //Remove the created test file after the test is completed to reset to the initial state of files
             //noinspection ResultOfMethodCallIgnored
             new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).delete();
@@ -241,10 +244,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt"
@@ -290,6 +293,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -306,10 +312,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
@@ -355,6 +361,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -371,8 +380,8 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt"
+            .replace('/', FILE_SEP);
         final String reportOutputPath =
             "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP);
         
@@ -420,6 +429,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -436,10 +448,10 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt".replace('/',
-            FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt".replace('/',
-            FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt"
+            .replace('/', FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt"
+            .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
@@ -484,6 +496,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(expectedReport),
             new FileInputStream(reportOutputPath))
         );
+        
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
         
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
@@ -551,6 +566,9 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+        
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -598,7 +616,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("C%d (P%d),", i, i);
         }
         outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
@@ -615,17 +633,17 @@ final class VotingSystemRunnerTest {
         int numAdded = 0;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking
-        for(int i = numAdded + 1; i <= candidateAndBallotSize; ++i) {
+        for(int i = numAdded + 1; i <= candidateAndBallotSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
+            groupNum++;
         }
         outputWriter.close();
     }
@@ -649,7 +667,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having a unique party
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("C%d (P%d),", i, i);
         }
         outputWriter.printf("C%d (P%d)\n", candidateAndBallotSize, candidateAndBallotSize);
@@ -670,17 +688,17 @@ final class VotingSystemRunnerTest {
         int numAdded = 0;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the left side
-        for(int i = numAdded + 1; i <= leftSize; ++i) {
+        for(int i = numAdded + 1; i <= leftSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, 0));
-            ++groupNum;
+            groupNum++;
         }
         
         //Fills the "right" side of the ballots (n/2 + 1 to n)
@@ -689,17 +707,17 @@ final class VotingSystemRunnerTest {
         final int leftGroupNum = groupNum - 1;
         while(nextSize != 0) {
             numAdded += nextSize;
-            for(int i = 0; i < nextSize; ++i) {
+            for(int i = 0; i < nextSize; i++) {
                 outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
             }
             nextSize >>= 1;
-            ++groupNum;
+            groupNum++;
         }
         
         //Writes any missing ballots as just having the next single candidate as the ranking for the right side
-        for(int i = numAdded + 1; i <= rightSize; ++i) {
+        for(int i = numAdded + 1; i <= rightSize; i++) {
             outputWriter.println(generateIrStairBallotLine(candidateAndBallotSize, groupNum, leftGroupNum));
-            ++groupNum;
+            groupNum++;
         }
         outputWriter.close();
     }
@@ -732,7 +750,7 @@ final class VotingSystemRunnerTest {
         outputWriter.println(candidateAndBallotSize);
         
         //Write each candidate and its party, each having
-        for(int i = 1; i < candidateAndBallotSize; ++i) {
+        for(int i = 1; i < candidateAndBallotSize; i++) {
             outputWriter.printf("[C%d, P%d],", i, (int) Math.ceil((double) i / candidatesPerParty));
         }
         outputWriter.printf("[C%d, P%d]\n", candidateAndBallotSize, (int) Math.ceil((double) candidateAndBallotSize / candidatesPerParty));
@@ -750,7 +768,7 @@ final class VotingSystemRunnerTest {
         final Random rand = new Random();
         
         //Write ballots with random candidates selected
-        for(int i = 1; i <= candidateAndBallotSize; ++i) {
+        for(int i = 1; i <= candidateAndBallotSize; i++) {
             outputWriter.println(generateOplTestBallotLine(rand.nextInt(candidateAndBallotSize) + 1, commaString));
         }
         outputWriter.close();
@@ -786,7 +804,7 @@ final class VotingSystemRunnerTest {
             //Create the output stream to which the file will be generated
             final FileOutputStream testFileLocation = new FileOutputStream(testFile);
             
-            //Create the parameters for the
+            //Create the parameters for the file generation method
             final Object[] finalGenerationParameters = new Object[generationParameters.size() + 1];
             finalGenerationParameters[0] = testFileLocation;
             int i = 1;
@@ -847,15 +865,15 @@ final class VotingSystemRunnerTest {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
             
+            /*
+             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
+             * with the other timed tests and to properly allow deletion of the file on Windows
+             */
+            System.gc();
+            
             //Delete the giant generated file
             //noinspection ResultOfMethodCallIgnored
             testFile.delete();
-            
-            /*
-             * Call the JVM garbage collector manually to prevent the issue of large memory build-up that can be caused by the running of this test
-             * with the other timed tests
-             */
-            System.gc();
         }
     }
     

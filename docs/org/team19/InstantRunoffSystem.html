@@ -190,7 +190,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ArrayDeque.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayDeque</a>&lt;<a href="InstantRunoffSystem.Ballot.html" title="class in org.team19">InstantRunoffSystem.Ballot</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html?is-external=true" title="class or interface in java.util" class="externalLink">Deque</a>&lt;<a href="InstantRunoffSystem.Ballot.html" title="class in org.team19">InstantRunoffSystem.Ballot</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#candidateBallotsMap">candidateBallotsMap</a></span></code></th>
 <td class="colLast">
 <div class="block">The mapping of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s to their current corresponding <a href="InstantRunoffSystem.Ballot.html" title="class in org.team19"><code>InstantRunoffSystem.Ballot</code></a>s</div>
@@ -234,7 +234,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RAND">RAND</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rand">rand</a></span></code></th>
 <td class="colLast">
 <div class="block">Used for randomization for breaking ties</div>
 </td>
@@ -244,13 +244,6 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reportWriter">reportWriter</a></span></code></th>
 <td class="colLast">
 <div class="block">The writer to an output stream for the report file to write a summary about the running of the election.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="TableFormatter.html" title="class in org.team19">TableFormatter</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tableFormatter">tableFormatter</a></span></code></th>
-<td class="colLast">
-<div class="block">The <a href="TableFormatter.html" title="class in org.team19"><code>TableFormatter</code></a> used to produce tables as output</div>
 </td>
 </tr>
 </table>
@@ -429,13 +422,13 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="RAND">
+<a id="rand">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>RAND</h4>
-<pre>protected static final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a> RAND</pre>
+<h4>rand</h4>
+<pre>protected static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html?is-external=true" title="class or interface in java.util" class="externalLink">Random</a> rand</pre>
 <div class="block">Used for randomization for breaking ties</div>
 </li>
 </ul>
@@ -485,7 +478,7 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <ul class="blockList">
 <li class="blockList">
 <h4>candidateBallotsMap</h4>
-<pre>protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ArrayDeque.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayDeque</a>&lt;<a href="InstantRunoffSystem.Ballot.html" title="class in org.team19">InstantRunoffSystem.Ballot</a>&gt;&gt; candidateBallotsMap</pre>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Candidate.html" title="class in org.team19">Candidate</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Deque.html?is-external=true" title="class or interface in java.util" class="externalLink">Deque</a>&lt;<a href="InstantRunoffSystem.Ballot.html" title="class in org.team19">InstantRunoffSystem.Ballot</a>&gt;&gt; candidateBallotsMap</pre>
 <div class="block">The mapping of <a href="Candidate.html" title="class in org.team19"><code>Candidate</code></a>s to their current corresponding <a href="InstantRunoffSystem.Ballot.html" title="class in org.team19"><code>InstantRunoffSystem.Ballot</code></a>s</div>
 </li>
 </ul>
@@ -507,16 +500,6 @@ extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>
 <h4>reportWriter</h4>
 <pre>protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/PrintWriter.html?is-external=true" title="class or interface in java.io" class="externalLink">PrintWriter</a> reportWriter</pre>
 <div class="block">The writer to an output stream for the report file to write a summary about the running of the election.</div>
-</li>
-</ul>
-<a id="tableFormatter">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>tableFormatter</h4>
-<pre>protected&nbsp;<a href="TableFormatter.html" title="class in org.team19">TableFormatter</a> tableFormatter</pre>
-<div class="block">The <a href="TableFormatter.html" title="class in org.team19"><code>TableFormatter</code></a> used to produce tables as output</div>
 </li>
 </ul>
 <a id="candidatePattern">
