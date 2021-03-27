@@ -195,7 +195,7 @@ final class VotingStreamParserTest {
             Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
                 () -> Assertions.assertEquals(instantRunoffSystem.getNumCandidates(), 4),
-                //Check that the candidates themmselves were correcly parsed
+                //Check that the candidates themselves were correctly parsed
                 () -> Assertions.assertEquals(instantRunoffSystem.getCandidates(), List.of(
                     new Candidate("Rosen", "D"),
                     new Candidate("Kleinberg", "R"),

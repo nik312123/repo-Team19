@@ -37,10 +37,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-//TODO: Add the final keyword where applicable (see CheckStyle)
-//TODO: Add tests for the case of ties by setting the rand field to a Random with a specific seed so tests don't change
-//TODO: Modify generated filenames to use the same name format as in Project1/testing/test-resources/votingStreamParserTest
-
 final class VotingSystemRunnerTest {
     
     //Creates a null device output stream to consume and ignore all output
@@ -245,19 +241,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //TODO: Change audit and report comparison file names to test-specific names
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt".replace('/',
+            FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt".replace('/',
+            FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityAudit.txt"
+        final String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt"
             .replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport = "Project1/testing/test-resources/votingSystemRunnerTest/testIrMajorityReport.txt"
+        final String expectedReport = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_expected.txt"
             .replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV = "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
+        final String inputCSV = "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
             .replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -268,7 +265,7 @@ final class VotingSystemRunnerTest {
             reportOutput = new FileOutputStream(reportOutputPath);
         }
         catch(FileNotFoundException e) {
-            e.printStackTrace();
+            Assertions.fail("Unable to create test_ir_majority_audit_actual.txt or test_ir_majority_report_actual.txt");
         }
         
         //Sets audit and report outputs
@@ -293,7 +290,6 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -310,19 +306,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //TODO: Change audit and report comparison file names to test-specific names
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt".replace('/',
+            FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt".replace('/',
+            FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityAudit.txt".replace('/', FILE_SEP);
+        final String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrPopularityReport.txt".replace('/', FILE_SEP);
+        final String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV =
+        final String inputCSV =
             "Project1/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -333,7 +330,7 @@ final class VotingSystemRunnerTest {
             reportOutput = new FileOutputStream(reportOutputPath);
         }
         catch(FileNotFoundException e) {
-            e.printStackTrace();
+            Assertions.fail("Unable to create test_ir_popularity_audit_actual.txt or test_ir_popularity_report_actual.txt");
         }
         
         //Sets audit and report outputs
@@ -358,7 +355,6 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -375,19 +371,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //TODO: Change audit and report comparison file names to test-specific names
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt".replace('/',
+            FILE_SEP);
+        final String reportOutputPath =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateAudit.txt".replace('/', FILE_SEP);
+        final String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testIrSingleCandidateReport.txt".replace('/', FILE_SEP);
+        final String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV =
+        final String inputCSV =
             "Project1/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -398,7 +395,7 @@ final class VotingSystemRunnerTest {
             reportOutput = new FileOutputStream(reportOutputPath);
         }
         catch(FileNotFoundException e) {
-            e.printStackTrace();
+            Assertions.fail("Unable to create test_ir_single_candidate_audit_actual or test_ir_single_candidate_report_actual");
         }
         
         //Sets audit and report outputs
@@ -423,7 +420,6 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -440,19 +436,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //TODO: Change audit and report comparison file names to test-specific names
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt".replace('/',
+            FILE_SEP);
+        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt".replace('/',
+            FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalAudit.txt".replace('/', FILE_SEP);
+        final String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplTypicalReport.txt".replace('/', FILE_SEP);
+        final String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV =
+        final String inputCSV =
             "Project1/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -463,7 +460,7 @@ final class VotingSystemRunnerTest {
             reportOutput = new FileOutputStream(reportOutputPath);
         }
         catch(FileNotFoundException e) {
-            e.printStackTrace();
+            Assertions.fail("Unable to create test_opl_typical_audit_actual.txt or test_opl_typical_report_actual.txt");
         }
         
         //Sets audit and report outputs
@@ -488,7 +485,6 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();
@@ -505,19 +501,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //TODO: Change audit and report comparison file names to test-specific names
-        String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/auditCompare.txt".replace('/', FILE_SEP);
-        String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/reportCompare.txt".replace('/', FILE_SEP);
+        final String auditOutputPath =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_actual.txt".replace('/', FILE_SEP);
+        final String reportOutputPath =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_actual.txt".replace('/', FILE_SEP);
         
         //Path to expected audit output
-        String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesAudit.txt".replace('/', FILE_SEP);
+        final String expectedAudit =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
-        String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/testOplMoreSeatsThanCandidatesReport.txt".replace('/', FILE_SEP);
+        final String expectedReport =
+            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
-        String inputCSV =
+        final String inputCSV =
             "Project1/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -528,7 +525,8 @@ final class VotingSystemRunnerTest {
             reportOutput = new FileOutputStream(reportOutputPath);
         }
         catch(FileNotFoundException e) {
-            e.printStackTrace();
+            Assertions.fail(
+                "Unable to create test_opl_more_seats_than_candidates_audit_actual.txt or test_opl_more_seats_than_candidates_report_actual.txt");
         }
         
         //Sets audit and report outputs
@@ -553,7 +551,6 @@ final class VotingSystemRunnerTest {
             new FileInputStream(reportOutputPath))
         );
         
-        //TODO: Create a File and convert it to FileInputStream instead of creating File just for deletion (see 2.1 in  tinyurl.com/y7am7464)
         //Deletes temp files if test passes
         //noinspection ResultOfMethodCallIgnored
         new File(auditOutputPath).delete();

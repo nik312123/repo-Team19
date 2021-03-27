@@ -14,7 +14,7 @@ Number of Seats: 14
 
 Number of Ballots: 21
 
-Quota: 1 ballots per seat
+Quota: 3 / 2 ballots per seat
 
 There are 8 seats remaining, but there are no more candidates to which seats can be distributed
 
