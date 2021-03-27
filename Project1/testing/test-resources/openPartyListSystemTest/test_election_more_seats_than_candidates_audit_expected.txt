@@ -1,4 +1,4 @@
-Quota: 21 / 14 = (3 / 2) ballots per seat
+Quota: 21 / 14 = 3 / 2 ballots per seat
 
 Grouping by Party:
 Party: D
