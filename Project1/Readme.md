@@ -131,21 +131,41 @@ Note 4: You can run all tests by right-clicking the test folder and clicking the
 
 Note: Ensure that your Eclipse is up to date before running the below:
 
+Note 2: If Eclipse is showing errors, then sometimes Eclipse has not loaded everything. If this happens, be patient.
+
 1. Open Eclipse
 
 2. Go to File → Open Projects from File System..., click Directory..., select the `repo-Team19` directory you cloned, and click Finish
 
+![misc/readme-resources/eclipse_open.png](misc/readme-resources/eclipse_open.png)
+![misc/readme-resources/eclipse_open_project.png](misc/readme-resources/eclipse_open_project.png)
+
 3. To run the program, navigate to `Project1 → src → main → org.team19 → VotingSystemRunner.java`, scroll to the `main` method, right-click within it, hover over Run As, and click Java Application. This by default reads from standard input. If you wish to stop this, click the red square stop button to the right of the console tab that opened.
+
+![misc/readme-resources/eclipse_voting_system_runner.png](misc/readme-resources/eclipse_voting_system_runner.png)
+![misc/readme-resources/eclipse_run_main.png](misc/readme-resources/eclipse_run_main.png)
 
 4. To run the program with command-line arguments, right-click within the `main` method, hover over Run As, and click Run Configurations..., click the Arguments tab, add space-delimited arguments to the Program arguments field, and click Run
 
+![misc/readme-resources/eclipse_configuration.png](misc/readme-resources/eclipse_configuration.png)
+![misc/readme-resources/eclipse_arguments.png](misc/readme-resources/eclipse_arguments.png)
+![misc/readme-resources/eclipse_run_args.png](misc/readme-resources/eclipse_run_args.png)
+
 5. To run tests, navigate to `Project1 → src → test → org.team19` and open the file corresponding to the class in which the tests you wish to run reside.
+
+![misc/readme-resources/eclipse_test_location.png](misc/readme-resources/eclipse_test_location.png)
 
 6. Right-click within the test method you wish to run, hover over Run As, and click JUnit Test
 
+![misc/readme-resources/eclipse_run_test.png](misc/readme-resources/eclipse_run_test.png)
+
+Note 3: You can run all tests for a class by right-clicking a test class, clicking Run As, and clicking JUnit Test
+
+Note 4: You can run all tests by right-clicking the org.team19 package in the test folder, clicking Run As, and clicking JUnit Test
+
 ## Step 2C: Command line on Ubuntu and macOS (least recommended)
 
-1. Download this zip file, and extract it to a directory of your choice
+1. Download [this](misc/repo-Team19.zip) zip file, and extract it to a directory of your choice
 
 2. `cd` into the `repo-Team19` folder
 
