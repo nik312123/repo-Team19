@@ -165,7 +165,7 @@ Note 4: You can run all tests by right-clicking the org.team19 package in the te
 
 ## Step 2C: Command line on Ubuntu and macOS (least recommended)
 
-1. Download [this](misc/repo-Team19.zip) zip file, and extract it to a directory of your choice
+1. Download [the zip file in this folder](https://drive.google.com/drive/folders/1EbV_wocsystdKSuFBtFHrvkna_U9waZL?usp=sharing), and extract it to a directory of your choice
 
 2. `cd` into the `repo-Team19` folder
 
