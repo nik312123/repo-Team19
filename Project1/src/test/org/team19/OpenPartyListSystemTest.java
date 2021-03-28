@@ -444,14 +444,14 @@ final class OpenPartyListSystemTest {
         
         opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
         opl.partyToCandidateCounts.get("I").put(smithI, 1);
-    
+        
         try {
             opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_initial_seats_typical_audit_actual.txt");
         }
-    
+        
         //Performs the initial allocation of seats
         opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
         
@@ -461,9 +461,9 @@ final class OpenPartyListSystemTest {
             FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
+            
             FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
@@ -640,18 +640,19 @@ final class OpenPartyListSystemTest {
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt or allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt");
+                "Unable to open allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt or "
+                    + "allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt");
         }
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
@@ -740,18 +741,20 @@ final class OpenPartyListSystemTest {
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt"
+            final FileInputStream auditExpected = new FileInputStream(
+                ("Project1/testing/test-resources/openPartyListSystemTest"
+                    + "/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt")
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt or allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt");
+                "Unable to open allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt or "
+                    + "allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt");
         }
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -842,12 +845,12 @@ final class OpenPartyListSystemTest {
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
@@ -1068,7 +1071,7 @@ final class OpenPartyListSystemTest {
             "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
-        OpenPartyListSystem opl = createOplNullStreams();
+        final OpenPartyListSystem opl = createOplNullStreams();
         
         opl.numSeats = 10;
         opl.numBallots = 9;
@@ -1096,34 +1099,35 @@ final class OpenPartyListSystemTest {
         
         final Integer numSeatsRemaining = initialAllocationResults.getFirst();
         final Set<String> remainingParties = initialAllocationResults.getSecond();
-    
+        
         try {
             opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt");
         }
-    
+        
         //Performs the allocation of remaining seats after the initial allocation where there are more seats than candidates
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
         
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt or allocate_remaining_seats_more_seats_than_candidates_audit_actual.txt");
+                "Unable to open allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt or "
+                    + "allocate_remaining_seats_more_seats_than_candidates_audit_actual.txt");
         }
-    
+        
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
         
@@ -1182,7 +1186,7 @@ final class OpenPartyListSystemTest {
             "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
-        OpenPartyListSystem opl = createOplNullStreams();
+        final OpenPartyListSystem opl = createOplNullStreams();
         
         opl.numSeats = 3;
         opl.numBallots = 9;
@@ -1210,32 +1214,33 @@ final class OpenPartyListSystemTest {
         final Integer numSeatsRemaining = initialAllocationResults.getFirst();
         final Set<String> remainingParties = initialAllocationResults.getSecond();
         opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-    
+        
         try {
             opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create distribute_seats_to_candidates_typical_audit_actual.txt");
         }
-    
+        
         //Distributes seats to candidates after allocation of seats
         opl.distributeSeatsToCandidates();
         
         opl.auditWriter.close();
-    
+        
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open test_distribute_seats_to_candidates_typical_audit_expected.txt or test_distribute_seats_to_candidates_typical_audit_actual.txt");
+                "Unable to open test_distribute_seats_to_candidates_typical_audit_expected.txt or "
+                    + "test_distribute_seats_to_candidates_typical_audit_actual.txt");
         }
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -1382,8 +1387,7 @@ final class OpenPartyListSystemTest {
             "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
-        OpenPartyListSystem opl = null;
-        opl = createOplNullStreams();
+        final OpenPartyListSystem opl = createOplNullStreams();
         opl.numSeats = 3;
         opl.numBallots = 9;
         
@@ -1418,26 +1422,26 @@ final class OpenPartyListSystemTest {
         for(final Map.Entry<String, OpenPartyListSystem.PartyInformation> party : opl.partyToPartyInformation.entrySet()) {
             partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
         }
-    
+        
         try {
             opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
         }
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create test_print_summary_table_actual.txt");
         }
-    
+        
         //Prints summary table
         opl.printSummaryTable(partiesToInitialSeats);
         
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
         }
@@ -1535,23 +1539,23 @@ final class OpenPartyListSystemTest {
         
         //Runs election
         opl.runElection();
-    
+        
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream auditActual = new FileInputStream(auditOutput);
-        
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            
             //Comparing expected output vs actual output of Audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
-        
-            FileInputStream reportExpected = new FileInputStream(
+            
+            final FileInputStream reportExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
                     .replace('/', FILE_SEP));
-        
-            FileInputStream reportActual = new FileInputStream(reportOutput);
-        
+            
+            final FileInputStream reportActual = new FileInputStream(reportOutput);
+            
             //Comparing expected output vs actual output of Audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
         }
@@ -1593,7 +1597,8 @@ final class OpenPartyListSystemTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to create run_election_more_seats_than_candidates_audit_actual.txt or run_election_more_seats_than_candidates_report_actual.txt");
+                "Unable to create run_election_more_seats_than_candidates_audit_actual.txt or run_election_more_seats_than_candidates_report_actual"
+                    + ".txt");
         }
         
         //Creates parties
@@ -1655,31 +1660,32 @@ final class OpenPartyListSystemTest {
         
         //Runs an election where there are more seats than candidates
         opl.runElection();
-    
+        
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
-    
-            FileInputStream auditActual = new FileInputStream(auditOutput);
+            
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
             
             //Comparing expected output vs actual output of Audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
-    
-            FileInputStream reportExpected = new FileInputStream(
+            
+            final FileInputStream reportExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_report_expected.txt"
                     .replace('/', FILE_SEP));
-    
-            FileInputStream reportActual = new FileInputStream(reportOutput);
-    
+            
+            final FileInputStream reportActual = new FileInputStream(reportOutput);
+            
             //Comparing expected output vs actual output of Audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open test_election_more_seats_than_candidates_audit_expected.txt or test_election_more_seats_than_candidates_report_expected.txt");
+                "Unable to open test_election_more_seats_than_candidates_audit_expected.txt or "
+                    + "test_election_more_seats_than_candidates_report_expected.txt");
         }
-    
+        
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
         
@@ -1776,12 +1782,12 @@ final class OpenPartyListSystemTest {
         OpenPartyListSystem.rand = new Random(10);
         
         opl.runElection();
-    
+        
         try {
             FileInputStream auditExpected = new FileInputStream(
                 "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
                     .replace('/', FILE_SEP));
-    
+            
             FileInputStream auditActual = new FileInputStream(auditOutput);
             
             //Comparing expected output vs actual output of audit file
@@ -1791,7 +1797,7 @@ final class OpenPartyListSystemTest {
             Assertions.fail(
                 "Unable to open test_run_election_tie_breaks_output_audit_expected.txt or test_run_election_tie_breaks_output_audit_actual.txt");
         }
-    
+        
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
         
