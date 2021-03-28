@@ -1,0 +1,890 @@
+public class VotingSystemRunner:
+    
+    private VotingSystemRunner():
+        nothing()
+    
+    private static String generateTimestampedFileName(String prefix, LocalDate currentTimestamp):
+        /*
+         * Generates a file name in the form <prefix>_<year>-<month>-<day>_<hours>-<minutes>-<seconds>.txt where the
+         * time is in 24-hour time and the month, day, hours, minutes, and seconds are left-padded with 0s such that
+         * they have 2 digits at all time
+         */
+         return timestampedFileName
+    
+    public static void main(String[] args):
+        if len(args) == 0:
+            inputStream = STDIN
+        elif len(args) == 1
+            try:
+                inputStream = retrieveInputStream(args[0])
+            except:
+                presentError()
+        else:
+            presentError()
+        
+        LocalDate currentTimestamp = LocalDate.now()
+        
+        auditFileName = generateTimestampedFileName("audit", currentTimestamp)
+        reportFileName = generateTimestampedFileName("report", currentTimestamp)
+        
+        try:
+            auditOutput = retrieveOutputStream(auditDirectory + auditFileName)
+        except:
+            presentError()
+        
+        try:
+            reportOutput = retrieveOutputStream(reportDirectory + reportFileName)
+        except:
+            presentError()
+        
+        headerSystemMap = Map(
+            "IR" => Class(InstantRunoffSystem),
+            "OPL" => Class(OpenPartyListingSystem)
+        )
+        
+        parser = VotingStreamParser()
+        try:
+            votingSystem = parser.parse(inputStream, auditOutput, reportOutput, headerSystemMap)
+        except:
+            presentError()
+        votingSystem.runElection()
+        
+        try:
+            closeStream(inputStream)
+        except:
+            presentError()
+        try:
+            closeStream(auditOutput)
+        except:
+            presentError()
+        try:
+            closeStream(reportOutput)
+        except:
+            presentError()
+
+public class VotingStreamParser:
+    
+    public VotingStreamParser():
+        nothing()
+    
+    public static VotingSystem parse(InputStream inputStream, OutputStream auditOutput, OutputStream reportOutput,
+        Map<String, Class<? extends VotingSystem>> headerSystemMap):
+        if inputStream == UNDEFINED:
+            presentError()
+        elif auditOutput == UNDEFINED:
+            presentError()
+        elif reportOutput == UNDEFINED:
+            presentError()
+        
+        lineNumber = 1
+        
+        try:
+            firstLine = inputStream.getLine()
+        except:
+            presentError(lineNumber)
+        votingSystemClass = headerSystemMap.get(firstLine)
+        if votingSystemClass == UNDEFINED:
+            presentError(lineNumber)
+        votingSystem = votingSystemClass.createInstance(auditOutput, reportOutput)
+        auditOutput.printElectionType(firstLine)
+        reportOutput.printElectionType(firstLine)
+        summaryOutput.printElectionType(firstLine)
+        lineNumber++
+        
+        candidateHeaderSize = votingSystem.getCandidateHeaderSize()
+        try:
+            candidatesHeader = inputStream.getLines(candidateHeaderSize)
+        except:
+            presentError(lineNumber)
+        try:
+            votingSystem.importCandidatesHeader(candidatesHeader, lineNumber)
+        except:
+            presentError(lineNumber)
+        lineNumber += candidateHeaderSize
+        
+        numCandidates = votingSystem.getNumCandidates()
+        
+        try:
+            candidatesLine = inputStream.getLine()
+        except:
+            presentError(lineNumber)
+        try:
+            votingSystem.addCandidates(candidatesLine)
+        except:
+            presentError(lineNumber)
+        if len(votingSystem.getCandidates()) != numCandidates:
+            presentError(lineNumber)
+        lineNumber++
+        
+        ballotHeaderSize = votingSystem.getBallotHeaderSize()
+        try:
+            ballotHeader = inputStream.getLines(ballotHeaderSize)
+        except presentError(lineNumber)
+        try:
+            votingSystem.importBallotHeader(ballotHeader, lineNumber)
+        except:
+            presentError(lineNumber)
+        lineNumber += ballotHeaderSize
+        
+        numBallots = votingSystem.getNumBallots()
+        
+        ballotNumber = 1
+        
+        for remaining line:
+            try:
+                votingSystem.addBallot(line, lineNumber, ballotNumber)
+            except:
+                presentError(lineNumber)
+            lineNumber++
+            ballotNumber++
+        
+        if numBallots != ballotNumber - 1:
+            presentError(lineNumber - 1)
+        
+        return votingSystem
+
+public class Candidate:
+    
+    protected String name
+    
+    protected String party
+    
+    public Candidate(String name, String party):
+        if name == UNDEFINED:
+            presentError()
+        elif party == UNDEFINED:
+            presentError()
+        this.name = name
+        this.party = party
+    
+    public String getName():
+        return name
+    
+    public String getParty():
+        return party
+    
+    public String toString():
+        return "<name> (<party>)" where <name> and <party> are replaced with the corresponding fields
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+
+public class Pair<K, V>:
+    
+    private K key
+    
+    private V value
+    
+    public Pair(K key, V value):
+        this.key = key
+        this.value = value
+    
+    public K getKey():
+        return key
+    
+    public K getFirst():
+        return getKey()
+    
+    public V getValue():
+        return value
+    
+    public V getSecond():
+        return getValue()
+    
+    public String toString():
+        return "Pair{<key>, <value>}" where <key> and <value> are substituted accordingly
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+
+public class Fraction:
+    
+    protected long numerator
+    
+    protected long denominator
+    
+    protected Fraction wholePart
+    
+    protected Fraction fractionalPart
+    
+    protected Fraction reciprocal
+    
+    public Fraction(long numerator, long denominator)
+        if denominator == 0:
+            presentError()
+        this.numerator = numerator
+        this.denominator = denominator
+        simplify()
+    
+    protected static long gcd(long n1, long n2):
+        return iterativeBinaryGcdOf(n1, n2)
+    
+    protected void simplify():
+        if numerator == 0:
+            denominator = 1
+            return
+        int gcdMultiplier = if denominator < 0 then -1 else 1
+        long signedNumDenomGcd = gcdMultiplier * gcd(abs(numerator), abs(denominator))
+        numerator /= signedNumDenomGcd
+        denominator /= signedNumDenomGcd
+    
+    public long getNumerator():
+        return numerator
+    
+    public long getDenominator():
+        return denominator
+    
+    public long getWholePart():
+        if wholePart == UNDEFINED:
+            wholePart = Fraction(numerator / denominator, 1)
+        return wholePart.getNumerator()
+    
+    public Fraction getFractionalPart():
+        if fractionalPart == UNDEFINED:
+            if wholePart == UNDEFINED:
+                getWholePart()
+            fractionalPart = subtract(wholePart)
+        return fractionalPart
+    
+    public double getDoubleValue():
+        return (double) numerator / denominator
+    
+    public Fraction reciprocal():
+        if numerator == 0:
+            presentError()
+        elif reciprocal == UNDEFINED:
+            reciprocal = Fraction(denominator, numerator)
+        return reciprocal
+    
+    public Fraction add(Fraction other):
+        return Fraction(numerator * other.denominator + other.numerator * denominator, denominator * other.denominator)
+    
+    public Fraction subtract(Fraction other):
+        return Fraction(numerator * other.denominator - other.numerator * denominator, denominator * other.denominator)
+    
+    public Fraction multiply(Fraction other):
+        return Fraction(numerator * other.numerator, denominator * other.denominator)
+    
+    public Fraction divide(Fraction other):
+        return Fraction(numerator * other.denominator, denominator * other.numerator)
+    
+    public String toString():
+        return "<numerator> / <denominator>" where <numerator> and <denominator> are replaced by their respective fields
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+
+public class TableFormatter:
+    
+    protected String intersection
+    
+    protected String horizontalDivider
+    
+    protected String verticalDivider
+    
+    public enum Alignment:
+        LEFT,
+        RIGHT
+    
+    public TableFormatter(char intersection, char horizontalDivider, char verticalDivider):
+        this.intersection = String(intersection)
+        this.horizontalDivider = String(horizontalDivider)
+        this.verticalDivider = String(verticalDivider)
+    
+    protected List<List<String>> objColTableToStrRowTable(List<String> headers, Collection<? extends Collection<Object>>
+        colTable, int numRows, int numCols):
+        strRowTable = ArrayList()
+        for i = 0 to numRows:
+            strRowTable.add(new ArrayList())
+        if numCols ! = 0:
+            strRowTable.get(0).addAll(headers)
+        for Collection<?> col : colTable:
+            Iterator<?> colIter = col.iterator()
+            for rowIndex = 1 to numRows:
+                strRowTable.get(rowIndex).add(colIter.next().toString())
+        return strRowTable
+    
+    protected int[] getColumnLengths(List<List<String>> strRowTable, int numCols):
+        columnLengths = int[numCols]
+        for row in strRowTable:
+            for j = 0 to numCols - 1:
+                columnLengths[j] = max(length(row[j]), columnLengths[j])
+        return columnLengths
+    
+    protected String getTableFormat(List<Alignment> alignments, int[] columnLengths, int numCols):
+        /*
+         * To make this more clear, we are creating a format specifier for a row using %[n]s where n is the length of
+         * the largest String in the column, adding negative signs in front of [n] if left-aligned, and separating with
+         * verticalDividers
+         */
+        String format = verticalDivider + " "
+        for j = 0 to numCols - 1:
+            format = concat("%")
+            if alignments.get(j) == Alignment.LEFT:
+                format += "-"
+            format += String(columnLengths[j]) + "s"
+            if j != numCols - 1:
+                format += " " + verticalDivider + " "
+        format += " " + verticalDivider
+        return format
+    
+    protected String getHorizontalDivider(int[] columnLengths, int numCols, String terminalCharStr):
+        horizontalDivider = terminalCharStr + horizontalDivider
+        for j = 0 to numCols - 1:
+            horizontalDivider += repeat(horizontalDivider, columnLengths[j])
+            if j != numCols - 1:
+                horizontalDivider += horizontalDivider + intersection + horizontalDivider
+        horizontalDivider += horizontalDivider + terminalCharStr
+        return horizontalDivider
+    
+    public String formatAsTable(List<String> headers, Collection<? extends Collection<?>> colTableData, List<Alignment>
+        alignments):
+        if headers == UNDEFINED:
+            presentError()
+        elif colTableData == UNDEFINED:
+            presentError()
+        elif alignments == UNDEFINED:
+            presentError()
+        
+        numCols = len(colTableData)
+        
+        if numCols != len(headers):
+            presentError()
+        elif numCols != len(alignments):
+            presentError()
+        
+        if numCols == 0:
+            numRows = 0
+        else:
+            numRows = len(colTableData.get(0)) + 1
+        
+        strRowTable = objColTableToStrRowTable(headers, colTableData, numRows, numCols)
+        columnLengths = getColumnLengths(strRowTable, numCols)
+        tableFormat = getTableFormat(alignments)
+        
+        terminalSeparator = getHorizontalDivider(columnLengths, numCols, intersection)
+        horizontalSeparator = getHorizontalDivider(columnLengths, numCols, verticalDivider)
+        
+        tableBuilder = terminalSeparator + "\n"
+        for i = 0 to numRows - 1:
+            tableBuilder += format(tableFormat, strRowTable.get(i)) + "\n"
+            if i != numRows - 1:
+                tableBuilder += horizontalSeparator + "\n"
+        tableBuilder += terminalSeparator
+        return tableBuilder
+    
+    public String toString():
+        return "TableFormatter{intersection='<intersection>', horizontalDivider='<horizontalDivider>', "
+            + "verticalDivider='<verticalDivider>'}" where <intersection>, <horizontalDivider>, and <verticalDivider>
+            are replaced by the corresponding fields
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+
+public abstract class VotingSystem (abstract class):
+    public VotingSystem(OutputStream auditOutput, OutputStream reportOutput):
+        nothing()
+    
+    public abstract int getCandidateHeaderSize()
+    public abstract int getBallotHeaderSize()
+    public abstract void importCandidatesHeader(String[] header, int line)
+    public abstract void addCandidates(String candidates, int line)
+    public abstract void importBallotsHeader(String[] header, int line)
+    public abstract void addBallot(String ballot, int line)
+    public abstract String getName()
+    public abstract String getShortName()
+    public abstract int getNumCandidates()
+    public abstract Collection<Candidate> getCandidates()
+    public abstract int getNumBallots()
+    public abstract void runElection()
+    public abstract String toString()
+    public abstract boolean equals(Object other)
+    public abstract int hashCode()
+
+public class InstantRunoffSystem extends VotingSystem:
+    
+    protected static class Ballot:
+        protected int ballotNumber
+        
+        protected int candidateIndex = -1
+        
+        protected Candidate[] rankedCandidates
+        
+        protected Ballot(Candidate[] rankedCandidates, int ballotNumber):
+            this.ballotNumber = ballotNumber
+            this.rankedCandidates = rankedCandidates
+        
+        protected Candidate getNextCandidate():
+            if i >= len(rankedCandidates) - 1
+                return UNDEFINED
+            candidateIndex++
+            return rankedCandidates[candidateIndex]
+        
+        public String toString():
+            return "Ballot <ballotNumber>: <rankedCandidates>" where <ballotNumber> and <rankedCandidates> are replaced
+                with string representations of their respective fields
+        
+        public boolean equals(Object other):
+            equals(this, other)
+        
+        public int hashCode():
+            return generateHashCode()
+    
+    protected int numCandidates
+    
+    protected int numBallots
+    
+    protected Candidate[] candidates
+    
+    protected Map<Candidate, Deque<Ballot>> candidateBallotsMap = LinkedHashMap()
+    
+    protected OutputStream auditOutput
+    
+    protected OutputStream reportOutput
+    
+    public InstantRunoffSystem(OutputStream auditOutput, OutputStream reportOutput):
+        if auditOutput == UNDEFINED:
+            presentError()
+        elif reportOutput == UNDEFINED:
+            presentError()
+        this.auditOutput = auditOutput
+        this.reportOutput = reportOutput
+    
+    public int getCandidateHeaderSize():
+        return 1
+    
+    public int getBallotHeaderSize():
+        return 1
+    
+    public void importCandidatesHeader(String[] header, int line):
+        try:
+            numCandidates = int(strip(header[0]))
+            auditOutput.printNumberOfCandidates(numCandidates)
+            reportOutput.printNumberOfCandidates(numCandidates)
+            summaryOutput.printNumberOfCandidates(numCandidates)
+        except:
+            presentError(line)
+    
+    public void addCandidates(String candidates, int line):
+        if candidates matches the form of comma-separated groups of "<candidate> (<party>)" where <candidate> and
+        <party> are nonempty strings:
+            try:
+                this.candidates = parseCandidates(candidates)
+                auditOutput.printCandidates(candidates)
+                reportOutput.printCandidates(candidates)
+                summaryOutput.printCandidates(candidates)
+            except:
+                presentError()
+        else:
+            presentError(line)
+    
+    public void importBallotsHeader(String[] header, int line):
+        try:
+            numBallots = int(strip(header[0]))
+            auditOutput.printNumberOfBallots(numBallots)
+            reportOutput.printNumberOfBallots(numBallots)
+            summaryOutput.printNumberOfBallots(numBallots)
+        except:
+            presentError(line)
+    
+    public void addBallot(int ballotNumber, final String ballot, final int line):
+        if ballot consists comma-separated values of 1 through m, iterating by 1, where m <= numCandidates, with empty
+            strings filling up the remaining numCandidates - m spaces:
+            try:
+                Ballot ballot = parseBallot(ballot)
+            except:
+                presentError()
+            Candidate firstCandidate = ballot.getNextCandidate()
+            if !candidateBallotsMap.contains(firstCandidate):
+                candidateBallotsMap.put(firstCandidate, ArrayDeque())
+            candidateBallotsMap.get(candidateBallotsMap).add(ballot)
+            
+            auditOutput.printBallot(ballot)
+        else:
+            presentError()
+    
+    public String getName():
+        return "Instant Runoff Voting"
+    
+    public String getShortName():
+        return "IR"
+    
+    public int getNumCandidates():
+        return numCandidates
+    
+    public Collection<Candidate> getCandidates():
+        return List(candidates)
+    
+    public int getNumBallots():
+        return numBallots
+    
+    public String toString():
+        return "InstantRunoffSystem"
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+    
+    protected Pair<Pair<Integer, List<Candidate>>, Pair<Integer, Candidate>>
+    getLowestHighestCandidates():
+        highestBallots = -1
+        highestCandidate = UNDEFINED
+        lowestBallots = Integer.MAX_INT
+        lowestCandidates = ArrayList()
+        for each candidate in candidates:
+            int numBallots = candidateBallotsMap.get(candidate).size()
+            if numBallots > highestBallots:
+                highestBallots = numBallots
+                highestCandidate = candidate
+            if numBallots < lowestBallots
+                lowestBallots = numBallots
+                lowestCandidate.clear()
+                lowestCandidates.add(candidate)
+            elif numBallots == lowestBallots:
+                lowestCandidates.add(candidate)
+        return Pair(Pair(lowestBallots, lowestCandidates), Pair(highestBallots, highestCandidate))
+    
+    protected void eliminateLowest(Candidate lowest):
+        Deque<Ballot> ballotsToRedistribute = candidateBallotsMap.remove(lowest)
+        if ballotsToRedistribute.isEmpty():
+            auditOutput.printNoBallotDistribution()
+        for ballot in ballotsToRedistribute:
+            Candidate nextCandidate = ballot.getNextCandidate()
+            while nextCandidate != null && !candidateBallotsMap.containsKey(nextCandidate):
+                auditOutput.printTryingNextChoice(ballot.BallotNumber, lowest, nextCandidate)
+                nextCandidate = ballot.getNextCandidate()
+            if nextCandidate == null:
+                auditOutput.printNoDistribution(ballot.ballotNumber, lowest)
+            else:
+                candidateBallotsMap.get(nextCandidate).add(ballot)
+                auditOutput.printNormalDistribution(ballot.ballotNumber, nextCandidate)
+    
+    public void runElection():
+        auditOutput.printFirstChoiceBallots(candidateBallotsMap)
+        reportOutput.printFirstChoiceBallots(candidateBallotsMap)
+        summaryOutput.printFirstChoiceBallots(candidateBallotsMap)
+        
+        candidateBallotsMapLen = len(candidateBallotsMap)
+        
+        if candidateBallotsMapLen == 1:
+            auditOutput.displayWinnerInfo(
+                candidateBallotsMapLen.getFirst().key(), false, numBallots, candidateBallotsMap
+            )
+        
+        while true:
+            if candidateBallotsMapLen == 2:
+                Candidate winner
+                boolean randomSelectionRequired = false
+                int firstSecondCandidateComparison =
+                    candidateBallotsMap.getFirst().value().compare(candidateBallotsMap.getSecond().value())
+                if firstSecondCandidateComparison > 0:
+                    winner = candidateBallotsMap.getFirst().key()
+                elif firstSecondCandidateComparison < 0:
+                    winner = candidateBallotsMap.getSecond().key()
+                else:
+                    randomSelectionRequired = true
+                    winner = randomlySelect(candidateBallotsMap.getFirst().key(), candidateBallotsMap.getSecond().key())
+                auditOutput.displayWinnerInfo(
+                    winner, randomSelectionRequired, numBallots, candidateBallotsMap
+                )
+                return
+            else:
+                lowestHighestCandidates = getLowestHighestCandidates()
+                highestCandidateBallots = lowestHighestCandidates.getSecond()
+                if highestCandidateBallots.getFirst() > numBallots / 2:
+                    Candidate winner = highestCandidateBallots.getSecond()
+                    auditOutput.displayWinnerInfo(
+                        winner, false, numBallots, candidateBallotsMap
+                    )
+                    return
+                lowestCandidateBallots = lowestHighestCandidates.getFirst()
+                Candidate lowest = selectRandom(lowestCandidateBallots.getSecond())
+                auditOutput.printCandidateToEliminate(lowest)
+                eliminateLowest(lowest)
+                auditOutput.printCandidatesAfterElimination(lowest, candidateBallotsMap)
+                reportOutput.printCandidatesAfterElimination(lowest, candidateBallotsMap)
+                summaryOutput..printCandidatesAfterElimination(lowest, candidateBallotsMap)
+
+public class OpenPartyListSystem extends VotingSystem:
+    
+    protected static class PartyInformation:
+        
+        protected int numCandidates = 0
+        
+        protected int numSeats
+        
+        protected int numBallots = 0
+        
+        protected Fraction remainder
+        
+        protected List<Map.Entry<Candidate, Integer>> orderedCandidateBallots
+        
+        protected PartyInformation():
+            nothing()
+        
+        public String toString():
+            return some kind of reasonably-formatted string that includes numBallots, remainder, numSeats,
+                numCandidates, and orderedCandidateBallots
+    
+    protected int numCandidates
+    
+    protected int numBallots
+    
+    protected int numSeats
+    
+    protected Candidate[] candidates
+    
+    protected Map<String, Map<Candidate, Integer>> partyToCandidateCounts = LinkedHashMap()
+    
+    protected Map<String, PartyInformation> partiesToPartyInformation = LinkedHashMap()
+    
+    protected OutputStream auditOutput
+    
+    protected OutputStream reportOutput
+    
+    protected TableFormatter tableFormatter
+    
+    public OpenPartyListSystem(OutputStream auditOutput, OutputStream reportOutput):
+        if auditOutput == UNDEFINED:
+            presentError()
+        elif reportOutput == UNDEFINED:
+            presentError()
+        this.auditOutput = auditOutput
+        this.reportOutput = reportOutput
+        tableFormatter = TableFormatter('+', '-', '|')
+    
+    public int getCandidateHeaderSize():
+        return 1
+    
+    public int getBallotHeaderSize():
+        return 2
+    
+    public void importCandidatesHeader(String[] header, int line):
+        try:
+            numCandidates = int(strip(header[0]))
+            auditOutput.printNumberOfCandidates(numCandidates)
+            reportOutput.printNumberOfCandidates(numCandidates)
+            summaryOutput.printNumberOfCandidates(numCandidates)
+        except:
+            presentError(line)
+    
+    public void addCandidates(String candidates, int line):
+        if candidates matches the form of comma-separated groups of "[<candidate>, <party>]" where <candidate> and
+        <party> are nonempty strings:
+            this.candidates = parseCandidates(candidates)
+            auditOutput.printCandidates(candidates)
+            reportOutput.printCandidates(candidates)
+            summaryOutput.printCandidates(candidates)
+            for candidate in this.candidates:
+                String party = candidate.getParty()
+                if !partiesToPartyInformation.contains(party):
+                    partiesToPartyInformation.put(party, PartyInformation())
+                    partyToCandidateCounts.put(party, LinkedHashMap())
+                partyToCandidateCounts.get(party).put(candidate, 0)
+        else:
+            presentError(line)
+    
+    public void importBallotsHeader(String[] header, int line):
+        try:
+            numSeats = int(strip(header[0]))
+            auditOutput.printNumberOfSeats(numBallots)
+            reportOutput.printNumberOfSeats(numBallots)
+            summaryOutput.printNumberOfSeats(numBallots)
+        except:
+            presentError(line)
+        try:
+            numBallots = int(strip(header[1]))
+            auditOutput.printNumberOfBallots(numBallots)
+            reportOutput.printNumberOfBallots(numBallots)
+            summaryOutput.printNumberOfBallots(numBallots)
+        except:
+            presentError(line)
+    
+    public void addBallot(int ballotNumber, final String ballot, final int line):
+        if ballot consist of numCandidates comma-separated values with one of them being 1 and the rest being empty:
+            Candidate candidate = parseBallot(ballot)
+            String party = candidate.getParty()
+            partyToCandidateCounts.get(party).put(candidate, partyToCandidateCounts.get(party).get(candidate) + 1)
+            partiesToPartyInformation.get(party).numBallots++
+            
+            auditOutput.printBallot(ballotNumber, candidate)
+        else:
+            presentError()
+    
+    public String getName():
+        return "Open Party List Voting"
+    
+    public String getShortName():
+        return "OPL"
+    
+    public int getNumCandidates():
+        return numCandidates
+    
+    public Collection<Candidate> getCandidates():
+        return List(candidates)
+    
+    public int getNumBallots():
+        return numBallots
+    
+    public String toString():
+        return "OpenPartyListSystem"
+    
+    public boolean equals(Object other):
+        return equals(this, other)
+    
+    public int hashCode():
+        return generateHashCode()
+    
+    protected Pair<Integer, Set<String>> allocateInitialSeats(Fraction quota):
+        int numSeatsRemaining = numSeats
+        Set<String> remainingParties = HashSet()
+        for party in partiesToPartyInformation:
+            partyInformation = partiesToPartyInformation.get(party)
+            Fraction ballotQuotaMultiples = Fraction(partyInformation.numBallots, 1).divide(quota)
+            partyInformation.numSeats =
+                min(
+                    ballotQuotaMultiples.wholePart(),
+                    partyInformation.numCandidates
+                )
+            if partyInformation.numSeats != partyInformation.numCandidates:
+                remainingParties.add(party)
+            partyInformation.remainder =
+                Fraction(partyInformation.numBallots, 1)
+                    .subtract(Fraction(partyInformation.numSeats, 1).multiply(quota))
+            numSeatsRemaining -= partyInformation.numSeats
+            auditOutput.printAllocation(party, partyInformation.numBallots, quota, partyInformation)
+        auditOutput.printRemainingSeats(numSeatsRemaining, numSeats)
+        auditOutput.printInitialAllocations(tableFormatter, partiesToPartyInformation)
+        return Pair(numSeatsRemaining, remainingParties)
+    
+    protected static <T> int indexAfterEquivalentGroup(List<T> arrayList, int idx, Comparator<T> comparator):
+        len = len(arrayList)
+        if len - idx <= 0:
+            return len
+        firstValue = arrayList.get(idx)
+        orderedGroup.add(firstValue)
+        idx++
+        for i = idx to len - 1:
+            cuvVal = arrayList.get(i)
+            if comparator.compare(firstValue, curVal) != 0:
+                break
+        return idx
+    
+    protected void allocateRemainingSeats(int numSeatsRemaining, Set<String> remainingParties):
+        List<Pair<String, Fraction>> partyRemainingBallots = ArrayList()
+        for party in remainingParties:
+            partyRemainingBallots.add(Pair(party, partyToPartyInformation.get(party).remainder))
+        partyRemainingBallots.sortHighestToLowest()
+        indexAfterCurrentGroup = 0
+        curIdx = 0
+        while numSeatsRemaining > 0:
+            if curIdx >= len(partyRemainingBallots):
+                List<Pair<String, Fraction>> partyRemainingBallotsTmp = ArrayList()
+                for partyRemainderPair in partyRemainingBallots:
+                    if remainingParties.contains(partyRemainderPair.getFirst()):
+                        partyRemainingBallotsTmp.add(partyRemainderPair)
+                partyRemainingBallots = partyRemainingBallotsTmp
+                indexAfterCurrentGroup = 0;
+                curIdx = 0
+                if len(partyRemainingBallotsTmp) == 0:
+                    auditOutput.printNotEnoughCandidates(numSeatsRemaining, numSeats)
+                    reportOutput.printNotEnoughCandidates(numSeatsRemaining, numSeats)
+                    summaryOutput.printNotEnoughCandidates(numSeatsRemaining, numSeats)
+                    break
+            if curIdx >= indexAfterCurrentGroup:
+                indexAfterCurrentGroup = indexAfterEquivalentGroup(partyRemainingBallots, curIdx,
+                    Comparator.comparing(Pair::getSecond))
+                shuffle(partyRemainingBallots, curIdx, indexAfterCurrentGroup, rand)
+            chosenParty = partyRemainingBallots.get(curIdx).getFirst()
+            partyInformation = partyToPartyInformation.get(chosenParty)
+            partyInformation.numSeats++
+            if partyInformation.numSeats == partyInformation.numCandidates:
+                remainingParties.remove(chosenParty)
+            numSeatsRemaining--
+            curIdx++
+            
+            numSeatsAllocated = numSeats - numSeatsRemaining
+            auditOutput.printSeatsAllocatedAndToBeAllocated(numSeatsAllocated, numSeats, numSeatsRemaining)
+
+    
+    protected void distributeSeatsToCandidates():
+        List<Candidate> finalSeats = ArrayList()
+        for party in partiesToPartyInformation:
+            partyInformation = partiesToPartyInformation.get(party)
+            numSeatsRemaining = partyInformation.numSeats
+            auditOutput.printPartySeatsToDistribute(party, numSeatsRemaining)
+            List<Map.Entry<Candidate, Integer>> orderedCandidateBallots = partyInformation.orderedCandidateBallots
+            indexAfterCurrentGroup = 0
+            curIdx = 0
+            while numSeatsRemaining > 0:
+                if curIdx >= indexAfterCurrentGroup:
+                    indexAfterCurrentGroup = indexAfterEquivalentGroup(orderedCandidateBallots, curIdx,
+                        Map.Entry.comparingByValue())
+                    shuffle(orderedCandidateBallots, curIdx, indexAfterCurrentGroup, rand)
+                selected = orderedCandidateBallots.get(curIdx).getKey()
+                finalSeats.add(selected)
+                numSeatsRemaining--
+                currentHighestBallots = orderedCandidateBallots.get(curIdx).getValue()
+                if indexAfterCurrentGroup - curIdx > 1:
+                      auditOutput.printRandomization(currentHighestBallots, curGroupStr)
+                      auditOutput.printNextChosenCandidate(selected)
+                else:
+                    auditOutput.printNextChosenCandidate(party, selected.getName(), currentHighestBallots)
+                auditOutput.println(numSeatsRemaining + " seat remaining")
+                curIdx++
+        auditOutput.printFinalSeats(finalSeats)
+        reportOutput.printFinalSeats(finalSeats)
+        summaryOutput.printFinalSeats(finalSeats)
+    
+    public void runElection():
+        for party in partyToCandidateCounts:
+            partyInformation = partiesToPartyInformation.get(party)
+            orderedCandidateBallots = ArrayList(partyToCandidateCounts.get(party).entrySet())
+            orderedCandidateBallots.sort((e1, e2) -> e2.getValue().compare(e1.getValue()))
+            partyInformation.numCandidates = len(orderedCandidateBallots)
+            partyInformation.orderedCandidateBallots = orderedCandidateBallots
+        Fraction quota = Fraction(numBallots, numSeats)
+        
+        auditOutput.printQuota(numBallots, numSeats, quota)
+        reportOutput.printQuota(quota)
+        summaryOutput.printQuota(quota)
+        
+        auditOutput.printPartyGrouping(partyToCandidateCounts)
+        auditOutput.printPartyBallots(tableFormatter, partiesToPartyInformation)
+        
+        initialAllocationResults = allocateInitialSeats(quota)
+        
+        Deque<Pair<String, Integer>> initialAllocations = ArrayDeque()
+        for party in partyToCandidateCounts:
+            initialAllocations.add(Pair(party, partyToCandidateCounts.get(party).numSeats))
+        
+        numSeatsRemaining = initialAllocationResults.getFirst()
+        Set<String> remainingParties = initialAllocationResults.getSecond()
+        
+        if numSeatsRemaining != 0:
+            allocateRemainingSeats(numSeatsRemaining, remainingParties)
+        
+        auditOutput.printPartySeats(tableFormatter, partiesToPartyInformation)
+        
+        reportOutput.printSummaryTable(
+            tableFormatter, partiesToPartyInformation, initialAllocations, numBallots, numSeats
+        )
+        summaryOutput.printSummaryTable(
+            tableFormatter, partiesToPartyInformation, initialAllocations, numBallots, numSeats
+        )
+        
+        distributeSeatsToCandidates()
