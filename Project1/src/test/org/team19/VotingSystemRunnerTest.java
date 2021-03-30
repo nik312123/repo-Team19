@@ -822,11 +822,14 @@ final class VotingSystemRunnerTest {
             }
             //Throw the underlying exception from the generation method if possible
             catch(InvocationTargetException e) {
-                testFileLocation.close();
-                if(e.getCause() == null) {
-                    throw e;
+                try {
+                    testFileLocation.close();
                 }
-                throw e.getCause();
+                catch(IOException ignored) {}
+                
+                //Retrieves the throwable underlying the InvocationTargetException if applicable
+                final Throwable relevantThrowable = e.getCause() == null ? e : e.getCause();
+                Assertions.fail(String.format("Error in running the generation function for %s: %s", testName, relevantThrowable.getMessage()));
             }
             testFileLocation.close();
             
@@ -857,9 +860,6 @@ final class VotingSystemRunnerTest {
         }
         catch(IOException e) {
             Assertions.fail(String.format("Unable to close the %s test file", testName));
-        }
-        catch(Throwable e) {
-            Assertions.fail(String.format("Error in running the generation function for %s: %s", testName, e.getMessage()));
         }
         finally {
             //Redirect STDOUT back to STDOUT
