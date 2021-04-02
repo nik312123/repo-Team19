@@ -1,4 +1,4 @@
-# Project 1 – CompuVote
+# Project 2 – CompuVote
 
 ## Documentation
 
@@ -22,7 +22,7 @@ More resources that indicate the use of `Fraction` and decimal remaining ballots
 
 ## Running the program
 
-Note: The audit output files appear in `Project1/audits`, and the report output files appear in `Project1/reports`.
+Note: The audit output files appear in `Project2/audits`, and the report output files appear in `Project2/reports`.
 
 ### Step 1: Cloning the program
 
@@ -104,7 +104,7 @@ Note 2: If IntelliJ is showing errors, then sometimes IntelliJ has not loaded ev
 ![misc/readme-resources/intellij_open.png](misc/readme-resources/intellij_projects_open.png)
 ![misc/readme-resources/intellij_select.png](misc/readme-resources/intellij_projects_select.png)
 
-4. To run the program, open the project view, and navigate to `Project1 → src → main → org.team19 → VotingSystemRunner`. Then, click the green play button to the left of `main`. This by default reads from standard input. If you wish to stop this, click the red square stop button at the upper-right of the window.
+4. To run the program, open the project view, and navigate to `Project2 → src → main → org.team19 → VotingSystemRunner`. Then, click the green play button to the left of `main`. This by default reads from standard input. If you wish to stop this, click the red square stop button at the upper-right of the window.
 
 ![misc/readme-resources/intellij_project_view.png](misc/readme-resources/intellij_project_view.png)
 ![misc/readme-resources/intellij_voting_system_runner.png](misc/readme-resources/intellij_voting_system_runner.png)
@@ -115,7 +115,7 @@ Note 2: If IntelliJ is showing errors, then sometimes IntelliJ has not loaded ev
 ![misc/readme-resources/intellij_run_main.png](misc/readme-resources/intellij_configuration.png)
 ![misc/readme-resources/intellij_args.png](misc/readme-resources/intellij_args.png)
 
-6. To run tests, navigate to `Project1 → src → test → org.team19` and open the file corresponding to the class in which the tests you wish to run reside.
+6. To run tests, navigate to `Project2 → src → test → org.team19` and open the file corresponding to the class in which the tests you wish to run reside.
 
 ![misc/readme-resources/intellij_test_location.png](misc/readme-resources/intellij_test_location.png)
 
@@ -140,7 +140,7 @@ Note 2: If Eclipse is showing errors, then sometimes Eclipse has not loaded ever
 ![misc/readme-resources/eclipse_open.png](misc/readme-resources/eclipse_open.png)
 ![misc/readme-resources/eclipse_open_project.png](misc/readme-resources/eclipse_open_project.png)
 
-3. To run the program, navigate to `Project1 → src → main → org.team19 → VotingSystemRunner.java`, scroll to the `main` method, right-click within it, hover over Run As, and click Java Application. This by default reads from standard input. If you wish to stop this, click the red square stop button to the right of the console tab that opened.
+3. To run the program, navigate to `Project2 → src → main → org.team19 → VotingSystemRunner.java`, scroll to the `main` method, right-click within it, hover over Run As, and click Java Application. This by default reads from standard input. If you wish to stop this, click the red square stop button to the right of the console tab that opened.
 
 ![misc/readme-resources/eclipse_voting_system_runner.png](misc/readme-resources/eclipse_voting_system_runner.png)
 ![misc/readme-resources/eclipse_run_main.png](misc/readme-resources/eclipse_run_main.png)
@@ -151,7 +151,7 @@ Note 2: If Eclipse is showing errors, then sometimes Eclipse has not loaded ever
 ![misc/readme-resources/eclipse_arguments.png](misc/readme-resources/eclipse_arguments.png)
 ![misc/readme-resources/eclipse_run_args.png](misc/readme-resources/eclipse_run_args.png)
 
-5. To run tests, navigate to `Project1 → src → test → org.team19` and open the file corresponding to the class in which the tests you wish to run reside.
+5. To run tests, navigate to `Project2 → src → test → org.team19` and open the file corresponding to the class in which the tests you wish to run reside.
 
 ![misc/readme-resources/eclipse_test_location.png](misc/readme-resources/eclipse_test_location.png)
 
