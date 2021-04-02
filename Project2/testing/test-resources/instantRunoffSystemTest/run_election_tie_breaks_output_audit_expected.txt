@@ -1,0 +1,50 @@
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 3 ballots
+Kleinberg (R): 0 ballots
+Chou (I): 3 ballots
+Royce (L): 1 ballots
+Biden (D): 0 ballots
+Trump (R): 0 ballots
+
+No candidate has a majority. There is a tie for lowest ballots between the following: Kleinberg (R), Biden (D), Trump (R)
+Random choice from the above for elimination: Kleinberg (R)
+
+Kleinberg (R) has no ballots to have distributed.
+
+Ballots after Kleinberg (R) was eliminated:
+Rosen (D): 3 ballots
+Chou (I): 3 ballots
+Royce (L): 1 ballots
+Biden (D): 0 ballots
+Trump (R): 0 ballots
+
+No candidate has a majority. There is a tie for lowest ballots between the following: Biden (D), Trump (R)
+Random choice from the above for elimination: Biden (D)
+
+Biden (D) has no ballots to have distributed.
+
+Ballots after Biden (D) was eliminated:
+Rosen (D): 3 ballots
+Chou (I): 3 ballots
+Royce (L): 1 ballots
+Trump (R): 0 ballots
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Trump (R)
+
+Trump (R) has no ballots to have distributed.
+
+Ballots after Trump (R) was eliminated:
+Rosen (D): 3 ballots
+Chou (I): 3 ballots
+Royce (L): 1 ballots
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Royce (L)
+
+Ballot 6 associated with Royce (L) did not have any other candidates ranked. As such, their ballot will not be distributed.
+
+Ballots after Royce (L) was eliminated:
+Rosen (D): 3 ballots
+Chou (I): 3 ballots
+
+There exists a tie between Rosen (D) and Chou (I).
+Rosen (D) won the random tie break. They have therefore won the election.

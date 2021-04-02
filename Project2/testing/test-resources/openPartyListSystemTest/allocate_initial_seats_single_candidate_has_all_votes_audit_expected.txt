@@ -1,0 +1,26 @@
+Computing initial seats per party by the minimum of the number of ballots for the party divided by the quota and the number of candidates for the party
+
+D initial allocation of seats: min(floor(0 / 25), 2) = 0
+
+Remaining ballots: 0
+
+R initial allocation of seats: min(floor(0 / 25), 3) = 0
+
+Remaining ballots: 0
+
+I initial allocation of seats: min(floor(100 / 25), 1) = 1
+
+Remaining ballots: 75
+
+1 / 4 have been allocated. 3 seats remaining
+
+Initial Seat Allocation Results:
++-------+---------------+-------------------+
+| Party | Initial Seats | Remaining Ballots |
+|-------+---------------+-------------------|
+| D     |             0 |                 0 |
+|-------+---------------+-------------------|
+| R     |             0 |                 0 |
+|-------+---------------+-------------------|
+| I     |             1 |                75 |
++-------+---------------+-------------------+

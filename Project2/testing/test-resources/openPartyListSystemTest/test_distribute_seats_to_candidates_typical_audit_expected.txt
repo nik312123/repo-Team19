@@ -1,0 +1,17 @@
+Distributing 2 seats for the party D:
+
+From party D's remaining candidates, Pike had the greatest number of votes: 3. As such, Pike will be allocated a seat.
+1 seats remaining
+
+From party D's remaining candidates, Foster had the greatest number of votes: 2. As such, Foster will be allocated a seat.
+0 seats remaining
+
+Distributing 1 seats for the party R:
+
+From party R's remaining candidates, Borg had the greatest number of votes: 2. As such, Borg will be allocated a seat.
+0 seats remaining
+
+Final Seats:
+Pike (D)
+Foster (D)
+Borg (R)

@@ -1,0 +1,12 @@
+Kleinberg (R) has no ballots to have distributed.
+
+Ballot 6 associated with Royce (L) did not have any other candidates ranked. As such, their ballot will not be distributed.
+
+Ballot 4 associated with Chou (I) has their next choice as candidate Kleinberg (R). but Kleinberg (R) was already eliminated. Trying the next choice.
+
+Ballot 4 has their next choice as candidate Rosen (D). The ballot will be distributed to Rosen (D).
+
+Ballot 5 associated with Chou (I) has their next choice as candidate Royce (L). but Royce (L) was already eliminated. Trying the next choice.
+
+Ballot 5 associated with Chou (I) did not have any other candidates ranked. As such, their ballot will not be distributed.
+

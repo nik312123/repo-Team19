@@ -1,0 +1,142 @@
+Election type: OPL
+
+Number of Candidates: 6
+
+Candidates:
+Pike (D)
+Foster (D)
+Deutsch (R)
+Borg (R)
+Jones (R)
+Smith (I)
+
+Number of Seats: 14
+
+Number of Ballots: 21
+
+Ballot 1 chose Pike (D)
+Ballot 2 chose Pike (D)
+Ballot 3 chose Foster (D)
+Ballot 4 chose Foster (D)
+Ballot 5 chose Foster (D)
+Ballot 6 chose Deutsch (R)
+Ballot 7 chose Deutsch (R)
+Ballot 8 chose Deutsch (R)
+Ballot 9 chose Deutsch (R)
+Ballot 10 chose Deutsch (R)
+Ballot 11 chose Borg (R)
+Ballot 12 chose Borg (R)
+Ballot 13 chose Borg (R)
+Ballot 14 chose Borg (R)
+Ballot 15 chose Jones (R)
+Ballot 16 chose Smith (I)
+Ballot 17 chose Smith (I)
+Ballot 18 chose Smith (I)
+Ballot 19 chose Smith (I)
+Ballot 20 chose Smith (I)
+Ballot 21 chose Smith (I)
+Quota: 21 / 14 = 3 / 2 ballots per seat
+
+Grouping by Party:
+Party: D
+    Pike
+    Foster
+Party: R
+    Deutsch
+    Borg
+    Jones
+Party: I
+    Smith
+
+The ballot counts for each party are as follows:
++-------+---------+
+| Party | Ballots |
+|-------+---------|
+| R     |      10 |
+|-------+---------|
+| D     |       5 |
+|-------+---------|
+| I     |       6 |
++-------+---------+
+
+Computing initial seats per party by the minimum of the number of ballots for the party divided by the quota and the number of candidates for the party
+
+R initial allocation of seats: min(floor(10 / (3 / 2)), 3) = 3
+
+Remaining ballots: 5.5000
+
+D initial allocation of seats: min(floor(5 / (3 / 2)), 2) = 2
+
+Remaining ballots: 2
+
+I initial allocation of seats: min(floor(6 / (3 / 2)), 1) = 1
+
+Remaining ballots: 4.5000
+
+6 / 14 have been allocated. 8 seats remaining
+
+Initial Seat Allocation Results:
++-------+---------------+-------------------+
+| Party | Initial Seats | Remaining Ballots |
+|-------+---------------+-------------------|
+| R     |             3 |            5.5000 |
+|-------+---------------+-------------------|
+| D     |             2 |                 2 |
+|-------+---------------+-------------------|
+| I     |             1 |            4.5000 |
++-------+---------------+-------------------+
+
+There are 8 seats remaining, but there are no more candidates to which seats can be distributed
+
+Final Seat Allocations:
++-------+-------------+
+| Party | Final Seats |
+|-------+-------------|
+| R     |           3 |
+|-------+-------------|
+| D     |           2 |
+|-------+-------------|
+| I     |           1 |
++-------+-------------+
+
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+| Parties | Ballots | First Allocation | Remaining Ballots | Second Allocation | Final Seats | % of Ballots to % of Seats |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| R       |      10 |                3 |            5.5000 |                 0 |           3 |                    48%/21% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| D       |       5 |                2 |                 2 |                 0 |           2 |                    24%/14% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| I       |       6 |                1 |            4.5000 |                 0 |           1 |                     29%/7% |
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+
+Distributing 3 seats for the party R:
+
+From party R's remaining candidates, Deutsch had the greatest number of votes: 5. As such, Deutsch will be allocated a seat.
+2 seats remaining
+
+From party R's remaining candidates, Borg had the greatest number of votes: 4. As such, Borg will be allocated a seat.
+1 seats remaining
+
+From party R's remaining candidates, Jones had the greatest number of votes: 1. As such, Jones will be allocated a seat.
+0 seats remaining
+
+Distributing 2 seats for the party D:
+
+From party D's remaining candidates, Foster had the greatest number of votes: 3. As such, Foster will be allocated a seat.
+1 seats remaining
+
+From party D's remaining candidates, Pike had the greatest number of votes: 2. As such, Pike will be allocated a seat.
+0 seats remaining
+
+Distributing 1 seats for the party I:
+
+From party I's remaining candidates, Smith had the greatest number of votes: 6. As such, Smith will be allocated a seat.
+0 seats remaining
+
+Final Seats:
+Deutsch (R)
+Borg (R)
+Jones (R)
+Foster (D)
+Pike (D)
+Smith (I)
