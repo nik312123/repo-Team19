@@ -165,7 +165,7 @@ Note 4: You can run all tests by right-clicking the org.team19 package in the te
 
 ## Step 2C: Command line on Ubuntu and macOS (least recommended)
 
-1. Download [this zip file](https://github.umn.edu/umn-csci-5801-S21-002/repo-Team19/releases/download/v1.0.0/repo-Team19-CLI.zip), and extract it to a directory of your choice
+1. Download [this zip file](https://github.umn.edu/umn-csci-5801-S21-002/repo-Team19/releases/download/v2.0.0/repo-Team19-CLI.zip), and extract it to a directory of your choice
 
 2. `cd` into the `repo-Team19` folder
 
