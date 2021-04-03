@@ -167,7 +167,7 @@ Note 4: You can run all tests by right-clicking the org.team19 package in the te
 
 1. `cd` into the `repo-Team19` folder
 
-2. Run `ant` to build the project
+2. Run `ant` to build the project (Note: `ant` 1.10.x or later is recommended for building the project)
 
 ### Running the project
 
