@@ -163,7 +163,7 @@ Note 4: You can run all tests by right-clicking the org.team19 package in the te
 
 ## Step 2C: Command line on Ubuntu (least recommended)
 
-Note: We only provide the command line option on Ubuntu as the macOS machines require being a graduate student. None of us are graduate students.
+Note: We only provide the command line option on Ubuntu as checking the macOS machines require being a graduate student. None of us are graduate students.
 
 ### Building the project
 
