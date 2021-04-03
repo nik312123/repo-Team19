@@ -1,0 +1,13 @@
+Election type: IR
+
+Number of Candidates: 1
+
+Candidates:
+Rosen (D)
+
+Number of Ballots: 3
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 3 ballots
+
+Rosen (D) has received 3/3 votes giving them a majority of 100.00% of the ballots. They have therefore won.

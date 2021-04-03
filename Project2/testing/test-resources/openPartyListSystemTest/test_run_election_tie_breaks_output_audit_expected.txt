@@ -1,0 +1,110 @@
+Quota: 9 / 4 = 9 / 4 ballots per seat
+
+Grouping by Party:
+Party: D
+    Foster
+    Pike
+    Biden
+Party: R
+    Deutsch
+    Jones
+    Borg
+Party: I
+    Smith
+    Jane
+
+The ballot counts for each party are as follows:
++-------+---------+
+| Party | Ballots |
+|-------+---------|
+| D     |       3 |
+|-------+---------|
+| R     |       3 |
+|-------+---------|
+| I     |       3 |
++-------+---------+
+
+Computing initial seats per party by the minimum of the number of ballots for the party divided by the quota and the number of candidates for the party
+
+D initial allocation of seats: min(floor(3 / (9 / 4)), 3) = 1
+
+Remaining ballots: 0.7500
+
+R initial allocation of seats: min(floor(3 / (9 / 4)), 3) = 1
+
+Remaining ballots: 0.7500
+
+I initial allocation of seats: min(floor(3 / (9 / 4)), 2) = 1
+
+Remaining ballots: 0.7500
+
+3 / 4 have been allocated. 1 seats remaining
+
+Initial Seat Allocation Results:
++-------+---------------+-------------------+
+| Party | Initial Seats | Remaining Ballots |
+|-------+---------------+-------------------|
+| D     |             1 |            0.7500 |
+|-------+---------------+-------------------|
+| R     |             1 |            0.7500 |
+|-------+---------------+-------------------|
+| I     |             1 |            0.7500 |
++-------+---------------+-------------------+
+
+Allocating seat 4:
+The next highest parties have equivalent ballot counts of 0.7500 and were randomized in the following order: D, I, R.
+Therefore, the next party will be D.
+As such, D will be allocated a seat.
+
+4 / 4 have been allocated. 0 seats remaining
+
+Final Seat Allocations:
++-------+-------------+
+| Party | Final Seats |
+|-------+-------------|
+| D     |           2 |
+|-------+-------------|
+| R     |           1 |
+|-------+-------------|
+| I     |           1 |
++-------+-------------+
+
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+| Parties | Ballots | First Allocation | Remaining Ballots | Second Allocation | Final Seats | % of Ballots to % of Seats |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| D       |       3 |                1 |            0.7500 |                 1 |           2 |                    33%/50% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| R       |       3 |                1 |            0.7500 |                 0 |           1 |                    33%/25% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| I       |       3 |                1 |            0.7500 |                 0 |           1 |                    33%/25% |
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+
+Distributing 2 seats for the party D:
+
+The next highest candidates have equivalent ballot counts of 1 and were randomized in the following order: Pike (D), Biden (D), Foster (D).
+Therefore, the next candidate will be Pike (D).
+As such, Pike (D) will be allocated a seat.
+1 seats remaining
+
+The next highest candidates have equivalent ballot counts of 1 and were randomized in the following order: Biden (D), Foster (D).
+Therefore, the next candidate will be Biden (D).
+As such, Biden (D) will be allocated a seat.
+0 seats remaining
+
+Distributing 1 seats for the party R:
+
+The next highest candidates have equivalent ballot counts of 1 and were randomized in the following order: Deutsch (R), Borg (R), Jones (R).
+Therefore, the next candidate will be Deutsch (R).
+As such, Deutsch (R) will be allocated a seat.
+0 seats remaining
+
+Distributing 1 seats for the party I:
+
+From party I's remaining candidates, Smith had the greatest number of votes: 3. As such, Smith will be allocated a seat.
+0 seats remaining
+
+Final Seats:
+Pike (D)
+Biden (D)
+Deutsch (R)
+Smith (I)

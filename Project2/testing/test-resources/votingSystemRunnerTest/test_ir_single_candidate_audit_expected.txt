@@ -1,0 +1,25 @@
+Election type: IR
+
+Number of Candidates: 1
+
+Candidates:
+Rosen (D)
+
+Number of Ballots: 3
+
+Ballot 1's rankings are as follows:
+    1 – Rosen (D)
+Therefore, ballot 1 goes to Rosen (D)
+
+Ballot 2's rankings are as follows:
+    1 – Rosen (D)
+Therefore, ballot 2 goes to Rosen (D)
+
+Ballot 3's rankings are as follows:
+    1 – Rosen (D)
+Therefore, ballot 3 goes to Rosen (D)
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 3 ballots
+
+Rosen (D) has received 3/3 votes giving them a majority of 100.00% of the ballots. They have therefore won.

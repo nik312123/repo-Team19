@@ -1,0 +1,37 @@
+Election type: OPL
+
+Number of Candidates: 6
+
+Candidates:
+Pike (D)
+Foster (D)
+Deutsch (R)
+Borg (R)
+Jones (R)
+Smith (I)
+
+Number of Seats: 14
+
+Number of Ballots: 21
+
+Quota: 3 / 2 ballots per seat
+
+There are 8 seats remaining, but there are no more candidates to which seats can be distributed
+
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+| Parties | Ballots | First Allocation | Remaining Ballots | Second Allocation | Final Seats | % of Ballots to % of Seats |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| R       |      10 |                3 |            5.5000 |                 0 |           3 |                    48%/21% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| D       |       5 |                2 |                 2 |                 0 |           2 |                    24%/14% |
+|---------+---------+------------------+-------------------+-------------------+-------------+----------------------------|
+| I       |       6 |                1 |            4.5000 |                 0 |           1 |                     29%/7% |
++---------+---------+------------------+-------------------+-------------------+-------------+----------------------------+
+
+Final Seats:
+Deutsch (R)
+Borg (R)
+Jones (R)
+Foster (D)
+Pike (D)
+Smith (I)
