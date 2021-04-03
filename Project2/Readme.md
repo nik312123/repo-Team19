@@ -84,7 +84,7 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 
 ![misc/readme-resources/ubuntu_terminal_clone.png](misc/readme-resources/ubuntu_terminal_clone.png)
 
-### Step 2A: IntelliJ IDEA (preferred)
+### Step 2A: IntelliJ IDEA (most recommended)
 
 Note: Ensure that your IntelliJ IDEA is up to date before running the below:
 
@@ -161,7 +161,9 @@ Note 3: You can run all tests for a class by right-clicking a test class, clicki
 
 Note 4: You can run all tests by right-clicking the org.team19 package in the test folder, clicking Run As, and clicking JUnit Test
 
-## Step 2C: Command line on Ubuntu and macOS (least recommended)
+## Step 2C: Command line on Ubuntu (least recommended)
+
+Note: We only provide the command line option on Ubuntu as the macOS machines require being a graduate student. None of us are graduate students.
 
 ### Building the project
 
