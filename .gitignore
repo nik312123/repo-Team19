@@ -44,7 +44,3 @@ uiDesigner.xml
 out/
 audits/
 reports/
-
-# Ignore csv files placed in root directory for testing purposes
-/*.txt
-/*.csv

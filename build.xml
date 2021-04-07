@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="repo-Team19">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="11"/>
+    <property name="source" value="11"/>
+    <path id="repo-Team19.classpath">
+        <pathelement location="out/production/repo-Team19"/>
+        <pathelement location="lib/apiguardian-api-1.1.0-javadoc.jar"/>
+        <pathelement location="lib/apiguardian-api-1.1.0-sources.jar"/>
+        <pathelement location="lib/apiguardian-api-1.1.0.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0-sources.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0-sources.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0-javadoc.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0-sources.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0.jar"/>
+    </path>
+    <path id="run.VotingSystemRunner.classpath">
+        <path refid="repo-Team19.classpath"/>
+        <pathelement location="lib/apiguardian-api-1.1.0-javadoc.jar"/>
+        <pathelement location="lib/apiguardian-api-1.1.0-sources.jar"/>
+        <pathelement location="lib/apiguardian-api-1.1.0.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-api-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-engine-5.7.0.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0-sources.jar"/>
+        <pathelement location="lib/junit-jupiter-params-5.7.0.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0-sources.jar"/>
+        <pathelement location="lib/junit-platform-commons-1.7.0.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0-javadoc.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0-sources.jar"/>
+        <pathelement location="lib/junit-platform-engine-1.7.0.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0-javadoc.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0-sources.jar"/>
+        <pathelement location="lib/opentest4j-1.2.0.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="out/production/repo-Team19"/>
+        <copy includeemptydirs="false" todir="out/production/repo-Team19">
+            <fileset dir="Project2/src/main">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="out/production/repo-Team19">
+            <fileset dir="Project2/src/test">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="out/production/repo-Team19"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="out/production/repo-Team19" includeantruntime="false" source="${source}"
+               target="${target}">
+            <src path="Project2/src/main"/>
+            <src path="Project2/src/test"/>
+            <classpath refid="repo-Team19.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="VotingSystemRunner">
+        <java classname="org.team19.VotingSystemRunner" failonerror="true" fork="yes">
+            <classpath refid="run.VotingSystemRunner.classpath"/>
+        </java>
+    </target>
+</project>

@@ -26,8 +26,6 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 
 ### Step 1: Cloning the program
 
-#### If running the program through the command line instead of using IntelliJ IDEA or Eclipse, skip to step 2C
-
 #### Windows 10
 
 1\. Click the windows search in the taskbar
@@ -47,6 +45,8 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 ![misc/readme-resources/powershell_clone.png](misc/readme-resources/powershell_clone.png)
 
 #### macOS
+
+Note: If using SSH, then skip to step 4
 
 1\. Open Finder by clicking the Finder application in the dock
 
@@ -70,6 +70,8 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 
 #### Ubuntu
 
+Note: If using SSH, then skip to step 3
+
 1\. Click the three-by-three squares in the lower-left
 
 ![misc/readme-resources/ubuntu_show_applications.png](misc/readme-resources/ubuntu_show_applications.png)
@@ -86,7 +88,7 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 
 ![misc/readme-resources/ubuntu_terminal_clone.png](misc/readme-resources/ubuntu_terminal_clone.png)
 
-### Step 2A: IntelliJ IDEA (preferred)
+### Step 2A: IntelliJ IDEA (most recommended)
 
 Note: Ensure that your IntelliJ IDEA is up to date before running the below:
 
@@ -163,20 +165,28 @@ Note 3: You can run all tests for a class by right-clicking a test class, clicki
 
 Note 4: You can run all tests by right-clicking the org.team19 package in the test folder, clicking Run As, and clicking JUnit Test
 
-## Step 2C: Command line on Ubuntu and macOS (least recommended)
+## Step 2C: Command line on Ubuntu (least recommended)
 
-1. Download [this zip file](https://github.umn.edu/umn-csci-5801-S21-002/repo-Team19/releases/download/v2.0.0/repo-Team19-CLI.zip), and extract it to a directory of your choice
+Note: We only provide the command line option on Ubuntu as checking the macOS machines require being a graduate student. None of us are graduate students.
 
-2. `cd` into the `repo-Team19` folder
+### Building the project
 
-3. Run `java -classpath out/production/repo-Team19 org.team19.VotingSystemRunner` to run the program with standard input as the file input
+1. `cd` into the `repo-Team19` folder
 
-4. Run `java -classpath out/production/repo-Team19 org.team19.VotingSystemRunner <pathToElectionFile>` replacing `<pathToElectionFile>` with the file you wish to run the program with to test a specific election file
+2. Run `ant` to build the project (Note: `ant` 1.10.x or later is recommended for building the project)
 
-#### These tests are available for flexibility but are NOT recommended
+### Running the project
 
-5. To run all tests, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -p org.team19`
+- Run `java -classpath out/production/repo-Team19 org.team19.VotingSystemRunner` to run the program with standard input as the file input
 
-6. To run tests for a class, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -c org.team19.[TestClassName]`, replacing the bracketed item with the corresponding test class (e.g. `org.team19.VotingSystemRunnerTest`)
+- Run `java -classpath out/production/repo-Team19 org.team19.VotingSystemRunner <pathToElectionFile>` replacing `<pathToElectionFile>` with the file you wish to run the program with to test a specific election file
 
-7. To run a test method, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -m org.team19.[TestClassName]#[methodName]`, replacing the bracketed item with the corresponding test class (e.g. `org.team19.VotingSystemRunnerTest#testGetFullFilePath`)
+### Running tests (not recommended over the non-CLI options)
+
+- To run all tests, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -p org.team19`
+
+- To run tests for a class, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -c org.team19.[TestClassName]`, replacing the bracketed item with the corresponding test class (e.g. `org.team19.VotingSystemRunnerTest`)
+
+- To run a test method, run `java -jar lib/junit-platform-console-standalone-1.8.0-M1.jar -cp out/production/repo-Team19:out/test/repo-Team19 -m org.team19.[TestClassName]#[methodName]`, replacing the bracketed item with the corresponding test class (e.g. `org.team19.VotingSystemRunnerTest#testGetFullFilePath`)
+
+Note: If you change `RUN_TIME_TESTS` to `true`, then you must rebuild the project by rerunnning the `ant` command
