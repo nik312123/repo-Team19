@@ -46,6 +46,8 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 
 #### macOS
 
+Note: If using SSH, then skip to step 4
+
 1\. Open Finder by clicking the Finder application in the dock
 
 ![misc/readme-resources/open_finder.png](misc/readme-resources/open_finder.png)
@@ -67,6 +69,8 @@ Note: The audit output files appear in `Project2/audits`, and the report output 
 ![misc/readme-resources/terminal_clone.png](misc/readme-resources/terminal_clone.png)
 
 #### Ubuntu
+
+Note: If using SSH, then skip to step 3
 
 1\. Click the three-by-three squares in the lower-left
 
