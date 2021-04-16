@@ -167,7 +167,7 @@ public final class VotingSystemRunner {
         if(auditOutputPotentialSource == null) {
             try {
                 auditOutput = getFileOutputStream(
-                    "Project1/audits/".replace('/', File.separatorChar)
+                    "Project2/audits/".replace('/', File.separatorChar)
                         + generateTimestampedFileName("audit", currentTimestamp)
                 );
             }
@@ -183,7 +183,7 @@ public final class VotingSystemRunner {
         if(reportOutputPotentialSource == null) {
             try {
                 reportOutput = getFileOutputStream(
-                    "Project1/reports/".replace('/', File.separatorChar)
+                    "Project2/reports/".replace('/', File.separatorChar)
                         + generateTimestampedFileName("report", currentTimestamp)
                 );
             }

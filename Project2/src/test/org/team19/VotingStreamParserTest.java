@@ -61,7 +61,7 @@ final class VotingStreamParserTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
-            final FileInputStream inputStream = new FileInputStream("Project1/testing/test-resources/votingStreamParserTest/file_ends_early.csv");
+            final FileInputStream inputStream = new FileInputStream("Project2/testing/test-resources/votingStreamParserTest/file_ends_early.csv");
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
         catch(FileNotFoundException e) {
@@ -80,7 +80,7 @@ final class VotingStreamParserTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
-            final FileInputStream inputStream = new FileInputStream("Project1/testing/test-resources/votingStreamParserTest/invalid_header.csv");
+            final FileInputStream inputStream = new FileInputStream("Project2/testing/test-resources/votingStreamParserTest/invalid_header.csv");
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
         catch(FileNotFoundException e) {
@@ -100,7 +100,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/invalid_candidates_header.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates_header.csv"
             );
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
@@ -121,7 +121,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/invalid_candidates.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates.csv"
             );
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
@@ -142,7 +142,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/invalid_ballot_header.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_header.csv"
             );
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
@@ -163,7 +163,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/invalid_ballot_line.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_line.csv"
             );
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(inputStream, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP));
         }
@@ -184,7 +184,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/correct_ir.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/correct_ir.csv"
             );
             
             //Get the InstantRunoffSystem if the assertion holds that no exception is thrown in parsing the file
@@ -223,7 +223,7 @@ final class VotingStreamParserTest {
         
         try {
             final FileInputStream inputStream = new FileInputStream(
-                "Project1/testing/test-resources/votingStreamParserTest/correct_opl.csv"
+                "Project2/testing/test-resources/votingStreamParserTest/correct_opl.csv"
             );
             
             //Get the OpenPartyListSystem if the assertion holds that no exception is thrown in parsing the file

@@ -105,7 +105,7 @@ final class VotingSystemRunnerTest {
                         VotingSystem.class,
                         getFullFilePath.invoke(
                             VotingSystemRunner.class,
-                            "Project1/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
+                            "Project2/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
                         )
                     )
                 ),
@@ -117,7 +117,7 @@ final class VotingSystemRunnerTest {
                             VotingSystem.class,
                             getFullFilePath.invoke(
                                 VotingSystemRunner.class,
-                                "Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
+                                "Project2/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
                             )
                         )
                     ).getCause().getClass()
@@ -130,7 +130,7 @@ final class VotingSystemRunnerTest {
                             VotingSystem.class,
                             getFullFilePath.invoke(
                                 VotingSystemRunner.class,
-                                "Project1/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
+                                "Project2/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
                             )
                         )
                     ).getCause().getClass()
@@ -199,19 +199,19 @@ final class VotingSystemRunnerTest {
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFileOutputStream.invoke(
                         VotingSystem.class,
-                        "Project1/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
+                        "Project2/testing/test-resources/votingSystemRunnerTest/test.txt".replace('/', fileSep)
                     )
                 ),
                 //Testing nonexistent file path
                 () -> Assertions.assertDoesNotThrow(() ->
                     getFileOutputStream.invoke(
                         VotingSystem.class,
-                        "Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
+                        "Project2/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)
                     )
                 ),
                 //Check that the nonexistent file was created for the output stream from the previous assertion
                 () -> Assertions.assertTrue(
-                    new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).exists()
+                    new File("Project2/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).exists()
                 ),
                 //Testing existing path but to directory
                 () -> Assertions.assertEquals(
@@ -219,7 +219,7 @@ final class VotingSystemRunnerTest {
                     Assertions.assertThrows(InvocationTargetException.class, () ->
                         getFileOutputStream.invoke(
                             VotingSystem.class,
-                            "Project1/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
+                            "Project2/testing/test-resources/votingSystemRunnerTest".replace('/', fileSep)
                         )
                     ).getCause().getClass()
                 )
@@ -234,7 +234,7 @@ final class VotingSystemRunnerTest {
             
             //Remove the created test file after the test is completed to reset to the initial state of files
             //noinspection ResultOfMethodCallIgnored
-            new File("Project1/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).delete();
+            new File("Project2/testing/test-resources/votingSystemRunnerTest/b.txt".replace('/', fileSep)).delete();
         }
     }
     
@@ -244,20 +244,20 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt"
+        final String auditOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt"
+        final String reportOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt"
             .replace('/', FILE_SEP);
         
         //Path to expected audit output
-        final String expectedAudit = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt"
+        final String expectedAudit = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt"
             .replace('/', FILE_SEP);
         //Path to expected report output
-        final String expectedReport = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_expected.txt"
+        final String expectedReport = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_expected.txt"
             .replace('/', FILE_SEP);
         
         //Path to CSV file
-        final String inputCSV = "Project1/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
+        final String inputCSV = "Project2/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv"
             .replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
@@ -312,21 +312,21 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt"
+        final String auditOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt"
+        final String reportOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt"
             .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
         final String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
         final String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
@@ -380,21 +380,21 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt"
+        final String auditOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_actual.txt"
             .replace('/', FILE_SEP);
         final String reportOutputPath =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
         final String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
         final String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
@@ -448,21 +448,21 @@ final class VotingSystemRunnerTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt"
+        final String auditOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutputPath = "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt"
+        final String reportOutputPath = "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt"
             .replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
         final String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
         final String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
@@ -517,20 +517,20 @@ final class VotingSystemRunnerTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutputPath =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_actual.txt".replace('/', FILE_SEP);
         final String reportOutputPath =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_actual.txt".replace('/', FILE_SEP);
         
         //Path to expected audit output
         final String expectedAudit =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_expected.txt".replace('/', FILE_SEP);
         //Path to expected report output
         final String expectedReport =
-            "Project1/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_expected.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_expected.txt".replace('/', FILE_SEP);
         
         //Path to CSV file
         final String inputCSV =
-            "Project1/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP);
         
         FileOutputStream auditOutput = null;
         FileOutputStream reportOutput = null;
@@ -884,7 +884,7 @@ final class VotingSystemRunnerTest {
             runTimedTest(
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
-                "Project1/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
+                "Project2/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
                 "testIrStairsTime",
                 8 * 60
             );
@@ -901,7 +901,7 @@ final class VotingSystemRunnerTest {
             runTimedTest(
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileDoubleStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
-                "Project1/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
+                "Project2/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
                 "testIrDoubleStairsTime",
                 8 * 60
             );
@@ -949,7 +949,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateOplTimeTestFile", OutputStream.class, int.class, int.class),
                 List.of(100000, currentCandidatePartySize),
                 String.format(
-                    "Project1/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
+                    "Project2/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
                     currentCandidatePartySize
                 ).replace('/', File.separatorChar),
                 String.format("testOplTime%d", currentCandidatePartySize),

@@ -417,7 +417,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt"
             .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -459,7 +459,7 @@ final class OpenPartyListSystemTest {
         
         try {
             FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -599,7 +599,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -641,7 +641,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -700,7 +700,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 5));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -742,7 +742,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                ("Project1/testing/test-resources/openPartyListSystemTest"
+                ("Project2/testing/test-resources/openPartyListSystemTest"
                     + "/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt")
                     .replace('/', FILE_SEP));
             
@@ -801,7 +801,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -846,7 +846,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1068,7 +1068,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1114,7 +1114,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1183,7 +1183,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1229,7 +1229,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1384,7 +1384,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1437,7 +1437,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1467,9 +1467,9 @@ final class OpenPartyListSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
         final String reportOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -1542,7 +1542,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1551,7 +1551,7 @@ final class OpenPartyListSystemTest {
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
             
             final FileInputStream reportExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream reportActual = new FileInputStream(reportOutput);
@@ -1581,10 +1581,10 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_audit_actual.txt"
             .replace('/', FILE_SEP);
         final String reportOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_report_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_report_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -1663,7 +1663,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1672,7 +1672,7 @@ final class OpenPartyListSystemTest {
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
             
             final FileInputStream reportExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_report_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_report_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream reportActual = new FileInputStream(reportOutput);
@@ -1703,7 +1703,7 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
             .replace('/', FILE_SEP);
         
         //Creates parties
@@ -1785,7 +1785,7 @@ final class OpenPartyListSystemTest {
         
         try {
             FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             FileInputStream auditActual = new FileInputStream(auditOutput);

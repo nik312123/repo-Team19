@@ -465,7 +465,7 @@ final class InstantRunoffSystemTest {
     
     @Test
     void testEliminateLowestOutput() {
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/test_eliminate_lowest_output_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_eliminate_lowest_output_audit_actual.txt"
             .replace('/', FILE_SEP);
         
         //Initializes InstantRunoffSystem with audit OutputStream
@@ -522,7 +522,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/test_eliminate_lowest_output_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/test_eliminate_lowest_output_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput))
         );
@@ -540,9 +540,9 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_majority_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_majority_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_majority_report_actual.txt"
+        final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_majority_report_actual.txt"
             .replace('/', FILE_SEP);
         
         InstantRunoffSystem ir = null;
@@ -595,7 +595,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/run_election_majority_audit_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/run_election_majority_audit_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput))
         );
@@ -603,7 +603,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/run_election_majority_report_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/run_election_majority_report_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(reportOutput))
         );
@@ -626,9 +626,9 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_popularity_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_popularity_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_popularity_report_actual.txt"
+        final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_popularity_report_actual.txt"
             .replace('/', FILE_SEP);
         
         InstantRunoffSystem ir = null;
@@ -677,7 +677,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/run_election_popularity_audit_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/run_election_popularity_audit_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput))
         );
@@ -685,7 +685,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/run_election_popularity_report_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/run_election_popularity_report_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(reportOutput))
         );
@@ -709,7 +709,7 @@ final class InstantRunoffSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput =
-            "Project1/testing/test-resources/instantRunoffSystemTest/run_election_tie_breaks_output_audit_actual.txt"
+            "Project2/testing/test-resources/instantRunoffSystemTest/run_election_tie_breaks_output_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         InstantRunoffSystem ir = null;
@@ -766,7 +766,7 @@ final class InstantRunoffSystemTest {
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(
-                "Project1/testing/test-resources/instantRunoffSystemTest/run_election_tie_breaks_output_audit_expected.txt".replace('/', FILE_SEP)
+                "Project2/testing/test-resources/instantRunoffSystemTest/run_election_tie_breaks_output_audit_expected.txt".replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput))
         );
@@ -787,9 +787,9 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_actual.txt"
             .replace('/', FILE_SEP);
-        final String reportOutput = "Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_actual.txt"
+        final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_actual.txt"
             .replace('/', FILE_SEP);
         
         InstantRunoffSystem ir = null;
@@ -839,7 +839,7 @@ final class InstantRunoffSystemTest {
         
         //Comparing expected output vs actual output of audit
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_expected.txt"
+            new FileInputStream("Project2/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_audit_expected.txt"
                 .replace('/', FILE_SEP)
             ),
             new FileInputStream(auditOutput))
@@ -847,7 +847,7 @@ final class InstantRunoffSystemTest {
         
         //Comparing expected output vs actual output of report
         assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream("Project1/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_expected.txt"
+            new FileInputStream("Project2/testing/test-resources/instantRunoffSystemTest/run_election_two_candidate_majority_report_expected.txt"
                 .replace('/', FILE_SEP)
             ),
             new FileInputStream(reportOutput))
