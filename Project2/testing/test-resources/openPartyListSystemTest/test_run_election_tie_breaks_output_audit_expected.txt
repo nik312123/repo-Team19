@@ -1,3 +1,5 @@
+Number of Ballots: 9
+
 Quota: 9 / 4 = 9 / 4 ballots per seat
 
 Grouping by Party:

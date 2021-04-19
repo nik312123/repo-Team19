@@ -1485,9 +1485,9 @@ final class OpenPartyListSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
         final String reportOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -1495,7 +1495,7 @@ final class OpenPartyListSystemTest {
             opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create run_election_typical_audit_actual.txt or run_election_typical_report_actual.txt");
+            Assertions.fail("Unable to create test_run_election_typical_audit_actual.txt or test_run_election_typical_report_actual.txt");
         }
         
         //Creates parties
@@ -1599,10 +1599,11 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_audit_actual.txt"
-            .replace('/', FILE_SEP);
+        final String auditOutput =
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_actual.txt"
+                .replace('/', FILE_SEP);
         final String reportOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_report_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -1615,8 +1616,9 @@ final class OpenPartyListSystemTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to create run_election_more_seats_than_candidates_audit_actual.txt or run_election_more_seats_than_candidates_report_actual"
-                    + ".txt");
+                "Unable to create test_run_election_more_seats_than_candidates_audit_actual.txt or "
+                    + "test_run_election_more_seats_than_candidates_report_actual.txt"
+            );
         }
         
         //Creates parties
@@ -1681,7 +1683,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1690,7 +1692,7 @@ final class OpenPartyListSystemTest {
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
             
             final FileInputStream reportExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_report_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream reportActual = new FileInputStream(reportOutput);
@@ -1700,8 +1702,8 @@ final class OpenPartyListSystemTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open test_election_more_seats_than_candidates_audit_expected.txt or "
-                    + "test_election_more_seats_than_candidates_report_expected.txt");
+                "Unable to open test_run_election_more_seats_than_candidates_audit_expected.txt or "
+                    + "test_run_election_more_seats_than_candidates_report_expected.txt");
         }
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug

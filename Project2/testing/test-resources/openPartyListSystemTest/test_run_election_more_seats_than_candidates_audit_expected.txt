@@ -1,3 +1,5 @@
+Number of Ballots: 21
+
 Quota: 21 / 14 = 3 / 2 ballots per seat
 
 Grouping by Party:

@@ -12,7 +12,7 @@ Smith (I)
 
 Number of Seats: 14
 
-Number of Ballots: 21
+Number of ballots in input source 1: 21
 
 Ballot 1 chose Pike (D)
 Ballot 2 chose Pike (D)
@@ -35,6 +35,8 @@ Ballot 18 chose Smith (I)
 Ballot 19 chose Smith (I)
 Ballot 20 chose Smith (I)
 Ballot 21 chose Smith (I)
+Number of Ballots: 21
+
 Quota: 21 / 14 = 3 / 2 ballots per seat
 
 Grouping by Party:
