@@ -48,7 +48,7 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * The number of ballots provided in this election
      */
-    protected int numBallots;
+    protected int numBallots = 0;
     
     /**
      * The number of seats in this election
@@ -327,18 +327,18 @@ public class OpenPartyListSystem extends VotingSystem {
         }
         try {
             //Parses the number of ballots as the second line
-            numBallots = Integer.parseInt(header[1].strip());
+            final int originalNumBallots = numBallots;
+            numBallots += Integer.parseInt(header[1].strip());
             if(numBallots < 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of ballots provided in the ballots header was %d but must be nonnegative", numBallots
                 ), inputIdentifier, line + 1);
             }
             
-            //Output the number of ballots to the audit, report, and summary
-            final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
-            auditWriter.println(numBallotsOutput);
-            reportWriter.println(numBallotsOutput);
-            System.out.println(numBallotsOutput);
+            //Output the number of ballots to the audit
+            auditWriter.printf(
+                "Number of ballots in input source %s: %d\n\n", inputIdentifier, numBallots - originalNumBallots
+            );
         }
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
@@ -1098,6 +1098,12 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
+        //Output the number of ballots to the audit, report, and summary
+        final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
+        auditWriter.println(numBallotsOutput);
+        reportWriter.println(numBallotsOutput);
+        System.out.println(numBallotsOutput);
+        
         //For each party, add to its respective party information the candidates and their respective ballot counts sorted by ballot count
         for(final String party : partyToCandidateCounts.keySet()) {
             final PartyInformation partyInformation = partyToPartyInformation.get(party);

@@ -47,7 +47,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * The number of ballots provided in this election
      */
-    protected int numBallots;
+    protected int numBallots = 0;
     
     /**
      * Half of the number of ballots provided in this election
@@ -346,19 +346,18 @@ public class InstantRunoffSystem extends VotingSystem {
     public void importBallotsHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException {
         try {
             //Parses the number of ballots as the first (and only) line
-            numBallots = Integer.parseInt(header[0].strip());
+            final int originalNumBallots = numBallots;
+            numBallots += Integer.parseInt(header[0].strip());
             if(numBallots < 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of ballots provided in the ballots header was %d but must be nonnegative", numBallots
                 ), inputIdentifier, line);
             }
-            halfNumBallots = numBallots / 2;
             
             //Output the number of ballots to the audit, report, and summary
-            final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
-            auditWriter.println(numBallotsOutput);
-            reportWriter.println(numBallotsOutput);
-            System.out.println(numBallotsOutput);
+            auditWriter.printf(
+                "Number of ballots in input source %s: %d\n\n", inputIdentifier, numBallots - originalNumBallots
+            );
         }
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
@@ -678,6 +677,12 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
+        //Output the number of ballots to the audit, report, and summary
+        final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
+        auditWriter.println(numBallotsOutput);
+        reportWriter.println(numBallotsOutput);
+        System.out.println(numBallotsOutput);
+        
         //Write the first choice ballot counts for each candidate
         String strToWriteToAll = "First-choice ballots (excluding candidates with 0 ballots):";
         auditWriter.println(strToWriteToAll);
@@ -688,6 +693,8 @@ public class InstantRunoffSystem extends VotingSystem {
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
+        
+        halfNumBallots = numBallots / 2;
         
         //If there is only 1 candidate, they are automatically declared the winner
         if(candidateBallotsMap.size() == 1) {
