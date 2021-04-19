@@ -47,39 +47,43 @@ public abstract class VotingSystem {
     /**
      * Parses the lines corresponding to the header for the candidates
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
-    public abstract void importCandidatesHeader(final String[] header, final int line) throws ParseException;
+    public abstract void importCandidatesHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException;
     
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
-     * @param candidatesLine The {@link String} representing the list of candidates and their parties
-     * @param line           The line number associated with the candidates {@link String}
+     * @param candidatesLine  The {@link String} representing the list of candidates and their parties
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the candidates {@link String}
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
-    public abstract void addCandidates(final String candidatesLine, final int line) throws ParseException;
+    public abstract void addCandidates(final String candidatesLine, final String inputIdentifier, final int line) throws ParseException;
     
     /**
-     * Parses the lines corresponding to the header for the ballots
+     * Parses the lines corresponding to the header for the ballots for an input source
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
-    public abstract void importBallotsHeader(final String[] header, final int line) throws ParseException;
+    public abstract void importBallotsHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException;
     
     /**
-     * Parses a line corresponding to a ballot and adds it internally
+     * Parses a line corresponding to a ballot and adds it internally for an input source
      *
-     * @param ballotNumber The number corresponding to the current ballot
-     * @param ballotLine   The {@link String} corresponding to a ballot
-     * @param line         The line number associated with the current ballot line being read
+     * @param ballotNumber    The number corresponding to the current ballot
+     * @param ballotLine      The {@link String} corresponding to a ballot
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the current ballot line being read
      * @throws ParseException Thrown if there is an issue in parsing the current ballot
      */
-    public abstract void addBallot(int ballotNumber, final String ballotLine, final int line) throws ParseException;
+    public abstract void addBallot(int ballotNumber, final String ballotLine, final String inputIdentifier, final int line) throws ParseException;
     
     /**
      * Returns the name of this voting system
@@ -96,7 +100,7 @@ public abstract class VotingSystem {
     public abstract String getShortName();
     
     /**
-     * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importCandidatesHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of candidates that the {@link VotingSystem} contains
      *
@@ -105,7 +109,7 @@ public abstract class VotingSystem {
     public abstract int getNumCandidates();
     
     /**
-     * Precondition: {@link #addCandidates(String, int)} has been executed successfully
+     * Precondition: {@link #addCandidates(String, String, int)} has been executed successfully
      * <p></p>
      * Returns the {@link Collection} of {@link Candidate}s for this {@link VotingSystem}
      *
@@ -114,7 +118,7 @@ public abstract class VotingSystem {
     public abstract Collection<Candidate> getCandidates();
     
     /**
-     * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importBallotsHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of ballots that the {@link VotingSystem} contains, which should be available after
      *
