@@ -620,7 +620,7 @@ public class OpenPartyListSystem extends VotingSystem {
         );
         
         //Gets the string format of the quota (parenthesized if it is a fraction)
-        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota);
         
         //Allocate initial votes for each party
         for(final String party : partyToPartyInformation.keySet()) {
@@ -966,7 +966,7 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param quota The total number of votes/candidates to calculate the initial seat allocations per party
      */
     private void printQuotaInformation(final Fraction quota) {
-        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("%s", quota.toString());
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("%s", quota);
         final String ballotsPerSeat = stringQuota + " ballots per seat";
         
         auditWriter.printf("Quota: %d / %d = %s\n\n",
