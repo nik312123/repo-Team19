@@ -82,15 +82,15 @@ final class InstantRunoffSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a non-positive candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"0"}, 2)),
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"-2"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"0"}, "1", 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"-2"}, "1", 2)),
                 //Test that a nonnumerical candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"a"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importCandidatesHeader(new String[] {"a"}, "1", 2)),
                 /*
                  * Try executing importCandidatesHeader with a positive integer, failing if it is unable to run without exception and ensure that
                  * the number of candidates was properly imported from the candidates header
                  */
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importCandidatesHeader(new String[] {"2"}, 2)),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importCandidatesHeader(new String[] {"2"}, "1", 2)),
                 () -> Assertions.assertEquals(2, instantRunoffSystem.getNumCandidates())
             );
         }
@@ -115,14 +115,14 @@ final class InstantRunoffSystemTest {
             
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of parentheses
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0), C1 P1", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0), C1 P1", "1", 3)),
                 //Tests issue in candidates format due to extra text
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0)a, C1 (P1)", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addCandidates("C0 (P0)a, C1 (P1)", "1", 3)),
                 //Tests valid typical candidates string is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addCandidates("C0 (P0), C1 (P1)", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addCandidates("C0 (P0), C1 (P1)", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), instantRunoffSystem.getCandidates()),
                 //Tests valid candidates string with excess whitespace is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addCandidates("   C0 (   P0   )   ,  C1    (   P1   )   ", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addCandidates("   C0 (   P0   )   ,  C1    (   P1   )   ", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), instantRunoffSystem.getCandidates())
             );
         }
@@ -144,21 +144,33 @@ final class InstantRunoffSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a negative ballots header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"-2"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"-2"}, "1", 4));
+                    instantRunoffSystem.numBallots = 0;
+                },
                 //Test that a nonnumerical ballots header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"a"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.importBallotsHeader(new String[] {"a"}, "1", 4));
+                    instantRunoffSystem.numBallots = 0;
+                },
                 /*
                  * Try executing importBallotsHeader with an input of 0, failing if it is unable to run without exception; then, ensure that the
                  * number was properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"0"}, 4)),
-                () -> Assertions.assertEquals(0, instantRunoffSystem.getNumBallots()),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"0"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(0, instantRunoffSystem.getNumBallots());
+                    instantRunoffSystem.numBallots = 0;
+                },
                 /*
                  * Try executing importBallotsHeader with a positive integer, failing if it is unable to run without exception; then, ensure that
                  * the number was properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"2"}, 4)),
-                () -> Assertions.assertEquals(2, instantRunoffSystem.getNumBallots())
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"2"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(2, instantRunoffSystem.getNumBallots());
+                    instantRunoffSystem.numBallots = 0;
+                }
             );
         }
         finally {
@@ -178,7 +190,7 @@ final class InstantRunoffSystemTest {
         try {
             Method parseBallotTmp = null;
             try {
-                parseBallotTmp = InstantRunoffSystem.class.getDeclaredMethod("parseBallot", int.class, String.class, int.class);
+                parseBallotTmp = InstantRunoffSystem.class.getDeclaredMethod("parseBallot", int.class, String.class, String.class, int.class);
                 parseBallotTmp.setAccessible(true);
             }
             catch(NoSuchMethodException e) {
@@ -187,8 +199,8 @@ final class InstantRunoffSystemTest {
             final Method parseBallot = parseBallotTmp;
             
             try {
-                instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, 2);
-                instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
+                instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
+                instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", "1", 3);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
@@ -196,19 +208,19 @@ final class InstantRunoffSystemTest {
             
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,3,4", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,3,4", "1", 5)),
                 //Test the case where no ballot is ranked
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, ",,,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, ",,,,", "1", 5)),
                 //Test the case where there is a non-integer rank
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,a,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,a,,", "1", 5)),
                 //Test the case where there is a rank below the possible range
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,0,4,3", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,0,4,3", "1", 5)),
                 //Test the case where there is a rank above the possible range
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,6,4,5", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,6,4,5", "1", 5)),
                 //Test the case where a number is skipped in ranking
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,5,4,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "1,2,5,4,", "1", 5)),
                 //Test the case where the start is specifically skipped
-                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "2,4,3,5,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> instantRunoffSystem.addBallot(1, "2,4,3,5,", "1", 5)),
                 //Test the case where all candidates are ranked
                 () -> Assertions.assertEquals(
                     new Ballot(1, new Candidate[] {
@@ -218,7 +230,7 @@ final class InstantRunoffSystemTest {
                         new Candidate("C2", "P2"),
                         new Candidate("C0", "P0")
                     }),
-                    parseBallot.invoke(instantRunoffSystem, 1, "5,2,4,1,3", 5)
+                    parseBallot.invoke(instantRunoffSystem, 1, "5,2,4,1,3", "1", 5)
                 ),
                 //Test the case where not all candidates are ranked
                 () -> Assertions.assertEquals(
@@ -227,7 +239,7 @@ final class InstantRunoffSystemTest {
                         new Candidate("C3", "P3"),
                         new Candidate("C1", "P1")
                     }),
-                    parseBallot.invoke(instantRunoffSystem, 1, ",3,,2,1", 5)
+                    parseBallot.invoke(instantRunoffSystem, 1, ",3,,2,1", "1", 5)
                 )
             );
         }
@@ -260,8 +272,8 @@ final class InstantRunoffSystemTest {
         try {
             //Put required sample data
             try {
-                instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", 3);
-                instantRunoffSystem.importBallotsHeader(new String[] {"143"}, 4);
+                instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", "1", 3);
+                instantRunoffSystem.importBallotsHeader(new String[] {"143"}, "1", 4);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");

@@ -88,15 +88,15 @@ final class OpenPartyListSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a non-positive candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"0"}, 2)),
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"-2"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"0"}, "1", 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"-2"}, "1", 2)),
                 //Test that a nonnumerical candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"a"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"a"}, "1", 2)),
                 /*
                  * Try executing importCandidatesHeader with a positive integer, failing if it is unable to run without exception and ensure that
                  * the number of candidates was properly imported from the candidates header
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importCandidatesHeader(new String[] {"2"}, 2)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importCandidatesHeader(new String[] {"2"}, "1", 2)),
                 () -> Assertions.assertEquals(2, openPartyListSystem.getNumCandidates())
             );
         }
@@ -121,14 +121,14 @@ final class OpenPartyListSystemTest {
             
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of brackets
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0], C1 P1", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0], C1 P1", "1", 3)),
                 //Tests issue in candidates format due to extra text
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0]a, [C1, P1]", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0]a, [C1, P1]", "1", 3)),
                 //Tests valid typical candidates string is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("[C0, P0], [C1, P1]", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("[C0, P0], [C1, P1]", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), openPartyListSystem.getCandidates()),
                 //Tests valid candidates string with excess whitespace is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("    [    C0   ,   P0  ]  , [   C1  , P1  ]   ", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("    [    C0   ,   P0  ]  , [   C1  , P1  ]   ", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), openPartyListSystem.getCandidates())
             );
         }
@@ -150,26 +150,44 @@ final class OpenPartyListSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a negative number of ballots results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "-2"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "-2"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a nonnumerical number of ballots results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "a"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "a"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a negative number of seats results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"-2", "1"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"-2", "1"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a nonnumerical number of seats results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"a", "1"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"a", "1"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 /*
                  * Try executing importBallotsHeader with an input of 0 ballots and seats, failing if it is unable to run without exception; then,
                  * ensure that the numbers were properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"0", "0"}, 4)),
-                () -> Assertions.assertEquals(0, openPartyListSystem.getNumBallots()),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"0", "0"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(0, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
                 () -> Assertions.assertEquals(0, openPartyListSystem.getNumSeats()),
                 /*
                  * Try executing importBallotsHeader with a positive integer of ballots and seats, failing if it is unable to run without exception;
                  * then, ensure that the numbers were properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"2", "3"}, 4)),
-                () -> Assertions.assertEquals(3, openPartyListSystem.getNumBallots()),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"2", "3"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(3, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
                 () -> Assertions.assertEquals(2, openPartyListSystem.getNumSeats())
             );
         }
@@ -190,7 +208,7 @@ final class OpenPartyListSystemTest {
         try {
             Method parseBallotTmp = null;
             try {
-                parseBallotTmp = OpenPartyListSystem.class.getDeclaredMethod("parseBallot", String.class, int.class);
+                parseBallotTmp = OpenPartyListSystem.class.getDeclaredMethod("parseBallot", String.class, String.class, int.class);
                 parseBallotTmp.setAccessible(true);
             }
             catch(NoSuchMethodException e) {
@@ -199,8 +217,8 @@ final class OpenPartyListSystemTest {
             final Method parseBallot = parseBallotTmp;
             
             try {
-                openPartyListSystem.importCandidatesHeader(new String[] {"5"}, 2);
-                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", 3);
+                openPartyListSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
+                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", "1", 3);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
@@ -208,21 +226,21 @@ final class OpenPartyListSystemTest {
             
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",1,,", "1", 5)),
                 //Test the case where no ballot is ranked
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,,", "1", 5)),
                 //Test the case where there is a rank that is not one
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,2,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,2,", "1", 5)),
                 //Test the case where there is a rank that is not an integer
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,a,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,a,,", "1", 5)),
                 //Test the case where there are multiple rankings
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",2,1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",2,1,,", "1", 5)),
                 //Test the case where there are multiple 1s
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, "1,,1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, "1,,1,,", "1", 5)),
                 //Testing a valid ballot
                 () -> Assertions.assertEquals(
                     new Candidate("C3", "P3"),
-                    parseBallot.invoke(openPartyListSystem, ",,,1,", 5)
+                    parseBallot.invoke(openPartyListSystem, ",,,1,", "1", 5)
                 )
             );
         }
@@ -255,8 +273,8 @@ final class OpenPartyListSystemTest {
         try {
             //Put required sample data
             try {
-                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", 3);
-                openPartyListSystem.importBallotsHeader(new String[] {"2", "143"}, 4);
+                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", "1", 3);
+                openPartyListSystem.importBallotsHeader(new String[] {"2", "143"}, "1", 4);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
