@@ -173,8 +173,8 @@ final class InstantRunoffSystemTest {
                 },
                 //Test that executing importBallotsHeader multiple times results in all of the ballot counts from the ballot header being added up
                 () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"2"}, "1", 4)),
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"0"}, "1", 4)),
-                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"6"}, "1", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"0"}, "2", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.importBallotsHeader(new String[] {"6"}, "3", 4)),
                 () -> {
                     Assertions.assertEquals(8, instantRunoffSystem.getNumBallots());
                     instantRunoffSystem.numBallots = 0;

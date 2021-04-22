@@ -194,8 +194,8 @@ final class OpenPartyListSystemTest {
                  *  and results in the last number of seats provided to be used
                  */
                 () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"4", "2"}, "1", 4)),
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"3", "0"}, "1", 4)),
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"5", "6"}, "1", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"3", "0"}, "2", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"5", "6"}, "3", 4)),
                 () -> {
                     Assertions.assertEquals(8, openPartyListSystem.getNumBallots());
                     openPartyListSystem.numBallots = 0;
