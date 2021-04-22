@@ -188,7 +188,19 @@ final class OpenPartyListSystemTest {
                     Assertions.assertEquals(3, openPartyListSystem.getNumBallots());
                     openPartyListSystem.numBallots = 0;
                 },
-                () -> Assertions.assertEquals(2, openPartyListSystem.getNumSeats())
+                () -> Assertions.assertEquals(2, openPartyListSystem.getNumSeats()),
+                /*
+                 * Test that executing importBallotsHeader multiple times results in all of the ballot counts from the ballot header being added up
+                 *  and results in the last number of seats provided to be used
+                 */
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"4", "2"}, "1", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"3", "0"}, "1", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"5", "6"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(8, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
+                () -> Assertions.assertEquals(5, openPartyListSystem.getNumSeats())
             );
         }
         finally {
