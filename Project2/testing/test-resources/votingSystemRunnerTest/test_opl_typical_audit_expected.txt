@@ -12,7 +12,7 @@ Smith (I)
 
 Number of Seats: 3
 
-Number of Ballots: 9
+Number of ballots in input source 1: 9
 
 Ballot 1 chose Pike (D)
 Ballot 2 chose Pike (D)
@@ -23,6 +23,8 @@ Ballot 6 chose Borg (R)
 Ballot 7 chose Borg (R)
 Ballot 8 chose Pike (D)
 Ballot 9 chose Foster (D)
+Number of Ballots: 9
+
 Quota: 9 / 3 = 3 ballots per seat
 
 Grouping by Party:

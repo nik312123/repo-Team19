@@ -1,3 +1,5 @@
+Number of Ballots: 9
+
 First-choice ballots (excluding candidates with 0 ballots):
 Rosen (D): 4 ballots
 Kleinberg (R): 1 ballots

@@ -204,7 +204,7 @@ public final class VotingSystemRunner {
         
         //Attempt to retrieve a voting system from parsing and run its election
         try {
-            final VotingSystem votingSystem = VotingStreamParser.parse(input, auditOutput, reportOutput, headerSystemMap);
+            final VotingSystem votingSystem = VotingStreamParser.parse(new InputStream[] {input}, auditOutput, reportOutput, headerSystemMap);
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file

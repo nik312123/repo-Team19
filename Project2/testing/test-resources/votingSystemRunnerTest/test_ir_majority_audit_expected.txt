@@ -8,7 +8,7 @@ Kleinberg (R)
 Chou (I)
 Royce (L)
 
-Number of Ballots: 9
+Number of ballots in input source 1: 9
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)
@@ -55,6 +55,8 @@ Therefore, ballot 8 goes to Kleinberg (R)
 Ballot 9's rankings are as follows:
     1 – Rosen (D)
 Therefore, ballot 9 goes to Rosen (D)
+
+Number of Ballots: 9
 
 First-choice ballots (excluding candidates with 0 ballots):
 Rosen (D): 4 ballots

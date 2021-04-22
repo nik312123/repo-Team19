@@ -8,7 +8,7 @@ Kleinberg (R)
 Chou (I)
 Royce (L)
 
-Number of Ballots: 6
+Number of ballots in input source 1: 6
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)
@@ -43,6 +43,8 @@ Therefore, ballot 5 goes to Chou (I)
 Ballot 6's rankings are as follows:
     1 – Royce (L)
 Therefore, ballot 6 goes to Royce (L)
+
+Number of Ballots: 6
 
 First-choice ballots (excluding candidates with 0 ballots):
 Rosen (D): 3 ballots
