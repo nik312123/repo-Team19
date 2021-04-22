@@ -28,6 +28,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Project2/testing" />
       <excludeFolder url="file://$MODULE_DIR$/Project1/src" />
       <excludeFolder url="file://$MODULE_DIR$/Project2/product_backlogs" />
+      <excludeFolder url="file://$MODULE_DIR$/Project2/sprint_backlogs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
