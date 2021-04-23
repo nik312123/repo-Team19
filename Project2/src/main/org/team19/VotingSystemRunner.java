@@ -176,6 +176,12 @@ public final class VotingSystemRunner {
         return auditOutput;
     }
     
+    /**
+     * Returns the report {@link OutputStream}
+     *
+     * @param currentTimestamp The current timestamp upon running the program
+     * @return The report {@link OutputStream}
+     */
     private static OutputStream getReportOutput(final LocalDateTime currentTimestamp) {
         OutputStream reportOutput = null;
         //If the report location is not set by tests
