@@ -12,7 +12,7 @@ Smith (I)
 
 Number of Seats: 14
 
-Number of ballots in input source 1: 21
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv: 21
 
 Ballot 1 chose Pike (D)
 Ballot 2 chose Pike (D)

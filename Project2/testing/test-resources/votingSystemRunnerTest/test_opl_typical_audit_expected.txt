@@ -12,7 +12,7 @@ Smith (I)
 
 Number of Seats: 3
 
-Number of ballots in input source 1: 9
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv: 9
 
 Ballot 1 chose Pike (D)
 Ballot 2 chose Pike (D)

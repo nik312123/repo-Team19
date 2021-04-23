@@ -8,7 +8,7 @@ Kleinberg (R)
 Chou (I)
 Royce (L)
 
-Number of ballots in input source 1: 9
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv: 9
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)
