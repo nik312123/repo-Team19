@@ -29,9 +29,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * Runs the election for a {@link VotingSystem} given a path to a file, which can be absolute or relative to the current working directory
+ * Runs the election for a {@link VotingSystem} given paths to election files that can be absolute or relative to the current working directory and
+ * compose a single election
  * <p></p>
- * If no file is given, then standard input will be used as the source
+ * If no command-line arguments are given, then standard input will be used as the source
  * <p></p>
  * Creates an audit files that shows the steps, process, computations, etc., along with various statistics pertaining to the election
  * <p></p>
@@ -40,12 +41,12 @@ import java.util.Map;
 public final class VotingSystemRunner {
     
     /**
-     * The potential source for the audit output set by classes in this package to specify an alternative output location for the audit contents
+     * The potential source for the audit output set by test classes in this package to specify an alternative output location for the audit contents
      */
     static OutputStream auditOutputPotentialSource = null;
     
     /**
-     * The potential source for the audit output set by classes in this package to specify an alternative output location for the report contents
+     * The potential source for the audit output set by test classes in this package to specify an alternative output location for the report contents
      */
     static OutputStream reportOutputPotentialSource = null;
     
@@ -120,50 +121,42 @@ public final class VotingSystemRunner {
     }
     
     /**
-     * Runs the election for a {@link VotingSystem} given a filepath relative to the workspace, using standard input if no file is provided
+     * Given the command-line arguments, which are presumed to be file paths, create {@link InputStream}s from them, and return the array of
+     * {@link InputStream}s
      *
-     * @param args The command-line arguments to the program, which should only consist of at most one command-line argument: a path to a file, which
-     *             can be absolute or relative to the current working directory
+     * @param args The command-line arguments for the program
+     * @return An array of {@link InputStream}s converted from the command-line arguments
      */
-    public static void main(final String... args) {
-        //The input stream from which to read input
-        InputStream input = null;
-        
-        //If there are no arguments provided, then assume standard input is being used
-        if(args.length == 0) {
-            System.out.println("Reading from standard input");
-            input = System.in;
-        }
-        //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
-        else if(args.length == 1) {
+    private static InputStream[] getInputStreams(final String[] args) {
+        final InputStream[] inputs;
+        inputs = new InputStream[args.length];
+        for(int i = 0; i < inputs.length; ++i) {
             try {
                 final String fullFilePath = getFullFilePath(args[0]);
                 System.out.println("Reading from " + fullFilePath);
-                input = getFileInputStream(fullFilePath);
+                inputs[i] = getFileInputStream(fullFilePath);
             }
             catch(FileNotFoundException e) {
-                System.err.println("The provided file could not be found or opened: " + e.getMessage());
+                System.err.printf("The provided file path %s could not be found or opened: %s\n", args[i], e.getMessage());
                 System.exit(2);
             }
             catch(IOException e) {
-                System.err.println("The provided file's path could not be resolved: " + e.getMessage());
+                System.err.printf("The provided file path %s could not be resolved: %s\n", args[i], e.getMessage());
                 System.exit(2);
             }
         }
-        //If there are more than one command-line arguments given, then print an error and exit with a nonzero status
-        else {
-            System.err.println("CompuVote can have 0 command-line arguments for standard input or 1 for a path to an election CSV file");
-            System.exit(2);
-        }
-        
-        //Get the current date/time
-        final LocalDateTime currentTimestamp = LocalDateTime.now();
-        
-        //Streams for the audit and report files
+        return inputs;
+    }
+    
+    /**
+     * Returns the audit {@link OutputStream}
+     *
+     * @param currentTimestamp The current timestamp upon running the program
+     * @return The audit {@link OutputStream}
+     */
+    private static OutputStream getAuditOutput(final LocalDateTime currentTimestamp) {
         OutputStream auditOutput = null;
-        OutputStream reportOutput = null;
-        
-        //Retrieves the output streams for the audit and report files, using the potential source variables if set
+        //If the audit location is not set by tests
         if(auditOutputPotentialSource == null) {
             try {
                 auditOutput = getFileOutputStream(
@@ -176,10 +169,16 @@ public final class VotingSystemRunner {
                 System.exit(2);
             }
         }
+        //If the audit location is set by tests
         else {
             auditOutput = auditOutputPotentialSource;
         }
-        
+        return auditOutput;
+    }
+    
+    private static OutputStream getReportOutput(final LocalDateTime currentTimestamp) {
+        OutputStream reportOutput = null;
+        //If the report location is not set by tests
         if(reportOutputPotentialSource == null) {
             try {
                 reportOutput = getFileOutputStream(
@@ -192,9 +191,57 @@ public final class VotingSystemRunner {
                 System.exit(2);
             }
         }
+        //If the report location is set by tests
         else {
             reportOutput = reportOutputPotentialSource;
         }
+        return reportOutput;
+    }
+    
+    /**
+     * Close an {@link OutputStream} corresponding to a type of output, printing an error message specific to the output type if the
+     * {@link OutputStream} could not be closed
+     *
+     * @param output     The {@link OutputStream} to close
+     * @param outputType The name associated with the output
+     */
+    private static void closeOutput(final OutputStream output, final String outputType) {
+        try {
+            output.close();
+        }
+        catch(IOException e) {
+            System.err.printf("Error: Was unable to close %s file successfully\n", outputType);
+            System.exit(2);
+        }
+    }
+    
+    /**
+     * Runs the election for a {@link VotingSystem} given paths to election files that can be absolute or relative to the current working directory
+     * and compose a single election, using standard input if none are given
+     *
+     * @param args The command-line arguments to the program, which should only consist of paths to election files that can be absolute or relative
+     *             to the current working directory and compose a single election
+     */
+    public static void main(final String... args) {
+        //Get the current date/time
+        final LocalDateTime currentTimestamp = LocalDateTime.now();
+        
+        //The input stream from which to read input
+        final InputStream[] inputs;
+        
+        //If there are no arguments provided, then assume standard input is being used
+        if(args.length == 0) {
+            System.out.println("Reading from standard input");
+            inputs = new InputStream[] {System.in};
+        }
+        //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
+        else {
+            inputs = getInputStreams(args);
+        }
+        
+        //Retrieves the output streams for the audit and report files, using the potential source variables if set
+        final OutputStream auditOutput = getAuditOutput(currentTimestamp);
+        final OutputStream reportOutput = getReportOutput(currentTimestamp);
         
         //Mapping of nonnull header strings to corresponding nonnull VotingSystem classes
         final Map<String, Class<? extends VotingSystem>> headerSystemMap = Map.of(
@@ -204,7 +251,7 @@ public final class VotingSystemRunner {
         
         //Attempt to retrieve a voting system from parsing and run its election
         try {
-            final VotingSystem votingSystem = VotingStreamParser.parse(new InputStream[] {input}, auditOutput, reportOutput, headerSystemMap);
+            final VotingSystem votingSystem = VotingStreamParser.parse(inputs, auditOutput, reportOutput, headerSystemMap);
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file
@@ -214,20 +261,8 @@ public final class VotingSystemRunner {
             System.exit(dataFormattingExitCode);
         }
         
-        try {
-            auditOutput.close();
-        }
-        catch(IOException e) {
-            System.err.println("Error: Was unable to close audit file successfully");
-            System.exit(2);
-        }
-        try {
-            reportOutput.close();
-        }
-        catch(IOException e) {
-            System.err.println("Error: Was unable to close report file successfully");
-            System.exit(2);
-        }
+        closeOutput(auditOutput, "audit");
+        closeOutput(reportOutput, "report");
     }
     
 }
