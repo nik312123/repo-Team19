@@ -235,14 +235,19 @@ public final class VotingSystemRunner {
         //The input stream from which to read input
         final InputStream[] inputs;
         
+        //The names corresponding to the input streams
+        final String[] inputNames;
+        
         //If there are no arguments provided, then assume standard input is being used
         if(args.length == 0) {
             System.out.println("Reading from standard input");
             inputs = new InputStream[] {System.in};
+            inputNames = new String[] {"Standard Input"};
         }
         //If there is one argument provided, then assume it is a file, and try to retrieve its input stream
         else {
             inputs = getInputStreams(args);
+            inputNames = args;
         }
         
         //Retrieves the output streams for the audit and report files, using the potential source variables if set
@@ -257,7 +262,7 @@ public final class VotingSystemRunner {
         
         //Attempt to retrieve a voting system from parsing and run its election
         try {
-            final VotingSystem votingSystem = VotingStreamParser.parse(inputs, auditOutput, reportOutput, headerSystemMap);
+            final VotingSystem votingSystem = VotingStreamParser.parse(inputs, inputNames, auditOutput, reportOutput, headerSystemMap);
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file
