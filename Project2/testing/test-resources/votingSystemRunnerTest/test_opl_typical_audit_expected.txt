@@ -10,7 +10,6 @@ Borg (R)
 Jones (R)
 Smith (I)
 
-Number of Seats: 3
 
 Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv: 9
 
@@ -23,7 +22,10 @@ Ballot 6 chose Borg (R)
 Ballot 7 chose Borg (R)
 Ballot 8 chose Pike (D)
 Ballot 9 chose Foster (D)
+
 Number of Ballots: 9
+
+Number of Seats: 3
 
 Quota: 9 / 3 = 3 ballots per seat
 
