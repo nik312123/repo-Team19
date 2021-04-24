@@ -55,6 +55,11 @@ public class InstantRunoffSystem extends VotingSystem {
     protected int halfNumBallots;
     
     /**
+     * Determines if ballot invalidation is activated
+     */
+    protected boolean invalidateBallots;
+    
+    /**
      * The array of {@link Candidate}s for this election in the order presented in the election file
      */
     protected Candidate[] candidates;
@@ -482,6 +487,8 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+        invalidateBallots = true;
+        
         //Writes the output for this ballot to the audit output
         auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
         
@@ -497,8 +504,19 @@ public class InstantRunoffSystem extends VotingSystem {
             candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
         }
         
+        //If the ballot ranks half or more of the candidates, add the ballot to its first ranked candidate list of ballots
+        if(invalidateBallots == true){
+            if(ballot.getRankedCandidates().length >= numCandidates / 2) {
+                candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+            }
+            else{
+                auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
+            }
+        }
         //Add the ballot to its first ranked candidate list of ballots
-        candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+        else{
+            candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+        }
     }
     
     /**
