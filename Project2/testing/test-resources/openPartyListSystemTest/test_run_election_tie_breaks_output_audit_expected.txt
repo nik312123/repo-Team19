@@ -1,4 +1,7 @@
+
 Number of Ballots: 9
+
+Number of Seats: 4
 
 Quota: 9 / 4 = 9 / 4 ballots per seat
 
