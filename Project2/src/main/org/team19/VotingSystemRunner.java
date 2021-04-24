@@ -130,9 +130,9 @@ public final class VotingSystemRunner {
     private static InputStream[] getInputStreams(final String[] args) {
         final InputStream[] inputs;
         inputs = new InputStream[args.length];
-        for(int i = 0; i < inputs.length; ++i) {
+        for(int i = 0; i < inputs.length; i++) {
             try {
-                final String fullFilePath = getFullFilePath(args[0]);
+                final String fullFilePath = getFullFilePath(args[i]);
                 System.out.println("Reading from " + fullFilePath);
                 inputs[i] = getFileInputStream(fullFilePath);
             }
