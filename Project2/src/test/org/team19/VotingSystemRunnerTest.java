@@ -579,6 +579,142 @@ final class VotingSystemRunnerTest {
         System.setOut(originalSystemOut);
     }
     
+    @Test
+    void testIrMultipleFiles() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+    
+        final String auditOutputPath =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_multiple_files_audit_actual.txt".replace('/', FILE_SEP);
+        final String reportOutputPath =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_multiple_files_report_actual.txt".replace('/', FILE_SEP);
+    
+        //Path to expected audit output
+        final String expectedAudit =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_multiple_files_audit_expected.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        final String expectedReport =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_multiple_files_report_expected.txt".replace('/', FILE_SEP);
+    
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+    
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            Assertions.fail(
+                "Unable to create test_ir_multiple_files_audit_actual.txt or test_ir_multiple_files_report_actual.txt");
+        }
+        
+        final String inputPath1 = "Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_1.csv";
+        final String inputPath2 = "Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_2.csv";
+        final String inputPath3 = "Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_3.csv";
+    
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        VotingSystemRunner.main(inputPath1, inputPath2, inputPath3);
+    
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+    
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+    
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+    
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+    
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+    
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testOplMultipleFiles() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        final String auditOutputPath =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_multiple_files_audit_actual.txt".replace('/', FILE_SEP);
+        final String reportOutputPath =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_multiple_files_report_actual.txt".replace('/', FILE_SEP);
+        
+        //Path to expected audit output
+        final String expectedAudit =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_multiple_files_audit_expected.txt".replace('/', FILE_SEP);
+        //Path to expected report output
+        final String expectedReport =
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_multiple_files_report_expected.txt".replace('/', FILE_SEP);
+        
+        FileOutputStream auditOutput = null;
+        FileOutputStream reportOutput = null;
+        
+        try {
+            auditOutput = new FileOutputStream(auditOutputPath);
+            reportOutput = new FileOutputStream(reportOutputPath);
+        }
+        catch(FileNotFoundException e) {
+            Assertions.fail(
+                "Unable to create test_opl_multiple_files_audit_actual.txt or test_opl_multiple_files_report_actual.txt");
+        }
+        
+        final String inputPath1 = "Project2/testing/test-resources/votingSystemRunnerTest/opl_multi_part_1.csv";
+        final String inputPath2 = "Project2/testing/test-resources/votingSystemRunnerTest/opl_multi_part_2.csv";
+        final String inputPath3 = "Project2/testing/test-resources/votingSystemRunnerTest/opl_multi_part_3.csv";
+        
+        //Sets audit and report outputs
+        VotingSystemRunner.auditOutputPotentialSource = auditOutput;
+        VotingSystemRunner.reportOutputPotentialSource = reportOutput;
+        
+        VotingSystemRunner.main(inputPath1, inputPath2, inputPath3);
+        
+        VotingSystemRunner.auditOutputPotentialSource = null;
+        VotingSystemRunner.reportOutputPotentialSource = null;
+    
+        //Comparing expected output vs actual output of audit
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedAudit),
+            new FileInputStream(auditOutputPath))
+        );
+    
+        //Comparing expected output vs actual output of report
+        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+            new FileInputStream(expectedReport),
+            new FileInputStream(reportOutputPath))
+        );
+    
+        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+        System.gc();
+    
+        //Deletes temp files if test passes
+        //noinspection ResultOfMethodCallIgnored
+        new File(auditOutputPath).delete();
+        //noinspection ResultOfMethodCallIgnored
+        new File(reportOutputPath).delete();
+    
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
     /**
      * Generates an IR ballot line that goes groupNum, groupNum -1, groupNum -2, ..., 1 with numCommasBefore commas before the numbering and
      * (candidateSize - groupNum - numCommasBefore) commas after
