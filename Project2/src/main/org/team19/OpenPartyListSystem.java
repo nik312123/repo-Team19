@@ -1097,7 +1097,7 @@ public class OpenPartyListSystem extends VotingSystem {
         auditWriter.println(numBallotsOutput);
         reportWriter.println(numBallotsOutput);
         System.out.println(numBallotsOutput);
-    
+        
         //Output the number of seats to the audit, report, and summary
         final String numSeatsOutput = String.format("Number of Seats: %d\n", numSeats);
         auditWriter.println(numSeatsOutput);
