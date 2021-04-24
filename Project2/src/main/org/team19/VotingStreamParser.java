@@ -104,6 +104,7 @@ public final class VotingStreamParser {
      * Parses the election type from the first line of the input and initiates and returns the corresponding {@link VotingSystem}
      *
      * @param inReader        The {@link BufferedReader} for the first provided {@link InputStream}
+     * @param inputSourceOne  The name for the first input source
      * @param auditStream     The {@link OutputStream} to write detailed information about the running of the election
      * @param reportStream    The {@link OutputStream} to write a summary about the running of the election
      * @param headerSystemMap The mapping between header strings and their corresponding {@link VotingSystem} classes
@@ -112,15 +113,16 @@ public final class VotingStreamParser {
      * @throws ParseException The {@link ParseException} thrown if the first line of the input is not one of the supported headers or if there are
      *                        0 lines in the input (if such an input exists)
      */
-    private static VotingSystem parseElectionType(final BufferedReader inReader, final OutputStream auditStream, final OutputStream reportStream,
-        final Map<String, Class<? extends VotingSystem>> headerSystemMap, final int lineNumber) throws ParseException {
+    private static VotingSystem parseElectionType(final BufferedReader inReader, final String inputSourceOne, final OutputStream auditStream,
+        final OutputStream reportStream, final Map<String, Class<? extends VotingSystem>> headerSystemMap, final int lineNumber)
+        throws ParseException {
         VotingSystem votingSystem = null;
         
         //Attempt to read the first line of the input
-        String firstLine = readLine(inReader, "1", lineNumber);
+        String firstLine = readLine(inReader, inputSourceOne, lineNumber);
         
         //Throw an exception if the input has 0 lines (if such an input exists)
-        throwParseExceptionIfEofLine(firstLine, "1", lineNumber);
+        throwParseExceptionIfEofLine(firstLine, inputSourceOne, lineNumber);
         
         //Strip any whitespace from the beginning or end of the line
         //noinspection ConstantConditions
@@ -134,7 +136,7 @@ public final class VotingStreamParser {
                 "The given input header %s does not match any of the supported headers that were provided: %s",
                 firstLine,
                 headers
-            ), "1", lineNumber);
+            ), inputSourceOne, lineNumber);
         }
         //If the election input header is valid
         else {
@@ -155,7 +157,7 @@ public final class VotingStreamParser {
                 throwParseException(String.format(
                     "There was an issue in trying to construct the VotingSystem %s with the audit and report streams passed as arguments",
                     headerSystemMap.get(firstLine).getSimpleName()
-                ), "1", lineNumber);
+                ), inputSourceOne, lineNumber);
             }
         }
         return votingSystem;
@@ -164,34 +166,37 @@ public final class VotingStreamParser {
     /**
      * Parses the candidate header, stores the header information in the {@link VotingSystem}, and returns the size of the candidate header
      *
-     * @param inReader     The {@link BufferedReader} for the first provided {@link InputStream}
-     * @param votingSystem The {@link VotingSystem} that will parse the candidate header
-     * @param lineNumber   The current line number of the input being parsed
+     * @param inReader       The {@link BufferedReader} for the first provided {@link InputStream}
+     * @param inputSourceOne The name for the first input source
+     * @param votingSystem   The {@link VotingSystem} that will parse the candidate header
+     * @param lineNumber     The current line number of the input being parsed
      * @return The size of the candidate header
      * @throws ParseException Thrown if the candidate header cannot be parsed
      */
-    private static int parseCandidateHeader(final VotingSystem votingSystem, final BufferedReader inReader, final int lineNumber)
-        throws ParseException {
+    private static int parseCandidateHeader(final VotingSystem votingSystem, final BufferedReader inReader, final String inputSourceOne,
+        final int lineNumber) throws ParseException {
         final int candidateHeaderSize = votingSystem.getCandidateHeaderSize();
-        final String[] candidatesHeader = readLines(inReader, candidateHeaderSize, "1", lineNumber);
-        throwParseExceptionIfEofLines(candidatesHeader, "1", lineNumber);
-        votingSystem.importCandidatesHeader(candidatesHeader, "1", lineNumber);
+        final String[] candidatesHeader = readLines(inReader, candidateHeaderSize, inputSourceOne, lineNumber);
+        throwParseExceptionIfEofLines(candidatesHeader, inputSourceOne, lineNumber);
+        votingSystem.importCandidatesHeader(candidatesHeader, inputSourceOne, lineNumber);
         return candidateHeaderSize;
     }
     
     /**
      * Parses the candidates and stores the candidates in the {@link VotingSystem}
      *
-     * @param votingSystem The {@link VotingSystem} that will parse the candidates
-     * @param inReader     The {@link BufferedReader} for the first provided {@link InputStream}
-     * @param lineNumber   The current line number of the input being parsed
+     * @param votingSystem   The {@link VotingSystem} that will parse the candidates
+     * @param inReader       The {@link BufferedReader} for the first provided {@link InputStream}
+     * @param inputSourceOne The name for the first input source
+     * @param lineNumber     The current line number of the input being parsed
      * @throws ParseException Thrown if the candidates cannot be parsed
      */
-    private static void parseCandidates(final VotingSystem votingSystem, final BufferedReader inReader, final int lineNumber) throws ParseException {
+    private static void parseCandidates(final VotingSystem votingSystem, final BufferedReader inReader, final String inputSourceOne,
+        final int lineNumber) throws ParseException {
         final int numCandidates = votingSystem.getNumCandidates();
-        final String candidatesLine = readLine(inReader, "1", lineNumber);
-        throwParseExceptionIfEofLine(candidatesLine, "1", lineNumber);
-        votingSystem.addCandidates(candidatesLine, "1", lineNumber);
+        final String candidatesLine = readLine(inReader, inputSourceOne, lineNumber);
+        throwParseExceptionIfEofLine(candidatesLine, inputSourceOne, lineNumber);
+        votingSystem.addCandidates(candidatesLine, inputSourceOne, lineNumber);
         
         //Throw an exception if the number of candidates parsed does not match the number of candidates provided in the candidates header
         if(votingSystem.getCandidates().size() != numCandidates) {
@@ -199,7 +204,7 @@ public final class VotingStreamParser {
                 "The number of parsed candidates %d is not equivalent to the number provided in the candidates header %d",
                 votingSystem.getCandidates().size(),
                 numCandidates
-            ), "1", lineNumber);
+            ), inputSourceOne, lineNumber);
         }
     }
     
@@ -273,6 +278,7 @@ public final class VotingStreamParser {
      * Parses {@link InputStream}s corresponding to one election and returns a {@link VotingSystem} constructed from the given stream
      *
      * @param inputs          The {@link InputStream}s to parse as a single election
+     * @param inputNames      The names corresponding to each of the {@link InputStream}s
      * @param auditStream     The {@link OutputStream} to write detailed information about the running of the election
      * @param reportStream    The {@link OutputStream} to write a summary about the running of the election
      * @param headerSystemMap The mapping between header strings and their corresponding {@link VotingSystem} classes
@@ -281,8 +287,9 @@ public final class VotingStreamParser {
      * @throws IllegalArgumentException Thrown if the number of {@link InputStream}s is not at least 1
      * @throws ParseException           Thrown if there is an issue in parsing the provided {@link InputStream}
      */
-    public static VotingSystem parse(final InputStream[] inputs, final OutputStream auditStream, final OutputStream reportStream,
-        final Map<String, Class<? extends VotingSystem>> headerSystemMap) throws ParseException, NullPointerException, IllegalArgumentException {
+    public static VotingSystem parse(final InputStream[] inputs, final String[] inputNames, final OutputStream auditStream,
+        final OutputStream reportStream, final Map<String, Class<? extends VotingSystem>> headerSystemMap) throws ParseException,
+        NullPointerException, IllegalArgumentException {
         //Require that the input stream and output streams are nonnull
         Objects.requireNonNull(inputs);
         for(final InputStream input : inputs) {
@@ -296,23 +303,25 @@ public final class VotingStreamParser {
             throw new IllegalArgumentException("The number of InputStream instances provided must be at least 1");
         }
         
+        final String inputSourceOne = inputNames[0];
+        
         //Use a BufferedReader to read from the input stream and PrintWriters to write to the output streams
         BufferedReader inReader = new BufferedReader(new InputStreamReader(inputs[0]));
         
         int lineNumber = 1;
         
         final VotingSystem votingSystem =
-            parseElectionType(inReader, auditStream, reportStream, headerSystemMap, lineNumber);
+            parseElectionType(inReader, inputSourceOne, auditStream, reportStream, headerSystemMap, lineNumber);
         
         lineNumber++;
         
         //Import the candidates header
-        final int candidateHeaderSize = parseCandidateHeader(votingSystem, inReader, lineNumber);
+        final int candidateHeaderSize = parseCandidateHeader(votingSystem, inReader, inputSourceOne, lineNumber);
         
         lineNumber += candidateHeaderSize;
         
         //Parse and add the candidates
-        parseCandidates(votingSystem, inReader, lineNumber);
+        parseCandidates(votingSystem, inReader, inputSourceOne, lineNumber);
         
         lineNumber++;
         
@@ -324,8 +333,8 @@ public final class VotingStreamParser {
         
         //For each of the input sources
         for(int i = 0; i < inputs.length; i++) {
-            //Get the identifier for the input source (1 through the number of input sources)
-            final String inputIdentifier = Integer.toString(i + 1);
+            //Get the identifier for the input source
+            final String inputIdentifier = inputNames[i];
             
             /*
              * If not the first input source, then advance to the line at which the ballots header is located, throwing an exception if there is

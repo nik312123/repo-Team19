@@ -61,10 +61,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/file_ends_early.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream("Project2/testing/test-resources/votingStreamParserTest/file_ends_early.csv");
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -82,10 +84,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/invalid_header.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream("Project2/testing/test-resources/votingStreamParserTest/invalid_header.csv");
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -103,12 +107,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates_header.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates_header.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -126,12 +130,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/invalid_candidates.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -149,12 +153,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_header.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_header.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -172,12 +176,12 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_line.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/invalid_ballot_line.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             Assertions.assertThrows(ParseException.class, () -> VotingStreamParser.parse(
-                new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
         }
         catch(FileNotFoundException e) {
@@ -195,14 +199,14 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/correct_ir.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/correct_ir.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             
             //Get the InstantRunoffSystem if the assertion holds that no exception is thrown in parsing the file
             final InstantRunoffSystem instantRunoffSystem = (InstantRunoffSystem) Assertions.assertDoesNotThrow(() ->
-                VotingStreamParser.parse(new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                VotingStreamParser.parse(new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
             
             Assertions.assertAll(
@@ -234,14 +238,14 @@ final class VotingStreamParserTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
+        final String inputPath = "Project2/testing/test-resources/votingStreamParserTest/correct_opl.csv";
+        
         try {
-            final FileInputStream inputStream = new FileInputStream(
-                "Project2/testing/test-resources/votingStreamParserTest/correct_opl.csv"
-            );
+            final FileInputStream inputStream = new FileInputStream(inputPath);
             
             //Get the OpenPartyListSystem if the assertion holds that no exception is thrown in parsing the file
             final OpenPartyListSystem openPartyListSystem = (OpenPartyListSystem) Assertions.assertDoesNotThrow(() ->
-                VotingStreamParser.parse(new InputStream[] {inputStream}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                VotingStreamParser.parse(new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
             );
             
             Assertions.assertAll(
