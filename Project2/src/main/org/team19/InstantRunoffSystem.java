@@ -505,16 +505,16 @@ public class InstantRunoffSystem extends VotingSystem {
         }
         
         //If the ballot ranks half or more of the candidates, add the ballot to its first ranked candidate list of ballots
-        if(invalidateBallots == true){
+        if(invalidateBallots == true) {
             if(ballot.getRankedCandidates().length >= numCandidates / 2) {
                 candidateBallotsMap.get(firstRankedCandidate).add(ballot);
             }
-            else{
+            else {
                 auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
             }
         }
         //Add the ballot to its first ranked candidate list of ballots
-        else{
+        else {
             candidateBallotsMap.get(firstRankedCandidate).add(ballot);
         }
     }
