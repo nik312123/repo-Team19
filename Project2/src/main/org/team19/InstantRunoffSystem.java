@@ -39,6 +39,9 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     protected static Random rand = new SecureRandom();
     
+    /**
+     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
+     */
     protected boolean invalidatedBallots = true;
     
     /**
@@ -502,12 +505,12 @@ public class InstantRunoffSystem extends VotingSystem {
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
-        //Prints an invalidation message to the audit file
+        //If invalidation is enabled and the ballot does not rank at least half the candidates, print an invalidation message to the audit file
         if(invalidateBallots && ballot.getRankedCandidates().length < numCandidates / 2.0) {
             auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
             numBallots--;
         }
-        //Add the ballot to its first ranked candidate list of ballots
+        //Otherwise, add the ballot to its first ranked candidate's collection of ballots
         else {
             //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
             if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
