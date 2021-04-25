@@ -55,9 +55,9 @@ public class InstantRunoffSystem extends VotingSystem {
     protected int halfNumBallots;
     
     /**
-     * Determines if ballot invalidation is activated
+     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
      */
-    protected boolean invalidateBallots;
+    protected boolean invalidateBallots = true;
     
     /**
      * The array of {@link Candidate}s for this election in the order presented in the election file
@@ -487,8 +487,6 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
-        invalidateBallots = true;
-        
         //Writes the output for this ballot to the audit output
         auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
         
@@ -497,25 +495,19 @@ public class InstantRunoffSystem extends VotingSystem {
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
-        auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
-        
-        //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
-        if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
-            candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
-        }
-        
-        //If the ballot ranks half or more of the candidates, add the ballot to its first ranked candidate list of ballots
-        if(invalidateBallots == true) {
-            if(ballot.getRankedCandidates().length >= numCandidates / 2) {
-                candidateBallotsMap.get(firstRankedCandidate).add(ballot);
-            }
-            else {
-                auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
-            }
+        //Prints an invalidation message to the audit file
+        if(invalidateBallots && ballot.getRankedCandidates().length < numCandidates / 2.0) {
+            auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
+            numBallots--;
         }
         //Add the ballot to its first ranked candidate list of ballots
         else {
+            //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
+            if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
+                candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
+            }
             candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+            auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
         }
     }
     
