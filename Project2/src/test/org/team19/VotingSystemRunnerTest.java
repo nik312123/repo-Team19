@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -782,11 +783,12 @@ final class VotingSystemRunnerTest {
      *                             {@link OutputStream} to which the contents of the generated file are written
      * @param generationParameters The parameters after the aforementioned {@link OutputStream} to pass to the generateFileMethod
      * @param filePath             The output path to which the file contents created by generateFileMethod will be written
+     * @param votingSystemModifier The {@link Consumer} used to modify the {@link VotingSystem}, which can be null if nonused
      * @param testName             The name of the particular test calling this function
      * @param timeLimitSeconds     The time limit that will cause the test to fail if exceeded
      */
-    void runTimedTest(final Method generateFileMethod, final Collection<Object> generationParameters, final String filePath, final String testName,
-        final int timeLimitSeconds) {
+    void runTimedTest(final Method generateFileMethod, final Collection<Object> generationParameters, final String filePath,
+        final Consumer<VotingSystem> votingSystemModifier, final String testName, final int timeLimitSeconds) {
         //If RUN_TIME_TESTS is false, then timed tests should not run and instead automatically pass
         if(!RUN_TIME_TESTS) {
             System.out.printf("The timed test for %s did not run because RUN_TIME_TESTS is false\n", testName);
@@ -837,6 +839,9 @@ final class VotingSystemRunnerTest {
             VotingSystemRunner.auditOutputPotentialSource = NULL_OUTPUT;
             VotingSystemRunner.reportOutputPotentialSource = NULL_OUTPUT;
             
+            //Set the consumer used to modify the voting system
+            VotingSystemRunner.votingSystemModifier = votingSystemModifier;
+            
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
             VotingSystemRunner.main(testFile.toString());
@@ -885,6 +890,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
+                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidatedBallots = false,
                 "testIrStairsTime",
                 8 * 60
             );
@@ -902,6 +908,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileDoubleStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
+                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidatedBallots = false,
                 "testIrDoubleStairsTime",
                 8 * 60
             );
@@ -952,6 +959,7 @@ final class VotingSystemRunnerTest {
                     "Project2/testing/test-resources/votingSystemRunnerTest/opl_test%d.txt",
                     currentCandidatePartySize
                 ).replace('/', File.separatorChar),
+                null,
                 String.format("testOplTime%d", currentCandidatePartySize),
                 8 * 60
             );

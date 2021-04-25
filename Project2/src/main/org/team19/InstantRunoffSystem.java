@@ -39,6 +39,8 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     protected static Random rand = new SecureRandom();
     
+    protected boolean invalidatedBallots = true;
+    
     /**
      * The number of candidates in this election
      */
