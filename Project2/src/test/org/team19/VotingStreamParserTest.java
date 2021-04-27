@@ -309,24 +309,24 @@ final class VotingStreamParserTest {
                 )
             );
             
-           final List<Candidate> expectedCandidates = List.of(
+            final List<Candidate> expectedCandidates = List.of(
                 new Candidate("Rosen", "D"),
                 new Candidate("Kleinberg", "R"),
                 new Candidate("Chou", "I"),
                 new Candidate("Royce", "L"));
             
-           Assertions.assertAll(
+            Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
-               () -> Assertions.assertEquals(4, instantRunoffSystem.getNumCandidates()),
+                () -> Assertions.assertEquals(4, instantRunoffSystem.getNumCandidates()),
                 //Check that the candidates themselves were correctly parsed
-               () -> Assertions.assertEquals(expectedCandidates, instantRunoffSystem.getCandidates()),
+                () -> Assertions.assertEquals(expectedCandidates, instantRunoffSystem.getCandidates()),
                 //Check that ballots from 3 different files are added up
-               () -> Assertions.assertEquals(9, instantRunoffSystem.getNumBallots()),
+                () -> Assertions.assertEquals(9, instantRunoffSystem.getNumBallots()),
                 //Check that all candidates' ballots are parsed and distributed properly
-               () -> Assertions.assertEquals(4, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(0)).size()),
-               () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(1)).size()),
-               () -> Assertions.assertEquals(1, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(2)).size()),
-               () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(3)).size())
+                () -> Assertions.assertEquals(4, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(0)).size()),
+                () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(1)).size()),
+                () -> Assertions.assertEquals(1, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(2)).size()),
+                () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(3)).size())
             );
         }
         catch(FileNotFoundException e) {
@@ -366,13 +366,13 @@ final class VotingStreamParserTest {
                 () -> Assertions.assertEquals(6, openPartyListSystem.getNumCandidates()),
                 //Check that the candidates themselves were correctly parsed
                 () -> Assertions.assertEquals(openPartyListSystem.getCandidates(), List.of(
-                new Candidate("Pike", "D"),
-                new Candidate("Foster", "D"),
-                new Candidate("Deutsch", "R"),
-                new Candidate("Borg", "R"),
-                new Candidate("Jones", "R"),
-                new Candidate("Smith", "I")
-            )),
+                    new Candidate("Pike", "D"),
+                    new Candidate("Foster", "D"),
+                    new Candidate("Deutsch", "R"),
+                    new Candidate("Borg", "R"),
+                    new Candidate("Jones", "R"),
+                    new Candidate("Smith", "I")
+                )),
                 //Check that ballots from 3 different files are added up
                 () -> Assertions.assertEquals(9, openPartyListSystem.getNumBallots()),
                 //Check that the number of seats was correctly parsed
