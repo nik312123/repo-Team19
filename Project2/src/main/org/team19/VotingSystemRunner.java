@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Runs the election for a {@link VotingSystem} given paths to election files that can be absolute or relative to the current working directory and
@@ -49,6 +50,11 @@ public final class VotingSystemRunner {
      * The potential source for the audit output set by test classes in this package to specify an alternative output location for the report contents
      */
     static OutputStream reportOutputPotentialSource = null;
+    
+    /**
+     * The potential consumer set by test classes in this package used to modify the parsed {@link VotingSystem}
+     */
+    static Consumer<VotingSystem> votingSystemModifier = null;
     
     /**
      * A private constructor for the utility class {@link VotingSystemRunner} to prevent instantiation
@@ -263,6 +269,9 @@ public final class VotingSystemRunner {
         //Attempt to retrieve a voting system from parsing and run its election
         try {
             final VotingSystem votingSystem = VotingStreamParser.parse(inputs, inputNames, auditOutput, reportOutput, headerSystemMap);
+            if(votingSystemModifier != null) {
+                votingSystemModifier.accept(votingSystem);
+            }
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file
