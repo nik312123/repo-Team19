@@ -284,14 +284,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -352,14 +352,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -420,14 +420,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -488,14 +488,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -557,14 +557,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -625,14 +625,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
@@ -674,7 +674,8 @@ final class VotingSystemRunnerTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to create test_opl_multiple_files_audit_actual.txt or test_opl_multiple_files_report_actual.txt");
+                "Unable to create test_opl_multiple_files_audit_actual.txt or test_opl_multiple_files_report_actual.txt"
+            );
         }
         
         final String inputPath1 = "Project2/testing/test-resources/votingSystemRunnerTest/opl_multi_part_1.csv";
@@ -693,14 +694,14 @@ final class VotingSystemRunnerTest {
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedAudit),
-            new FileInputStream(auditOutputPath))
-        );
+            new FileInputStream(auditOutputPath)
+            ));
         
         //Comparing expected output vs actual output of report
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
             new FileInputStream(expectedReport),
-            new FileInputStream(reportOutputPath))
-        );
+            new FileInputStream(reportOutputPath)
+            ));
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
         System.gc();
