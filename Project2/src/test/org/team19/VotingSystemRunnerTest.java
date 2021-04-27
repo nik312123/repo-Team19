@@ -272,14 +272,15 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to create test_ir_majority_audit_actual.txt or test_ir_majority_report_actual.txt");
         }
         
-        InstantRunoffSystem.invalidateBallots = false;
-        
         //Sets audit and report outputs
         VotingSystemRunner.auditOutputPotentialSource = auditOutput;
         VotingSystemRunner.reportOutputPotentialSource = reportOutput;
         
+        //Prevents the invalidation of ballots that rank less than half of the candidates
+        InstantRunoffSystem.invalidateBallots = false;
         //Runs main algorithm
         VotingSystemRunner.main(inputCSV);
+        InstantRunoffSystem.invalidateBallots = true;
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
@@ -342,14 +343,15 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to create test_ir_popularity_audit_actual.txt or test_ir_popularity_report_actual.txt");
         }
         
-        InstantRunoffSystem.invalidateBallots = false;
-        
         //Sets audit and report outputs
         VotingSystemRunner.auditOutputPotentialSource = auditOutput;
         VotingSystemRunner.reportOutputPotentialSource = reportOutput;
         
+        //Prevents the invalidation of ballots that rank less than half of the candidates
+        InstantRunoffSystem.invalidateBallots = false;
         //Runs main algorithm
         VotingSystemRunner.main(inputCSV);
+        InstantRunoffSystem.invalidateBallots = true;
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
