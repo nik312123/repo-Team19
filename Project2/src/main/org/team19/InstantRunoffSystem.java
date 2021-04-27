@@ -35,14 +35,14 @@ import java.util.regex.Pattern;
 public class InstantRunoffSystem extends VotingSystem {
     
     /**
+     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
+     */
+    protected static boolean invalidateBallots = true;
+    
+    /**
      * Used for randomization for breaking ties
      */
     protected static Random rand = new SecureRandom();
-    
-    /**
-     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
-     */
-    protected boolean invalidatedBallots = true;
     
     /**
      * The number of candidates in this election
@@ -58,11 +58,6 @@ public class InstantRunoffSystem extends VotingSystem {
      * Half of the number of ballots provided in this election
      */
     protected int halfNumBallots;
-    
-    /**
-     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
-     */
-    protected boolean invalidateBallots = true;
     
     /**
      * The array of {@link Candidate}s for this election in the order presented in the election file
