@@ -272,6 +272,8 @@ final class VotingSystemRunnerTest {
             Assertions.fail("Unable to create test_ir_majority_audit_actual.txt or test_ir_majority_report_actual.txt");
         }
         
+        InstantRunoffSystem.invalidateBallots = false;
+        
         //Sets audit and report outputs
         VotingSystemRunner.auditOutputPotentialSource = auditOutput;
         VotingSystemRunner.reportOutputPotentialSource = reportOutput;
@@ -339,6 +341,8 @@ final class VotingSystemRunnerTest {
         catch(FileNotFoundException e) {
             Assertions.fail("Unable to create test_ir_popularity_audit_actual.txt or test_ir_popularity_report_actual.txt");
         }
+        
+        InstantRunoffSystem.invalidateBallots = false;
         
         //Sets audit and report outputs
         VotingSystemRunner.auditOutputPotentialSource = auditOutput;
@@ -1027,7 +1031,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
-                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidatedBallots = false,
+                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false,
                 "testIrStairsTime",
                 8 * 60
             );
@@ -1045,7 +1049,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileDoubleStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
-                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidatedBallots = false,
+                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false,
                 "testIrDoubleStairsTime",
                 8 * 60
             );
