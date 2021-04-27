@@ -218,6 +218,7 @@ final class OpenPartyListSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
+            //Retrieve the ballot parsing method for the voting system
             Method parseBallotTmp = null;
             try {
                 parseBallotTmp = OpenPartyListSystem.class.getDeclaredMethod("parseBallot", String.class, String.class, int.class);
@@ -227,7 +228,8 @@ final class OpenPartyListSystemTest {
                 Assertions.fail("Unable to retrieve parseBallot from OpenPartyListSystem");
             }
             final Method parseBallot = parseBallotTmp;
-            
+    
+            //Set up the voting system with the following candidate header information and candidates
             try {
                 openPartyListSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
                 openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", "1", 3);

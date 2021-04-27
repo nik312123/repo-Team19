@@ -31,6 +31,7 @@ import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 final class InstantRunoffSystemTest {
     
@@ -196,6 +197,7 @@ final class InstantRunoffSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
+            //Retrieve the ballot parsing method for the voting system
             Method parseBallotTmp = null;
             try {
                 parseBallotTmp = InstantRunoffSystem.class.getDeclaredMethod("parseBallot", int.class, String.class, String.class, int.class);
@@ -206,6 +208,7 @@ final class InstantRunoffSystemTest {
             }
             final Method parseBallot = parseBallotTmp;
             
+            //Set up the voting system with the following candidate header information and candidates
             try {
                 instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
                 instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", "1", 3);
@@ -255,6 +258,177 @@ final class InstantRunoffSystemTest {
             //Redirect STDOUT back to STDOUT
             System.setOut(originalSystemOut);
         }
+    }
+    
+    @Test
+    void testAddBallotInvalidationOdd() {
+        final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
+        
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //Set up the voting system with the following candidate header information and candidates
+        try {
+            instantRunoffSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
+            instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3), C4 (P4)", "1", 3);
+        }
+        catch(ParseException e) {
+            Assertions.fail("Unable to properly set up the candidates for the test");
+        }
+        
+        //Retrieve the list of candidates
+        List<Candidate> candidateListTmp = null;
+        try {
+            candidateListTmp = (List<Candidate>) instantRunoffSystem.getCandidates();
+        }
+        catch(ClassCastException e) {
+            Assertions.fail("The provided collection of candidates could not be casted to a list");
+        }
+        final List<Candidate> candidateList = candidateListTmp;
+        
+        //Retrieve candidates 0 and 2
+        final Candidate c0 = candidateList.get(0);
+        final Candidate c2 = candidateList.get(2);
+        
+        /*
+         * Set the expected ballots for candidate 0, calling getNextCandidate on each ballot to increment the candidate index as is the case for
+         * the actual ballots
+         */
+        final Ballot[] c0ExpectedBallots = new Ballot[] {
+            new Ballot(3, new Candidate[] {candidateList.get(0), candidateList.get(3), candidateList.get(2)})
+        };
+        for(final Ballot ballot : c0ExpectedBallots) {
+            ballot.getNextCandidate();
+        }
+        
+        /*
+         * Set the expected ballots for candidate 2, calling getNextCandidate on each ballot to increment the candidate index as is the case for
+         * the actual ballots
+         */
+        final Ballot[] c2ExpectedBallots = new Ballot[] {
+            new Ballot(1, new Candidate[] {
+                candidateList.get(2), candidateList.get(3), candidateList.get(0), candidateList.get(1), candidateList.get(4)
+            })
+        };
+        for(final Ballot ballot : c2ExpectedBallots) {
+            ballot.getNextCandidate();
+        }
+        
+        Assertions.assertAll(
+            //Adding a ballot that ranks all of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(1, "3,4,1,2,5", "testAddBallotInvalidation", 5)),
+            //Adding a ballot that ranks less than half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(2, ",,,1,", "testAddBallotInvalidation", 6)),
+            //Adding a ballot that ranks just over half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(3, "1,,3,2,", "testAddBallotInvalidation", 7)),
+            //Adding a ballot that ranks just under half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(4, ",2,1,,", "testAddBallotInvalidation", 8)),
+            
+            //Note: The following tests are done in place of the use of Map.equals because Deque-inheriting classes apparently do not overwrite equals
+            
+            //Test that only the candidates that have ballots were added to the map
+            () -> Assertions.assertEquals(
+                Set.of(c0, c2),
+                instantRunoffSystem.candidateBallotsMap.keySet()
+            ),
+            //Test that candidate 0 only has ballot 3
+            () -> Assertions.assertArrayEquals(
+                instantRunoffSystem.candidateBallotsMap.get(c0).toArray(),
+                c0ExpectedBallots
+            ),
+            //Test that candidate 2 only has ballot 1
+            () -> Assertions.assertArrayEquals(
+                instantRunoffSystem.candidateBallotsMap.get(c2).toArray(),
+                c2ExpectedBallots
+            )
+        );
+    }
+    
+    @Test
+    void testAddBallotInvalidationEven() {
+        final InstantRunoffSystem instantRunoffSystem = createIrNullStreams();
+        
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        //Set up the voting system with the following candidate header information and candidates
+        try {
+            instantRunoffSystem.importCandidatesHeader(new String[] {"4"}, "1", 2);
+            instantRunoffSystem.addCandidates("C0 (P0), C1 (P1), C2 (P2), C3 (P3)", "1", 3);
+        }
+        catch(ParseException e) {
+            Assertions.fail("Unable to properly set up the candidates for the test");
+        }
+        
+        //Retrieve the list of candidates
+        List<Candidate> candidateListTmp = null;
+        try {
+            candidateListTmp = (List<Candidate>) instantRunoffSystem.getCandidates();
+        }
+        catch(ClassCastException e) {
+            Assertions.fail("The provided collection of candidates could not be casted to a list");
+        }
+        final List<Candidate> candidateList = candidateListTmp;
+        
+        //Retrieve candidates 0 and 2
+        final Candidate c0 = candidateList.get(0);
+        final Candidate c2 = candidateList.get(2);
+        
+        /*
+         * Set the expected ballots for candidate 0, calling getNextCandidate on each ballot to increment the candidate index as is the case for
+         * the actual ballots
+         */
+        final Ballot[] c0ExpectedBallots = new Ballot[] {
+            new Ballot(3, new Candidate[] {candidateList.get(0), candidateList.get(3), candidateList.get(2)})
+        };
+        for(final Ballot ballot : c0ExpectedBallots) {
+            ballot.getNextCandidate();
+        }
+        
+        /*
+         * Set the expected ballots for candidate 2, calling getNextCandidate on each ballot to increment the candidate index as is the case for
+         * the actual ballots
+         */
+        final Ballot[] c2ExpectedBallots = new Ballot[] {
+            new Ballot(1, new Candidate[] {
+                candidateList.get(2), candidateList.get(3), candidateList.get(0), candidateList.get(1)
+            }),
+            new Ballot(4, new Candidate[] {candidateList.get(2), candidateList.get(1)})
+        };
+        for(final Ballot ballot : c2ExpectedBallots) {
+            ballot.getNextCandidate();
+        }
+        
+        Assertions.assertAll(
+            //Adding a ballot that ranks all of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(1, "3,4,1,2", "testAddBallotInvalidation", 5)),
+            //Adding a ballot that ranks less than half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(2, ",,,1", "testAddBallotInvalidation", 6)),
+            //Adding a ballot that ranks more than half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(3, "1,,3,2", "testAddBallotInvalidation", 7)),
+            //Adding a ballot that ranks half of the candidates and testing that it does not throw an exception
+            () -> Assertions.assertDoesNotThrow(() -> instantRunoffSystem.addBallot(4, ",2,1,", "testAddBallotInvalidation", 8)),
+            
+            //Note: The following tests are done in place of the use of Map.equals because Deque-inheriting classes apparently do not overwrite equals
+            
+            //Test that only the candidates that have ballots were added to the map
+            () -> Assertions.assertEquals(
+                Set.of(c0, c2),
+                instantRunoffSystem.candidateBallotsMap.keySet()
+            ),
+            //Test that candidate 0 only has ballot 3
+            () -> Assertions.assertArrayEquals(
+                instantRunoffSystem.candidateBallotsMap.get(c0).toArray(),
+                c0ExpectedBallots
+            ),
+            //Test that candidate 2 only has ballot 1
+            () -> Assertions.assertArrayEquals(
+                instantRunoffSystem.candidateBallotsMap.get(c2).toArray(),
+                c2ExpectedBallots
+            )
+        );
     }
     
     @Test

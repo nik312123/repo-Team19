@@ -168,8 +168,14 @@ public class InstantRunoffSystem extends VotingSystem {
          *
          * @return The {@link String} form of this {@link Ballot}
          */
+        @Override
         public String toString() {
-            return String.format("Ballot %d: %s", ballotNumber, Arrays.toString(rankedCandidates));
+            return String.format(
+                "Ballot{ballotNumber=%d, candidateIndex=%d, rankedCandidates=%s}",
+                ballotNumber,
+                candidateIndex,
+                Arrays.toString(rankedCandidates)
+            );
         }
         
         /**
