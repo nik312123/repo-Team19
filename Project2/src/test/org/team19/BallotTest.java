@@ -63,7 +63,7 @@ final class BallotTest {
             23,
             new Candidate[] {c0, c1}
         );
-        Assertions.assertEquals(String.format("Ballot{ballotNumber=23, candidateIndex=-1, rankedCandidates=[C0 (P0), C1 (P1)]}", c0, c1), ballot.toString());
+        Assertions.assertEquals("Ballot{ballotNumber=23, candidateIndex=-1, rankedCandidates=[C0 (P0), C1 (P1)]}", ballot.toString());
     }
     
     @Test
