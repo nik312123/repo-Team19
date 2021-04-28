@@ -308,6 +308,11 @@ final class VotingSystemRunnerTest {
         System.setOut(originalSystemOut);
     }
     
+    /**
+     * Disables ballot validation for a provided {@link VotingSystem}, assuming it is an instance of {@link InstantRunoffSystem}
+     *
+     * @param votingSystem The {@link VotingSystem} on which to disable ballot invalidation
+     */
     private static void disableInvalidateBallots(final VotingSystem votingSystem) {
         ((InstantRunoffSystem) votingSystem).invalidateBallots = false;
     }
@@ -729,7 +734,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_stairs_test.txt".replace('/', File.separatorChar),
-                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false,
+                VotingSystemRunnerTest::disableInvalidateBallots,
                 "testIrStairsTime",
                 8 * 60
             );
@@ -747,7 +752,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunnerTest.class.getDeclaredMethod("generateIrTimeTestFileDoubleStairs", OutputStream.class, int.class),
                 Collections.singletonList(100000),
                 "Project2/testing/test-resources/votingSystemRunnerTest/ir_double_stairs_test.txt".replace('/', File.separatorChar),
-                votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false,
+                VotingSystemRunnerTest::disableInvalidateBallots,
                 "testIrDoubleStairsTime",
                 8 * 60
             );
