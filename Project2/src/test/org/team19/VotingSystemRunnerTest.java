@@ -284,6 +284,7 @@ final class VotingSystemRunnerTest {
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
+        VotingSystemRunner.votingSystemModifierBeforeParsing = null;
         
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
@@ -355,6 +356,7 @@ final class VotingSystemRunnerTest {
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
+        VotingSystemRunner.votingSystemModifierBeforeParsing = null;
         
         //Comparing expected output vs actual output of audit
         Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
@@ -993,6 +995,9 @@ final class VotingSystemRunnerTest {
             //Setting the output sources back to null so they are not changed for other tests
             VotingSystemRunner.auditOutputPotentialSource = null;
             VotingSystemRunner.reportOutputPotentialSource = null;
+            
+            //Set the consumer used to modify the voting system back to null so they are not changed for other tests
+            VotingSystemRunner.votingSystemModifierBeforeElection = null;
             
             //Get the runtime in seconds, and if it exceeds the time limit, then fail
             final double runtime = (double) (finalTime - initTime) / 1000000000;
