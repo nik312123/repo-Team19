@@ -1,4 +1,7 @@
+
 Number of Ballots: 21
+
+Number of Seats: 14
 
 Quota: 21 / 14 = 3 / 2 ballots per seat
 

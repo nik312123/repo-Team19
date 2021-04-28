@@ -206,7 +206,12 @@ final class VotingStreamParserTest {
             
             //Get the InstantRunoffSystem if the assertion holds that no exception is thrown in parsing the file
             final InstantRunoffSystem instantRunoffSystem = (InstantRunoffSystem) Assertions.assertDoesNotThrow(() ->
-                VotingStreamParser.parse(new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                VotingStreamParser.parse(
+                    new InputStream[] {inputStream}, new String[] {inputPath},
+                    NULL_OUTPUT,
+                    NULL_OUTPUT,
+                    HEADER_SYSTEM_MAP
+                )
             );
             
             Assertions.assertAll(
@@ -245,7 +250,12 @@ final class VotingStreamParserTest {
             
             //Get the OpenPartyListSystem if the assertion holds that no exception is thrown in parsing the file
             final OpenPartyListSystem openPartyListSystem = (OpenPartyListSystem) Assertions.assertDoesNotThrow(() ->
-                VotingStreamParser.parse(new InputStream[] {inputStream}, new String[] {inputPath}, NULL_OUTPUT, NULL_OUTPUT, HEADER_SYSTEM_MAP)
+                VotingStreamParser.parse(
+                    new InputStream[] {inputStream}, new String[] {inputPath},
+                    NULL_OUTPUT,
+                    NULL_OUTPUT,
+                    HEADER_SYSTEM_MAP
+                )
             );
             
             Assertions.assertAll(
@@ -274,4 +284,110 @@ final class VotingStreamParserTest {
         System.setOut(originalSystemOut);
     }
     
+    @Test
+    void testParseMultipleIrFiles() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        final String inputPath1 = "Project2/testing/test-resources/votingStreamParserTest/ir_multi_part_1.csv";
+        final String inputPath2 = "Project2/testing/test-resources/votingStreamParserTest/ir_multi_part_2.csv";
+        final String inputPath3 = "Project2/testing/test-resources/votingStreamParserTest/ir_multi_part_3.csv";
+        
+        try {
+            final FileInputStream inputStream1 = new FileInputStream(inputPath1);
+            final FileInputStream inputStream2 = new FileInputStream(inputPath2);
+            final FileInputStream inputStream3 = new FileInputStream(inputPath3);
+            
+            final InstantRunoffSystem instantRunoffSystem = (InstantRunoffSystem) Assertions.assertDoesNotThrow(() ->
+                VotingStreamParser.parse(
+                    new InputStream[] {inputStream1, inputStream2, inputStream3},
+                    new String[] {inputPath1, inputPath2, inputPath3},
+                    NULL_OUTPUT,
+                    NULL_OUTPUT,
+                    HEADER_SYSTEM_MAP
+                )
+            );
+            
+            final List<Candidate> expectedCandidates = List.of(
+                new Candidate("Rosen", "D"),
+                new Candidate("Kleinberg", "R"),
+                new Candidate("Chou", "I"),
+                new Candidate("Royce", "L")
+            );
+            
+            Assertions.assertAll(
+                //Check that the number of candidates was correctly parsed
+                () -> Assertions.assertEquals(4, instantRunoffSystem.getNumCandidates()),
+                //Check that the candidates themselves were correctly parsed
+                () -> Assertions.assertEquals(expectedCandidates, instantRunoffSystem.getCandidates()),
+                //Check that ballots from 3 different files are added up
+                () -> Assertions.assertEquals(9, instantRunoffSystem.getNumBallots()),
+                //Check that all candidates' ballots are parsed and distributed properly
+                () -> Assertions.assertEquals(4, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(0)).size()),
+                () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(1)).size()),
+                () -> Assertions.assertEquals(1, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(2)).size()),
+                () -> Assertions.assertEquals(2, instantRunoffSystem.candidateBallotsMap.get(expectedCandidates.get(3)).size())
+            );
+        }
+        catch(FileNotFoundException e) {
+            Assertions.fail("Unable to open multiple csv files");
+        }
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
+    
+    @Test
+    void testParseMultipleOplFiles() {
+        //Store the original STDOUT and redirect it to go to a null device print stream
+        final PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(NULL_OUTPUT));
+        
+        final String inputPath1 = "Project2/testing/test-resources/votingStreamParserTest/opl_multi_part_1.csv";
+        final String inputPath2 = "Project2/testing/test-resources/votingStreamParserTest/opl_multi_part_2.csv";
+        final String inputPath3 = "Project2/testing/test-resources/votingStreamParserTest/opl_multi_part_3.csv";
+        
+        try {
+            final FileInputStream inputStream1 = new FileInputStream(inputPath1);
+            final FileInputStream inputStream2 = new FileInputStream(inputPath2);
+            final FileInputStream inputStream3 = new FileInputStream(inputPath3);
+            
+            final OpenPartyListSystem openPartyListSystem = (OpenPartyListSystem) Assertions.assertDoesNotThrow(() ->
+                VotingStreamParser.parse(
+                    new InputStream[] {inputStream1, inputStream2, inputStream3},
+                    new String[] {inputPath1, inputPath2, inputPath3},
+                    NULL_OUTPUT,
+                    NULL_OUTPUT,
+                    HEADER_SYSTEM_MAP
+                )
+            );
+            
+            Assertions.assertAll(
+                //Check that the number of candidates was correctly parsed
+                () -> Assertions.assertEquals(6, openPartyListSystem.getNumCandidates()),
+                //Check that the candidates themselves were correctly parsed
+                () -> Assertions.assertEquals(openPartyListSystem.getCandidates(), List.of(
+                    new Candidate("Pike", "D"),
+                    new Candidate("Foster", "D"),
+                    new Candidate("Deutsch", "R"),
+                    new Candidate("Borg", "R"),
+                    new Candidate("Jones", "R"),
+                    new Candidate("Smith", "I")
+                )),
+                //Check that ballots from 3 different files are added up
+                () -> Assertions.assertEquals(9, openPartyListSystem.getNumBallots()),
+                //Check that the number of seats was correctly parsed
+                () -> Assertions.assertEquals(3, openPartyListSystem.getNumSeats()),
+                //Check that all parties' ballots are parsed and assigned properly
+                () -> Assertions.assertEquals(3, openPartyListSystem.partyToPartyInformation.get("R").numBallots),
+                () -> Assertions.assertEquals(5, openPartyListSystem.partyToPartyInformation.get("D").numBallots),
+                () -> Assertions.assertEquals(1, openPartyListSystem.partyToPartyInformation.get("I").numBallots)
+            );
+        }
+        catch(FileNotFoundException e) {
+            Assertions.fail("Unable to open multiple csv files");
+        }
+        //Redirect STDOUT back to STDOUT
+        System.setOut(originalSystemOut);
+    }
 }

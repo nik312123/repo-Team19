@@ -10,9 +10,10 @@ Borg (R)
 Jones (R)
 Smith (I)
 
-Number of Seats: 14
 
 Number of Ballots: 21
+
+Number of Seats: 14
 
 Quota: 3 / 2 ballots per seat
 

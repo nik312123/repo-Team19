@@ -228,7 +228,7 @@ final class OpenPartyListSystemTest {
                 Assertions.fail("Unable to retrieve parseBallot from OpenPartyListSystem");
             }
             final Method parseBallot = parseBallotTmp;
-    
+            
             //Set up the voting system with the following candidate header information and candidates
             try {
                 openPartyListSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);

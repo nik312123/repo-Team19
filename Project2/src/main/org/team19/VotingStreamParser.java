@@ -315,6 +315,11 @@ public final class VotingStreamParser {
         
         lineNumber++;
         
+        //For testing purposes, modify the voting system before parsing
+        if(VotingSystemRunner.votingSystemModifierBeforeParsing != null) {
+            VotingSystemRunner.votingSystemModifierBeforeParsing.accept(votingSystem);
+        }
+        
         //Import the candidates header
         final int candidateHeaderSize = parseCandidateHeader(votingSystem, inReader, inputSourceOne, lineNumber);
         
