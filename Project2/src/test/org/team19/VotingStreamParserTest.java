@@ -313,7 +313,8 @@ final class VotingStreamParserTest {
                 new Candidate("Rosen", "D"),
                 new Candidate("Kleinberg", "R"),
                 new Candidate("Chou", "I"),
-                new Candidate("Royce", "L"));
+                new Candidate("Royce", "L")
+            );
             
             Assertions.assertAll(
                 //Check that the number of candidates was correctly parsed
