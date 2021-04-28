@@ -37,7 +37,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
      */
-    protected static boolean invalidateBallots = true;
+    protected boolean invalidateBallots = true;
     
     /**
      * Used for randomization for breaking ties

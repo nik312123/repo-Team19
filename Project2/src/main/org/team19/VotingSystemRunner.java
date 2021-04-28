@@ -52,9 +52,14 @@ public final class VotingSystemRunner {
     static OutputStream reportOutputPotentialSource = null;
     
     /**
-     * The potential consumer set by test classes in this package used to modify the parsed {@link VotingSystem}
+     * The potential consumer set by test classes in this package used to modify the {@link VotingSystem} before parsing
      */
-    static Consumer<VotingSystem> votingSystemModifier = null;
+    static Consumer<VotingSystem> votingSystemModifierBeforeParsing = null;
+    
+    /**
+     * The potential consumer set by test classes in this package used to modify the {@link VotingSystem} before the election
+     */
+    static Consumer<VotingSystem> votingSystemModifierBeforeElection = null;
     
     /**
      * A private constructor for the utility class {@link VotingSystemRunner} to prevent instantiation
@@ -269,9 +274,12 @@ public final class VotingSystemRunner {
         //Attempt to retrieve a voting system from parsing and run its election
         try {
             final VotingSystem votingSystem = VotingStreamParser.parse(inputs, inputNames, auditOutput, reportOutput, headerSystemMap);
-            if(votingSystemModifier != null) {
-                votingSystemModifier.accept(votingSystem);
+            
+            //For testing purposes, modify the voting system before running the election
+            if(votingSystemModifierBeforeElection != null) {
+                votingSystemModifierBeforeElection.accept(votingSystem);
             }
+            
             votingSystem.runElection();
         }
         //If there is an issue in parsing the election file

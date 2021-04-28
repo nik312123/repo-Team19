@@ -277,10 +277,10 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.reportOutputPotentialSource = reportOutput;
         
         //Prevents the invalidation of ballots that rank less than half of the candidates
-        InstantRunoffSystem.invalidateBallots = false;
+        VotingSystemRunner.votingSystemModifierBeforeParsing = votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false;
+        
         //Runs main algorithm
         VotingSystemRunner.main(inputCSV);
-        InstantRunoffSystem.invalidateBallots = true;
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
@@ -348,10 +348,10 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.reportOutputPotentialSource = reportOutput;
         
         //Prevents the invalidation of ballots that rank less than half of the candidates
-        InstantRunoffSystem.invalidateBallots = false;
+        VotingSystemRunner.votingSystemModifierBeforeParsing = votingSystem -> ((InstantRunoffSystem) votingSystem).invalidateBallots = false;
+        
         //Runs main algorithm
         VotingSystemRunner.main(inputCSV);
-        InstantRunoffSystem.invalidateBallots = true;
         
         VotingSystemRunner.auditOutputPotentialSource = null;
         VotingSystemRunner.reportOutputPotentialSource = null;
@@ -983,7 +983,7 @@ final class VotingSystemRunnerTest {
             VotingSystemRunner.reportOutputPotentialSource = NULL_OUTPUT;
             
             //Set the consumer used to modify the voting system
-            VotingSystemRunner.votingSystemModifier = votingSystemModifier;
+            VotingSystemRunner.votingSystemModifierBeforeElection = votingSystemModifier;
             
             //Time the running of CompuVote with the current file
             final long initTime = System.nanoTime();
