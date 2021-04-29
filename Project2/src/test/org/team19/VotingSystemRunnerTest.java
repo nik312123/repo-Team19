@@ -277,35 +277,38 @@ final class VotingSystemRunnerTest {
         VotingSystemRunner.votingSystemModifierBeforeParsing = beforeParsingModifier;
         
         //Runs main algorithm
-        VotingSystemRunner.main(inputPaths);
-        
-        VotingSystemRunner.auditOutputPotentialSource = null;
-        VotingSystemRunner.reportOutputPotentialSource = null;
-        VotingSystemRunner.votingSystemModifierBeforeParsing = null;
-        
-        //Comparing expected output vs actual output of audit
-        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedAuditPath),
-            new FileInputStream(auditOutputPath)
-        ));
-        
-        //Comparing expected output vs actual output of report
-        Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(expectedReportPath),
-            new FileInputStream(reportOutputPath)
-        ));
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //Deletes temp files if test passes
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutputPath).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutputPath).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
+        try {
+            VotingSystemRunner.main(inputPaths);
+            
+            //Comparing expected output vs actual output of audit
+            Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(expectedAuditPath),
+                new FileInputStream(auditOutputPath)
+            ));
+            
+            //Comparing expected output vs actual output of report
+            Assertions.assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(expectedReportPath),
+                new FileInputStream(reportOutputPath)
+            ));
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //Deletes temp files if test passes
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutputPath).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutputPath).delete();
+        }
+        finally {
+            VotingSystemRunner.auditOutputPotentialSource = null;
+            VotingSystemRunner.reportOutputPotentialSource = null;
+            VotingSystemRunner.votingSystemModifierBeforeParsing = null;
+            
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
+        }
     }
     
     /**
@@ -683,25 +686,30 @@ final class VotingSystemRunnerTest {
             //Set the consumer used to modify the voting system
             VotingSystemRunner.votingSystemModifierBeforeElection = votingSystemModifier;
             
-            //Time the running of CompuVote with the current file
-            final long initTime = System.nanoTime();
-            VotingSystemRunner.main(testFile.toString());
-            final long finalTime = System.nanoTime();
-            
-            //Setting the output sources back to null so they are not changed for other tests
-            VotingSystemRunner.auditOutputPotentialSource = null;
-            VotingSystemRunner.reportOutputPotentialSource = null;
-            
-            //Set the consumer used to modify the voting system back to null so they are not changed for other tests
-            VotingSystemRunner.votingSystemModifierBeforeElection = null;
-            
-            //Get the runtime in seconds, and if it exceeds the time limit, then fail
-            final double runtime = (double) (finalTime - initTime) / 1000000000;
-            if(runtime > timeLimitSeconds) {
-                Assertions.fail(String.format("%s took %.2f seconds but a maximum of %d seconds was expected", testName, runtime, timeLimitSeconds));
+            try {
+                //Time the running of CompuVote with the current file
+                final long initTime = System.nanoTime();
+                VotingSystemRunner.main(testFile.toString());
+                final long finalTime = System.nanoTime();
+                
+                //Get the runtime in seconds, and if it exceeds the time limit, then fail
+                final double runtime = (double) (finalTime - initTime) / 1000000000;
+                if(runtime > timeLimitSeconds) {
+                    Assertions.fail(
+                        String.format("%s took %.2f seconds but a maximum of %d seconds was expected", testName, runtime, timeLimitSeconds)
+                    );
+                }
+                else {
+                    originalSystemOut.printf("%s runtime: %f\n", testName, runtime);
+                }
             }
-            else {
-                originalSystemOut.printf("%s runtime: %f\n", testName, runtime);
+            finally {
+                //Setting the output sources back to null so they are not changed for other tests
+                VotingSystemRunner.auditOutputPotentialSource = null;
+                VotingSystemRunner.reportOutputPotentialSource = null;
+                
+                //Set the consumer used to modify the voting system back to null so they are not changed for other tests
+                VotingSystemRunner.votingSystemModifierBeforeElection = null;
             }
         }
         catch(FileNotFoundException e) {
