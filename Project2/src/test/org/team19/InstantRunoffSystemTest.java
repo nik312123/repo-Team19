@@ -752,84 +752,87 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_audit_actual.txt"
-            .replace('/', FILE_SEP);
-        final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_report_actual.txt"
-            .replace('/', FILE_SEP);
-        
-        InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create test_run_election_majority_audit_actual.txt or test_run_election_majority_report_actual.txt");
+            final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_audit_actual.txt"
+                .replace('/', FILE_SEP);
+            final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_report_actual.txt"
+                .replace('/', FILE_SEP);
             
+            InstantRunoffSystem ir = null;
+            try {
+                ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create test_run_election_majority_audit_actual.txt or test_run_election_majority_report_actual.txt");
+                
+            }
+            
+            ir.numCandidates = 4;
+            ir.numBallots = 9;
+            ir.halfNumBallots = ir.numBallots / 2;
+            ir.candidates = new Candidate[4];
+            
+            //Creates candidates
+            ir.candidates[0] = new Candidate("Rosen", "D");
+            ir.candidates[1] = new Candidate("Kleinberg", "R");
+            ir.candidates[2] = new Candidate("Chou", "I");
+            ir.candidates[3] = new Candidate("Royce", "L");
+            
+            //Creates ballots
+            final Ballot[] ballots = new Ballot[] {
+                new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+                new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[0], ir.candidates[1], ir.candidates[3]}),
+                new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+                new Ballot(6, new Candidate[] {ir.candidates[3]}),
+                new Ballot(7, new Candidate[] {ir.candidates[3]}),
+                new Ballot(8, new Candidate[] {ir.candidates[1], ir.candidates[0]}),
+                new Ballot(9, new Candidate[] {ir.candidates[1]})
+            };
+            
+            for(final Ballot ballot : ballots) {
+                ballot.getNextCandidate();
+            }
+            
+            ir.candidateBallotsMap = new LinkedHashMap<>();
+            
+            //Maps candidates to their ballots
+            ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2], ballots[8])));  //4
+            ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>(List.of(ballots[7])));                                      //1
+            ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));                          //2
+            ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5], ballots[6])));                          //2
+            
+            ir.runElection();
+            
+            //Comparing expected output vs actual output of audit
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_audit_expected.txt".replace('/', FILE_SEP)
+                ),
+                new FileInputStream(auditOutput))
+            );
+            
+            //Comparing expected output vs actual output of report
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_report_expected.txt".replace('/', FILE_SEP)
+                ),
+                new FileInputStream(reportOutput))
+            );
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutput).delete();
         }
-        
-        ir.numCandidates = 4;
-        ir.numBallots = 9;
-        ir.halfNumBallots = ir.numBallots / 2;
-        ir.candidates = new Candidate[4];
-        
-        //Creates candidates
-        ir.candidates[0] = new Candidate("Rosen", "D");
-        ir.candidates[1] = new Candidate("Kleinberg", "R");
-        ir.candidates[2] = new Candidate("Chou", "I");
-        ir.candidates[3] = new Candidate("Royce", "L");
-        
-        //Creates ballots
-        final Ballot[] ballots = new Ballot[] {
-            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
-            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[0], ir.candidates[1], ir.candidates[3]}),
-            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
-            new Ballot(6, new Candidate[] {ir.candidates[3]}),
-            new Ballot(7, new Candidate[] {ir.candidates[3]}),
-            new Ballot(8, new Candidate[] {ir.candidates[1], ir.candidates[0]}),
-            new Ballot(9, new Candidate[] {ir.candidates[1]})
-        };
-        
-        for(final Ballot ballot : ballots) {
-            ballot.getNextCandidate();
+        finally {
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
         }
-        
-        ir.candidateBallotsMap = new LinkedHashMap<>();
-        
-        //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2], ballots[8])));  //4
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>(List.of(ballots[7])));                                      //1
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));                          //2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5], ballots[6])));                          //2
-        
-        ir.runElection();
-        
-        //Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(
-                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_audit_expected.txt".replace('/', FILE_SEP)
-            ),
-            new FileInputStream(auditOutput))
-        );
-        
-        //Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(
-                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_majority_report_expected.txt".replace('/', FILE_SEP)
-            ),
-            new FileInputStream(reportOutput))
-        );
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutput).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -838,82 +841,85 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_audit_actual.txt"
-            .replace('/', FILE_SEP);
-        final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_report_actual.txt"
-            .replace('/', FILE_SEP);
-        
-        InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to create test_run_election_popularity_audit_actual.txt or test_run_election_popularity_report_actual.txt"
+            final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_audit_actual.txt"
+                .replace('/', FILE_SEP);
+            final String reportOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_report_actual.txt"
+                .replace('/', FILE_SEP);
+            
+            InstantRunoffSystem ir = null;
+            try {
+                ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to create test_run_election_popularity_audit_actual.txt or test_run_election_popularity_report_actual.txt"
+                );
+            }
+            
+            ir.numCandidates = 4;
+            ir.numBallots = 6;
+            ir.halfNumBallots = ir.numBallots / 2;
+            ir.candidates = new Candidate[4];
+            
+            //Creates candidates
+            ir.candidates[0] = new Candidate("Rosen", "D");
+            ir.candidates[1] = new Candidate("Kleinberg", "R");
+            ir.candidates[2] = new Candidate("Chou", "I");
+            ir.candidates[3] = new Candidate("Royce", "L");
+            
+            //Creates ballots
+            final Ballot[] ballots = new Ballot[] {
+                new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+                new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+                new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+                new Ballot(6, new Candidate[] {ir.candidates[3]}),
+            };
+            
+            for(final Ballot ballot : ballots) {
+                ballot.getNextCandidate();
+            }
+            
+            ir.candidateBallotsMap = new LinkedHashMap<>();
+            
+            //Maps candidates to their ballots
+            ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+            ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+            ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
+            ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+            
+            ir.runElection();
+            
+            //Comparing expected output vs actual output of audit
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_audit_expected.txt".replace('/', FILE_SEP)
+                ),
+                new FileInputStream(auditOutput))
             );
+            
+            //Comparing expected output vs actual output of report
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_report_expected.txt".replace('/', FILE_SEP)
+                ),
+                new FileInputStream(reportOutput))
+            );
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutput).delete();
         }
-        
-        ir.numCandidates = 4;
-        ir.numBallots = 6;
-        ir.halfNumBallots = ir.numBallots / 2;
-        ir.candidates = new Candidate[4];
-        
-        //Creates candidates
-        ir.candidates[0] = new Candidate("Rosen", "D");
-        ir.candidates[1] = new Candidate("Kleinberg", "R");
-        ir.candidates[2] = new Candidate("Chou", "I");
-        ir.candidates[3] = new Candidate("Royce", "L");
-        
-        //Creates ballots
-        final Ballot[] ballots = new Ballot[] {
-            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
-            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
-            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
-            new Ballot(6, new Candidate[] {ir.candidates[3]}),
-        };
-        
-        for(final Ballot ballot : ballots) {
-            ballot.getNextCandidate();
+        finally {
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
         }
-        
-        ir.candidateBallotsMap = new LinkedHashMap<>();
-        
-        //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
-        
-        ir.runElection();
-        
-        //Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(
-                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_audit_expected.txt".replace('/', FILE_SEP)
-            ),
-            new FileInputStream(auditOutput))
-        );
-        
-        //Comparing expected output vs actual output of report
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(
-                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_popularity_report_expected.txt".replace('/', FILE_SEP)
-            ),
-            new FileInputStream(reportOutput))
-        );
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutput).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -926,74 +932,77 @@ final class InstantRunoffSystemTest {
             "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
-        InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
+            InstantRunoffSystem ir = null;
+            try {
+                ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create test_run_election_tie_breaks_output_audit_actual.txt");
+            }
+            
+            ir.numCandidates = 6;
+            ir.numBallots = 7;
+            ir.halfNumBallots = ir.numBallots / 2;
+            ir.candidates = new Candidate[6];
+            
+            //Creates candidates
+            ir.candidates[0] = new Candidate("Rosen", "D");
+            ir.candidates[1] = new Candidate("Kleinberg", "R");
+            ir.candidates[2] = new Candidate("Chou", "I");
+            ir.candidates[3] = new Candidate("Royce", "L");
+            ir.candidates[4] = new Candidate("Biden", "D");
+            ir.candidates[5] = new Candidate("Trump", "R");
+            
+            //Creates ballots
+            final Ballot[] ballots = new Ballot[] {
+                new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+                new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+                new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+                new Ballot(6, new Candidate[] {ir.candidates[3]}),
+                new Ballot(7, new Candidate[] {ir.candidates[2]}),
+            };
+            
+            for(final Ballot ballot : ballots) {
+                ballot.getNextCandidate();
+            }
+            
+            ir.candidateBallotsMap = new LinkedHashMap<>();
+            
+            //Maps candidates to their ballots
+            ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+            ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+            ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4], ballots[6])));  //3
+            ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+            ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>());                                             //0
+            ir.candidateBallotsMap.put(ir.candidates[5], new ArrayDeque<>());                                             //0
+            
+            //Sets a seed so that the output is always the same
+            ir.rand = new Random(10L);
+            
+            ir.runElection();
+            
+            //Comparing expected output vs actual output of audit
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
+                        .replace('/', FILE_SEP)
+                ),
+                new FileInputStream(auditOutput))
+            );
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create test_run_election_tie_breaks_output_audit_actual.txt");
+        finally {
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
         }
-        
-        ir.numCandidates = 6;
-        ir.numBallots = 7;
-        ir.halfNumBallots = ir.numBallots / 2;
-        ir.candidates = new Candidate[6];
-        
-        //Creates candidates
-        ir.candidates[0] = new Candidate("Rosen", "D");
-        ir.candidates[1] = new Candidate("Kleinberg", "R");
-        ir.candidates[2] = new Candidate("Chou", "I");
-        ir.candidates[3] = new Candidate("Royce", "L");
-        ir.candidates[4] = new Candidate("Biden", "D");
-        ir.candidates[5] = new Candidate("Trump", "R");
-        
-        //Creates ballots
-        final Ballot[] ballots = new Ballot[] {
-            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
-            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
-            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
-            new Ballot(6, new Candidate[] {ir.candidates[3]}),
-            new Ballot(7, new Candidate[] {ir.candidates[2]}),
-        };
-        
-        for(final Ballot ballot : ballots) {
-            ballot.getNextCandidate();
-        }
-        
-        ir.candidateBallotsMap = new LinkedHashMap<>();
-        
-        //Maps candidates to their ballots
-        ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
-        ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
-        ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4], ballots[6])));  //3
-        ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
-        ir.candidateBallotsMap.put(ir.candidates[4], new ArrayDeque<>());                                             //0
-        ir.candidateBallotsMap.put(ir.candidates[5], new ArrayDeque<>());                                             //0
-        
-        //Sets a seed so that the output is always the same
-        InstantRunoffSystem.rand = new Random(10L);
-        
-        ir.runElection();
-        
-        //Comparing expected output vs actual output of audit
-        assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
-            new FileInputStream(
-                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
-                    .replace('/', FILE_SEP)
-            ),
-            new FileInputStream(auditOutput))
-        );
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        
-        //Redirect STDOUT back to STDOUT
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -1002,47 +1011,91 @@ final class InstantRunoffSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_audit_actual.txt"
-            .replace('/', FILE_SEP);
-        final String reportOutput =
-            "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_report_actual.txt"
-                .replace('/', FILE_SEP);
-        
-        InstantRunoffSystem ir = null;
         try {
-            ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to create test_run_election_two_candidate_majority_audit_actual.txt or "
-                    + "test_run_election_two_candidate_majority_report_actual.txt"
+            final String auditOutput =
+                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_audit_actual.txt"
+                    .replace('/', FILE_SEP);
+            final String reportOutput =
+                "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_report_actual.txt"
+                    .replace('/', FILE_SEP);
+            
+            InstantRunoffSystem ir = null;
+            try {
+                ir = new InstantRunoffSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to create test_run_election_two_candidate_majority_audit_actual.txt or "
+                        + "test_run_election_two_candidate_majority_report_actual.txt"
+                );
+            }
+            
+            ir.numCandidates = 4;
+            ir.numBallots = 6;
+            ir.halfNumBallots = ir.numBallots / 2;
+            ir.candidates = new Candidate[4];
+            
+            //Creates candidates
+            ir.candidates[0] = new Candidate("Rosen", "D");
+            ir.candidates[1] = new Candidate("Kleinberg", "R");
+            ir.candidates[2] = new Candidate("Chou", "I");
+            ir.candidates[3] = new Candidate("Royce", "L");
+            
+            //Creates ballots
+            final Ballot[] ballots = new Ballot[] {
+                new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
+                new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
+                new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
+                new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
+                new Ballot(6, new Candidate[] {ir.candidates[3], ir.candidates[0]}),
+            };
+            
+            for(final Ballot ballot : ballots) {
+                ballot.getNextCandidate();
+            }
+            
+            ir.candidateBallotsMap = new LinkedHashMap<>();
+            
+            //Maps candidates to their ballots
+            ir.candidateBallotsMap.put(ir.candidates[0], new ArrayDeque<>(List.of(ballots[0], ballots[1], ballots[2])));  //3
+            ir.candidateBallotsMap.put(ir.candidates[1], new ArrayDeque<>());                                             //0
+            ir.candidateBallotsMap.put(ir.candidates[2], new ArrayDeque<>(List.of(ballots[3], ballots[4])));              //2
+            ir.candidateBallotsMap.put(ir.candidates[3], new ArrayDeque<>(List.of(ballots[5])));                          //1
+            
+            ir.runElection();
+            
+            //Comparing expected output vs actual output of audit
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_audit_expected.txt"
+                        .replace('/', FILE_SEP)
+                ),
+                new FileInputStream(auditOutput))
             );
+            
+            //Comparing expected output vs actual output of report
+            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(
+                new FileInputStream(
+                    "Project2/testing/test-resources/instantRunoffSystemTest/test_run_election_two_candidate_majority_report_expected.txt"
+                        .replace('/', FILE_SEP)
+                ),
+                new FileInputStream(reportOutput))
+            );
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutput).delete();
         }
-        
-        ir.numCandidates = 4;
-        ir.numBallots = 6;
-        ir.halfNumBallots = ir.numBallots / 2;
-        ir.candidates = new Candidate[4];
-        
-        //Creates candidates
-        ir.candidates[0] = new Candidate("Rosen", "D");
-        ir.candidates[1] = new Candidate("Kleinberg", "R");
-        ir.candidates[2] = new Candidate("Chou", "I");
-        ir.candidates[3] = new Candidate("Royce", "L");
-        
-        //Creates ballots
-        final Ballot[] ballots = new Ballot[] {
-            new Ballot(1, new Candidate[] {ir.candidates[0], ir.candidates[3], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(2, new Candidate[] {ir.candidates[0], ir.candidates[2]}),
-            new Ballot(3, new Candidate[] {ir.candidates[0], ir.candidates[1], ir.candidates[2]}),
-            new Ballot(4, new Candidate[] {ir.candidates[2], ir.candidates[1], ir.candidates[0], ir.candidates[3]}),
-            new Ballot(5, new Candidate[] {ir.candidates[2], ir.candidates[3]}),
-            new Ballot(6, new Candidate[] {ir.candidates[3], ir.candidates[0]}),
-        };
-        
-        for(final Ballot ballot : ballots) {
-            ballot.getNextCandidate();
+        finally {
+            //Redirect STDOUT back to STDOUT
+            System.setOut(originalSystemOut);
         }
+    }
         
         ir.candidateBallotsMap = new LinkedHashMap<>();
         

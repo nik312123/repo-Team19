@@ -490,11 +490,11 @@ final class OpenPartyListSystemTest {
         opl.auditWriter.close();
         
         try {
-            FileInputStream auditExpected = new FileInputStream(
+            final FileInputStream auditExpected = new FileInputStream(
                 "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
-            FileInputStream auditActual = new FileInputStream(auditOutput);
+            final FileInputStream auditActual = new FileInputStream(auditOutput);
             
             //Comparing expected output vs actual output of audit file
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
@@ -982,80 +982,83 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
-        
-        opl.numSeats = 10;
-        opl.numBallots = 9;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(borgR, 2);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        
-        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        final Set<String> remainingParties = initialAllocationResults.getSecond();
-        
-        //Performs the allocation of remaining seats after the initial allocation where there are more seats than candidates
-        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-        
-        //Tests to check that every candidate has a seat
-        assertEquals(partyR.numSeats, partyR.numCandidates);
-        assertEquals(partyD.numSeats, partyD.numCandidates);
-        assertEquals(partyI.numSeats, partyI.numCandidates);
-        
-        //Sets System.out back to original state
-        System.setOut(originalSystemOut);
+        try {
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+            
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
+            
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
+            
+            opl.numSeats = 10;
+            opl.numBallots = 9;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(borgR, 2);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+            
+            final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+            final Set<String> remainingParties = initialAllocationResults.getSecond();
+            
+            //Performs the allocation of remaining seats after the initial allocation where there are more seats than candidates
+            opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+            
+            //Tests to check that every candidate has a seat
+            assertEquals(partyR.numSeats, partyR.numCandidates);
+            assertEquals(partyD.numSeats, partyD.numCandidates);
+            assertEquals(partyI.numSeats, partyI.numCandidates);
+        }
+        finally {
+            //Sets System.out back to original state
+            System.setOut(originalSystemOut);
+        }
     }
     
     @Test
@@ -1064,110 +1067,113 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
-                .replace('/', FILE_SEP);
-        
-        final OpenPartyListSystem opl = createOplNullStreams();
-        
-        opl.numSeats = 10;
-        opl.numBallots = 9;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(borgR, 2);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        
-        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        final Set<String> remainingParties = initialAllocationResults.getSecond();
-        
         try {
-            opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt");
-        }
-        
-        //Performs the allocation of remaining seats after the initial allocation where there are more seats than candidates
-        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-        
-        opl.auditWriter.close();
-        
-        try {
-            final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
-                    .replace('/', FILE_SEP));
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
             
-            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
             
-            //Comparing expected output vs actual output of audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            final String auditOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
+                    .replace('/', FILE_SEP);
+            
+            final OpenPartyListSystem opl = createOplNullStreams();
+            
+            opl.numSeats = 10;
+            opl.numBallots = 9;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(borgR, 2);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+            
+            final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+            final Set<String> remainingParties = initialAllocationResults.getSecond();
+            
+            try {
+                opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt");
+            }
+            
+            //Performs the allocation of remaining seats after the initial allocation where there are more seats than candidates
+            opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+            
+            opl.auditWriter.close();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt or "
+                        + "allocate_remaining_seats_more_seats_than_candidates_audit_actual.txt");
+            }
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt or "
-                    + "allocate_remaining_seats_more_seats_than_candidates_audit_actual.txt");
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
         }
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        
-        //Sets System.out back to original
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -1176,113 +1182,116 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        partyD.numSeats = 0;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        partyR.numSeats = 0;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        partyI.numSeats = 0;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
-        
-        //Creates OPL system
-        final OpenPartyListSystem opl = createOplNullStreams();
-        
-        opl.numSeats = 3;
-        opl.numBallots = 9;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 2);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 3);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(borgR, 2);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        final Set<String> remainingParties = initialAllocationResults.getSecond();
-        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-        
         try {
-            opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create distribute_seats_to_candidates_typical_audit_actual.txt");
-        }
-        
-        //Distributes seats to candidates after allocation of seats
-        opl.distributeSeatsToCandidates();
-        
-        opl.auditWriter.close();
-        
-        try {
-            final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
-                    .replace('/', FILE_SEP));
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
             
-            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
             
-            //Comparing expected output vs actual output of audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            partyD.numSeats = 0;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            partyR.numSeats = 0;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            partyI.numSeats = 0;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            final String auditOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt"
+                    .replace('/', FILE_SEP);
+            
+            //Creates OPL system
+            final OpenPartyListSystem opl = createOplNullStreams();
+            
+            opl.numSeats = 3;
+            opl.numBallots = 9;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 2);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 3);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(borgR, 2);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+            final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+            final Set<String> remainingParties = initialAllocationResults.getSecond();
+            opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+            
+            try {
+                opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create distribute_seats_to_candidates_typical_audit_actual.txt");
+            }
+            
+            //Distributes seats to candidates after allocation of seats
+            opl.distributeSeatsToCandidates();
+            
+            opl.auditWriter.close();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open test_distribute_seats_to_candidates_typical_audit_expected.txt or "
+                        + "test_distribute_seats_to_candidates_typical_audit_actual.txt");
+            }
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open test_distribute_seats_to_candidates_typical_audit_expected.txt or "
-                    + "test_distribute_seats_to_candidates_typical_audit_actual.txt");
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
         }
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        
-        //Sets System.out back to original
-        System.setOut(originalSystemOut);
-        
     }
     
     @Test
@@ -1291,84 +1300,88 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        partyD.numSeats = 0;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 2;
-        partyR.numSeats = 0;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        partyI.numSeats = 0;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        //Creates OPL system
-        final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
-        
-        opl.numSeats = 3;
-        opl.numBallots = 8;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(borgR, 1);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        final Set<String> remainingParties = initialAllocationResults.getSecond();
-        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-        opl.printFinalSeatAllocations();
-        
-        //Distributes seats to candidates where there are ties between them after allocation of seats        
-        final List<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
-        
-        //Test to check that either Jones or Borg can get their party's allocated seat since they both have 1 vote
-        assertTrue(candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Jones (R)]")
-            || candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Borg (R)]")
-        );
-        
-        System.setOut(originalSystemOut);
+        try {
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+            
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
+            
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            partyD.numSeats = 0;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 2;
+            partyR.numSeats = 0;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            partyI.numSeats = 0;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            //Creates OPL system
+            final OpenPartyListSystem opl = new OpenPartyListSystem(NULL_OUTPUT, NULL_OUTPUT);
+            
+            opl.numSeats = 3;
+            opl.numBallots = 8;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(borgR, 1);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+            final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+            final Set<String> remainingParties = initialAllocationResults.getSecond();
+            opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+            opl.printFinalSeatAllocations();
+            
+            //Distributes seats to candidates where there are ties between them after allocation of seats
+            final List<Candidate> candidatesWithSeats = opl.distributeSeatsToCandidates();
+            
+            //Test to check that either Jones or Borg can get their party's allocated seat since they both have 1 vote
+            assertTrue(candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Jones (R)]")
+                || candidatesWithSeats.toString().equals("[Pike (D), Foster (D), Borg (R)]")
+            );
+        }
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
+        }
     }
     
     @Test
@@ -1377,119 +1390,122 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        partyD.numSeats = 0;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        partyR.numSeats = 0;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        partyI.numSeats = 0;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
-        
-        //Creates OPL system
-        final OpenPartyListSystem opl = createOplNullStreams();
-        opl.numSeats = 3;
-        opl.numBallots = 9;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(borgR, 2);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
-        
-        final Integer numSeatsRemaining = initialAllocationResults.getFirst();
-        final Set<String> remainingParties = initialAllocationResults.getSecond();
-        
-        opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
-        
-        final Map<String, Integer> partiesToInitialSeats = new HashMap<>();
-        
-        for(final Map.Entry<String, OpenPartyListSystem.PartyInformation> party : opl.partyToPartyInformation.entrySet()) {
-            partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
-        }
-        
         try {
-            opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create test_print_summary_table_actual.txt");
-        }
-        
-        //Prints summary table
-        opl.printSummaryTable(partiesToInitialSeats);
-        
-        opl.auditWriter.close();
-        
-        try {
-            final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
-                    .replace('/', FILE_SEP));
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
             
-            final FileInputStream auditActual = new FileInputStream(auditOutput);
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
             
-            //Comparing expected output vs actual output of audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            partyD.numSeats = 0;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            partyR.numSeats = 0;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            partyI.numSeats = 0;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            final String auditOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
+            
+            //Creates OPL system
+            final OpenPartyListSystem opl = createOplNullStreams();
+            opl.numSeats = 3;
+            opl.numBallots = 9;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(borgR, 2);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            final Pair<Integer, Set<String>> initialAllocationResults = opl.allocateInitialSeats(new Fraction(opl.numBallots, opl.numSeats));
+            
+            final Integer numSeatsRemaining = initialAllocationResults.getFirst();
+            final Set<String> remainingParties = initialAllocationResults.getSecond();
+            
+            opl.allocateRemainingSeats(numSeatsRemaining, remainingParties);
+            
+            final Map<String, Integer> partiesToInitialSeats = new HashMap<>();
+            
+            for(final Map.Entry<String, OpenPartyListSystem.PartyInformation> party : opl.partyToPartyInformation.entrySet()) {
+                partiesToInitialSeats.put(party.getKey(), party.getValue().numSeats);
+            }
+            
+            try {
+                opl.auditWriter = new PrintWriter(new FileOutputStream(auditOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create test_print_summary_table_actual.txt");
+            }
+            
+            //Prints summary table
+            opl.printSummaryTable(partiesToInitialSeats);
+            
+            opl.auditWriter.close();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open test_print_summary_table_actual.txt or test_print_summary_table_expected.txt");
+            }
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open test_print_summary_table_actual.txt or test_print_summary_table_expected.txt");
+        finally {
+            //Sets System.out to original
+            System.setOut(originalSystemOut);
         }
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        
-        //Sets System.out to original
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -1498,113 +1514,116 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
-        final String reportOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_actual.txt".replace('/', FILE_SEP);
-        
-        //Creates OPL system
-        OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            final String auditOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
+            final String reportOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_actual.txt".replace('/', FILE_SEP);
+            
+            //Creates OPL system
+            OpenPartyListSystem opl = null;
+            try {
+                opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create test_run_election_typical_audit_actual.txt or test_run_election_typical_report_actual.txt");
+            }
+            
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+            
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
+            
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 1;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
+            
+            opl.numSeats = 3;
+            opl.numBallots = partyD.numBallots + partyR.numBallots + partyI.numBallots;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(borgR, 2);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(deutschR, 0);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 1);
+            
+            //Runs election
+            opl.runElection();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of Audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+                
+                final FileInputStream reportExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream reportActual = new FileInputStream(reportOutput);
+                
+                //Comparing expected output vs actual output of Audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open test_run_election_typical_audit_expected.txt or test_run_election_typical_report_expected.txt");
+            }
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create test_run_election_typical_audit_actual.txt or test_run_election_typical_report_actual.txt");
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
         }
-        
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 2));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 0));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 1;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
-        
-        opl.numSeats = 3;
-        opl.numBallots = partyD.numBallots + partyR.numBallots + partyI.numBallots;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(borgR, 2);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(deutschR, 0);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 1);
-        
-        //Runs election
-        opl.runElection();
-        
-        try {
-            final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
-                    .replace('/', FILE_SEP));
-            
-            final FileInputStream auditActual = new FileInputStream(auditOutput);
-            
-            //Comparing expected output vs actual output of Audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
-            
-            final FileInputStream reportExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
-                    .replace('/', FILE_SEP));
-            
-            final FileInputStream reportActual = new FileInputStream(reportOutput);
-            
-            //Comparing expected output vs actual output of Audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open test_run_election_typical_audit_expected.txt or test_run_election_typical_report_expected.txt");
-        }
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutput).delete();
-        
-        //Sets System.out back to original
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -1613,122 +1632,126 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_actual.txt"
-                .replace('/', FILE_SEP);
-        final String reportOutput =
-            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_actual.txt"
-                .replace('/', FILE_SEP);
-        
-        //Creates OPL system
-        OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(
-                new FileOutputStream(auditOutput),
-                new FileOutputStream(reportOutput)
-            );
+            final String auditOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_actual.txt"
+                    .replace('/', FILE_SEP);
+            final String reportOutput =
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_actual.txt"
+                    .replace('/', FILE_SEP);
+            
+            //Creates OPL system
+            OpenPartyListSystem opl = null;
+            try {
+                opl = new OpenPartyListSystem(
+                    new FileOutputStream(auditOutput),
+                    new FileOutputStream(reportOutput)
+                );
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to create test_run_election_more_seats_than_candidates_audit_actual.txt or "
+                        + "test_run_election_more_seats_than_candidates_report_actual.txt"
+                );
+            }
+            
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
+            
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
+            
+            //Creates data for each party
+            partyD.numCandidates = 2;
+            partyD.numBallots = 5;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 10;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 5));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 4));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 6;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 6));
+            
+            opl.numSeats = 14;
+            opl.numBallots = partyD.numBallots + partyR.numBallots + partyI.numBallots;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 3);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 2);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 5);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 4);
+            opl.partyToCandidateCounts.get("R").put(borgR, 1);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 6);
+            
+            //Runs an election where there are more seats than candidates
+            opl.runElection();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of Audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+                
+                final FileInputStream reportExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream reportActual = new FileInputStream(reportOutput);
+                
+                //Comparing expected output vs actual output of Audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open test_run_election_more_seats_than_candidates_audit_expected.txt or "
+                        + "test_run_election_more_seats_than_candidates_report_expected.txt");
+            }
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
+            //noinspection ResultOfMethodCallIgnored
+            new File(reportOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to create test_run_election_more_seats_than_candidates_audit_actual.txt or "
-                    + "test_run_election_more_seats_than_candidates_report_actual.txt"
-            );
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
         }
-        
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 2;
-        partyD.numBallots = 5;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 3));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 2));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 10;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 5));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 4));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 6;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 6));
-        
-        opl.numSeats = 14;
-        opl.numBallots = partyD.numBallots + partyR.numBallots + partyI.numBallots;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 3);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 2);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 5);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 4);
-        opl.partyToCandidateCounts.get("R").put(borgR, 1);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 6);
-        
-        //Runs an election where there are more seats than candidates
-        opl.runElection();
-        
-        try {
-            final FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_expected.txt"
-                    .replace('/', FILE_SEP));
-            
-            final FileInputStream auditActual = new FileInputStream(auditOutput);
-            
-            //Comparing expected output vs actual output of Audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
-            
-            final FileInputStream reportExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_expected.txt"
-                    .replace('/', FILE_SEP));
-            
-            final FileInputStream reportActual = new FileInputStream(reportOutput);
-            
-            //Comparing expected output vs actual output of Audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(reportExpected, reportActual));
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open test_run_election_more_seats_than_candidates_audit_expected.txt or "
-                    + "test_run_election_more_seats_than_candidates_report_expected.txt");
-        }
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        //noinspection ResultOfMethodCallIgnored
-        new File(reportOutput).delete();
-        
-        System.setOut(originalSystemOut);
     }
     
     @Test
@@ -1737,107 +1760,111 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
-            .replace('/', FILE_SEP);
-        
-        //Creates parties
-        final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
-        final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
-        
-        //Creates candidates
-        final Candidate fosterD = new Candidate("Foster", "D");
-        final Candidate pikeD = new Candidate("Pike", "D");
-        final Candidate bidenD = new Candidate("Biden", "D");
-        final Candidate deutschR = new Candidate("Deutsch", "R");
-        final Candidate jonesR = new Candidate("Jones", "R");
-        final Candidate borgR = new Candidate("Borg", "R");
-        final Candidate smithI = new Candidate("Smith", "I");
-        final Candidate janeI = new Candidate("Jane", "I");
-        
-        //Creates data for each party
-        partyD.numCandidates = 3;
-        partyD.numBallots = 3;
-        
-        partyD.orderedCandidateBallots = new ArrayList<>();
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 1));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 1));
-        partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(bidenD, 1));
-        
-        partyR.numCandidates = 3;
-        partyR.numBallots = 3;
-        
-        partyR.orderedCandidateBallots = new ArrayList<>();
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
-        partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
-        
-        partyI.numCandidates = 1;
-        partyI.numBallots = 3;
-        
-        partyI.orderedCandidateBallots = new ArrayList<>();
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 3));
-        partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(janeI, 0));
-        
-        //Creates OPL system
-        OpenPartyListSystem opl = null;
         try {
-            opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
-        }
-        catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create test_run_election_tie_breaks_output_audit_actual.txt");
-        }
-        
-        opl.numSeats = 4;
-        opl.numBallots = partyD.numBallots + partyI.numBallots + partyR.numBallots;
-        
-        opl.partyToPartyInformation = new LinkedHashMap<>();
-        opl.partyToPartyInformation.put("D", partyD);
-        opl.partyToPartyInformation.put("R", partyR);
-        opl.partyToPartyInformation.put("I", partyI);
-        
-        opl.partyToCandidateCounts = new LinkedHashMap<>();
-        
-        opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("D").put(fosterD, 1);
-        opl.partyToCandidateCounts.get("D").put(pikeD, 1);
-        opl.partyToCandidateCounts.get("D").put(bidenD, 1);
-        
-        opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("R").put(deutschR, 1);
-        opl.partyToCandidateCounts.get("R").put(jonesR, 1);
-        opl.partyToCandidateCounts.get("R").put(borgR, 1);
-        
-        opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
-        opl.partyToCandidateCounts.get("I").put(smithI, 3);
-        opl.partyToCandidateCounts.get("I").put(janeI, 0);
-        
-        //Sets a random seed to ensure the output is always the same
-        OpenPartyListSystem.rand = new Random(10);
-        
-        opl.runElection();
-        
-        try {
-            FileInputStream auditExpected = new FileInputStream(
-                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
-                    .replace('/', FILE_SEP));
+            final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
+                .replace('/', FILE_SEP);
             
-            FileInputStream auditActual = new FileInputStream(auditOutput);
+            //Creates parties
+            final OpenPartyListSystem.PartyInformation partyD = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyR = new OpenPartyListSystem.PartyInformation();
+            final OpenPartyListSystem.PartyInformation partyI = new OpenPartyListSystem.PartyInformation();
             
-            //Comparing expected output vs actual output of audit file
-            assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            //Creates candidates
+            final Candidate fosterD = new Candidate("Foster", "D");
+            final Candidate pikeD = new Candidate("Pike", "D");
+            final Candidate bidenD = new Candidate("Biden", "D");
+            final Candidate deutschR = new Candidate("Deutsch", "R");
+            final Candidate jonesR = new Candidate("Jones", "R");
+            final Candidate borgR = new Candidate("Borg", "R");
+            final Candidate smithI = new Candidate("Smith", "I");
+            final Candidate janeI = new Candidate("Jane", "I");
+            
+            //Creates data for each party
+            partyD.numCandidates = 3;
+            partyD.numBallots = 3;
+            
+            partyD.orderedCandidateBallots = new ArrayList<>();
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(fosterD, 1));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(pikeD, 1));
+            partyD.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(bidenD, 1));
+            
+            partyR.numCandidates = 3;
+            partyR.numBallots = 3;
+            
+            partyR.orderedCandidateBallots = new ArrayList<>();
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(deutschR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(jonesR, 1));
+            partyR.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(borgR, 1));
+            
+            partyI.numCandidates = 1;
+            partyI.numBallots = 3;
+            
+            partyI.orderedCandidateBallots = new ArrayList<>();
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 3));
+            partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(janeI, 0));
+            
+            //Creates OPL system
+            OpenPartyListSystem opl = null;
+            try {
+                opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), NULL_OUTPUT);
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail("Unable to create test_run_election_tie_breaks_output_audit_actual.txt");
+            }
+            
+            opl.numSeats = 4;
+            opl.numBallots = partyD.numBallots + partyI.numBallots + partyR.numBallots;
+            
+            opl.partyToPartyInformation = new LinkedHashMap<>();
+            opl.partyToPartyInformation.put("D", partyD);
+            opl.partyToPartyInformation.put("R", partyR);
+            opl.partyToPartyInformation.put("I", partyI);
+            
+            opl.partyToCandidateCounts = new LinkedHashMap<>();
+            
+            opl.partyToCandidateCounts.put("D", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("D").put(fosterD, 1);
+            opl.partyToCandidateCounts.get("D").put(pikeD, 1);
+            opl.partyToCandidateCounts.get("D").put(bidenD, 1);
+            
+            opl.partyToCandidateCounts.put("R", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("R").put(deutschR, 1);
+            opl.partyToCandidateCounts.get("R").put(jonesR, 1);
+            opl.partyToCandidateCounts.get("R").put(borgR, 1);
+            
+            opl.partyToCandidateCounts.put("I", new LinkedHashMap<>());
+            opl.partyToCandidateCounts.get("I").put(smithI, 3);
+            opl.partyToCandidateCounts.get("I").put(janeI, 0);
+            
+            //Sets a random seed to ensure the output is always the same
+            OpenPartyListSystem.rand = new Random(10);
+            
+            opl.runElection();
+            
+            try {
+                final FileInputStream auditExpected = new FileInputStream(
+                    "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
+                        .replace('/', FILE_SEP));
+                
+                final FileInputStream auditActual = new FileInputStream(auditOutput);
+                
+                //Comparing expected output vs actual output of audit file
+                assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
+            }
+            catch(FileNotFoundException e) {
+                Assertions.fail(
+                    "Unable to open test_run_election_tie_breaks_output_audit_expected.txt or test_run_election_tie_breaks_output_audit_actual.txt");
+            }
+            
+            //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
+            System.gc();
+            
+            //noinspection ResultOfMethodCallIgnored
+            new File(auditOutput).delete();
         }
-        catch(FileNotFoundException e) {
-            Assertions.fail(
-                "Unable to open test_run_election_tie_breaks_output_audit_expected.txt or test_run_election_tie_breaks_output_audit_actual.txt");
+        finally {
+            //Sets System.out back to original
+            System.setOut(originalSystemOut);
         }
-        
-        //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
-        System.gc();
-        
-        //noinspection ResultOfMethodCallIgnored
-        new File(auditOutput).delete();
-        
-        System.setOut(originalSystemOut);
     }
 }
