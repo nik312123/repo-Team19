@@ -97,9 +97,11 @@ public final class CompareInputStreams {
         int lineNumber = 1;
         
         try {
+            //Get the first line of both inputs, replacing any Project2 path file separators in the expected input with the correct separators
             String curExpectedLine = replaceStringFileSeparator(expectedReader.readLine());
             String curActualLine = actualReader.readLine();
             
+            //While neither file is finished, go through each line, and throw an exception if a line does not match
             while(curExpectedLine != null && curActualLine != null) {
                 if(!Objects.equals(curExpectedLine, curActualLine)) {
                     throwParseException(String.format(
@@ -113,6 +115,14 @@ public final class CompareInputStreams {
                 curExpectedLine = replaceStringFileSeparator(expectedReader.readLine());
                 curActualLine = actualReader.readLine();
                 lineNumber++;
+            }
+            
+            //Test the cases where one of the inputs ends early and throw an exception if that was the case
+            if(curActualLine == null && curExpectedLine != null) {
+                throwParseException("Error: Actual input ended before expected input", lineNumber);
+            }
+            else if(curActualLine != null) {
+                throwParseException("Error: Actual input continued beyond expected input", lineNumber);
             }
         }
         catch(IOException e) {
