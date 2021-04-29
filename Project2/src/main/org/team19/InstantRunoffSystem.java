@@ -707,6 +707,13 @@ public class InstantRunoffSystem extends VotingSystem {
         reportWriter.println(numBallotsOutput);
         System.out.println(numBallotsOutput);
         
+        //If no candidates have any ballots, then all candidates should be available to win
+        if(candidateBallotsMap.size() == 0) {
+            for(final Candidate candidate : candidates) {
+                candidateBallotsMap.put(candidate, new ArrayDeque<>());
+            }
+        }
+        
         //Write the first choice ballot counts for each candidate
         String strToWriteToAll = "First-choice ballots (excluding candidates with 0 ballots):";
         auditWriter.println(strToWriteToAll);
