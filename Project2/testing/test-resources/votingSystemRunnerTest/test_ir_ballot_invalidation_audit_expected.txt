@@ -1,0 +1,74 @@
+Election type: IR
+
+Number of Candidates: 4
+
+Candidates:
+Rosen (D)
+Kleinberg (R)
+Chou (I)
+Royce (L)
+
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_testBallotInvalidation.csv: 9
+
+Ballot 1's rankings are as follows:
+    1 – Rosen (D)
+    2 – Chou (I)
+    3 – Kleinberg (R)
+    4 – Royce (L)
+Therefore, ballot 1 goes to Rosen (D)
+
+Ballot 2's rankings are as follows:
+    1 – Rosen (D)
+    2 – Royce (L)
+    3 – Kleinberg (R)
+Therefore, ballot 2 goes to Rosen (D)
+
+Ballot 3's rankings are as follows:
+    1 – Rosen (D)
+    2 – Kleinberg (R)
+    3 – Chou (I)
+Therefore, ballot 3 goes to Rosen (D)
+
+Ballot 4's rankings are as follows:
+    1 – Chou (I)
+    2 – Rosen (D)
+Therefore, ballot 4 goes to Chou (I)
+
+Ballot 5's rankings are as follows:
+    1 – Chou (I)
+    2 – Royce (L)
+Therefore, ballot 5 goes to Chou (I)
+
+Ballot 6's rankings are as follows:
+    1 – Royce (L)
+Ballot 6 has been invalidated because it does not rank at least half of the candidates
+
+Ballot 7's rankings are as follows:
+    1 – Royce (L)
+Ballot 7 has been invalidated because it does not rank at least half of the candidates
+
+Ballot 8's rankings are as follows:
+    1 – Kleinberg (R)
+    2 – Rosen (D)
+Therefore, ballot 8 goes to Kleinberg (R)
+
+Ballot 9's rankings are as follows:
+    1 – Rosen (D)
+Ballot 9 has been invalidated because it does not rank at least half of the candidates
+
+Number of Ballots: 6
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 3 ballots
+Chou (I): 2 ballots
+Kleinberg (R): 1 ballots
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Kleinberg (R)
+
+Ballot 8 has their next choice as candidate Rosen (D). The ballot will be distributed to Rosen (D).
+
+Ballots after Kleinberg (R) was eliminated:
+Rosen (D): 4 ballots
+Chou (I): 2 ballots
+
+Rosen (D) has received 4/6 ballots, giving them the majority with 66.67% of the ballots
