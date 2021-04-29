@@ -10,7 +10,6 @@ Borg (R)
 Jones (R)
 Smith (I)
 
-
 Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/opl_multi_part_1.csv: 1
 
 Ballot 1 chose Pike (D)

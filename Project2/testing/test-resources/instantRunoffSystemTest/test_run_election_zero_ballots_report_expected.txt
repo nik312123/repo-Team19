@@ -1,0 +1,17 @@
+Number of Ballots: 0
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 0 ballots
+Kleinberg (R): 0 ballots
+Chou (I): 0 ballots
+Royce (L): 0 ballots
+
+Ballots after Chou (I) was eliminated:
+Rosen (D): 0 ballots
+Kleinberg (R): 0 ballots
+Royce (L): 0 ballots
+
+Ballots after Rosen (D) was eliminated:
+Kleinberg (R): 0 ballots
+Royce (L): 0 ballots
+

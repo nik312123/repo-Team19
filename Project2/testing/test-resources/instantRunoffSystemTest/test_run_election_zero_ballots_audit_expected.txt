@@ -1,0 +1,29 @@
+Number of Ballots: 0
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 0 ballots
+Kleinberg (R): 0 ballots
+Chou (I): 0 ballots
+Royce (L): 0 ballots
+
+No candidate has a majority. There is a tie for lowest ballots between the following: Rosen (D), Kleinberg (R), Chou (I), Royce (L)
+Random choice from the above for elimination: Chou (I)
+
+Chou (I) has no ballots to have distributed.
+
+Ballots after Chou (I) was eliminated:
+Rosen (D): 0 ballots
+Kleinberg (R): 0 ballots
+Royce (L): 0 ballots
+
+No candidate has a majority. There is a tie for lowest ballots between the following: Rosen (D), Kleinberg (R), Royce (L)
+Random choice from the above for elimination: Rosen (D)
+
+Rosen (D) has no ballots to have distributed.
+
+Ballots after Rosen (D) was eliminated:
+Kleinberg (R): 0 ballots
+Royce (L): 0 ballots
+
+There exists a tie between Kleinberg (R) and Royce (L).
+Kleinberg (R) won the random tie break. They have therefore won the election.

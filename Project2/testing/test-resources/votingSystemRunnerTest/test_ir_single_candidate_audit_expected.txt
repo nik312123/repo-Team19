@@ -5,7 +5,7 @@ Number of Candidates: 1
 Candidates:
 Rosen (D)
 
-Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv: 3
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_test_single_candidate.csv: 3
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)

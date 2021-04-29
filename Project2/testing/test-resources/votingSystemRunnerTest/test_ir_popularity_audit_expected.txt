@@ -8,7 +8,7 @@ Kleinberg (R)
 Chou (I)
 Royce (L)
 
-Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv: 6
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_test_popularity.csv: 6
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)

@@ -327,7 +327,7 @@ final class VotingSystemRunnerTest {
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_actual.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_audit_expected.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_majority_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_testMajority.csv".replace('/', FILE_SEP)},
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_test_majority.csv".replace('/', FILE_SEP)},
             VotingSystemRunnerTest::disableInvalidateBallots
         );
     }
@@ -339,7 +339,7 @@ final class VotingSystemRunnerTest {
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_actual.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_audit_expected.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_popularity_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_testPopularity.csv".replace('/', FILE_SEP)},
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_test_popularity.csv".replace('/', FILE_SEP)},
             VotingSystemRunnerTest::disableInvalidateBallots
         );
     }
@@ -351,31 +351,7 @@ final class VotingSystemRunnerTest {
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_actual.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_audit_expected.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_single_candidate_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv".replace('/', FILE_SEP)},
-            null
-        );
-    }
-    
-    @Test
-    void testOplTypical() {
-        runAuditReportSystemTest(
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_expected.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/opl_testTypical.csv".replace('/', FILE_SEP)},
-            null
-        );
-    }
-    
-    @Test
-    void testOplMoreSeatsThanCandidates() {
-        runAuditReportSystemTest(
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_actual.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_actual.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_expected.txt".replace('/', FILE_SEP),
-            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/opl_testMoreSeatsThanCandidates.csv".replace('/', FILE_SEP)},
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_test_single_candidate.csv".replace('/', FILE_SEP)},
             null
         );
     }
@@ -403,7 +379,43 @@ final class VotingSystemRunnerTest {
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_ballot_invalidation_report_actual.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_ballot_invalidation_audit_expected.txt".replace('/', FILE_SEP),
             "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_ballot_invalidation_report_expected.txt".replace('/', FILE_SEP),
-            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_testBallotInvalidation.csv".replace('/', FILE_SEP)},
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_test_ballot_invalidation.csv".replace('/', FILE_SEP)},
+            null
+        );
+    }
+    
+    @Test
+    void testIrZeroBallots() {
+        runAuditReportSystemTest(
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_zero_ballots_audit_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_zero_ballots_report_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_zero_ballots_audit_expected.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_ir_zero_ballots_report_expected.txt".replace('/', FILE_SEP),
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/ir_test_zero_ballots.csv".replace('/', FILE_SEP)},
+            votingSystem -> ((InstantRunoffSystem) votingSystem).rand = new Random(10L)
+        );
+    }
+    
+    @Test
+    void testOplTypical() {
+        runAuditReportSystemTest(
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_audit_expected.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_typical_report_expected.txt".replace('/', FILE_SEP),
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/opl_test_typical.csv".replace('/', FILE_SEP)},
+            null
+        );
+    }
+    
+    @Test
+    void testOplMoreSeatsThanCandidates() {
+        runAuditReportSystemTest(
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_actual.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_audit_expected.txt".replace('/', FILE_SEP),
+            "Project2/testing/test-resources/votingSystemRunnerTest/test_opl_more_seats_than_candidates_report_expected.txt".replace('/', FILE_SEP),
+            new String[] {"Project2/testing/test-resources/votingSystemRunnerTest/opl_test_more_seats_than_candidates.csv".replace('/', FILE_SEP)},
             null
         );
     }

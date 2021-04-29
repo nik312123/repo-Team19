@@ -10,7 +10,6 @@ Borg (R)
 Jones (R)
 Smith (I)
 
-
 Number of Ballots: 9
 
 Number of Seats: 3
