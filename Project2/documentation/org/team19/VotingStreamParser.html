@@ -154,17 +154,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.InputStream,java.io.OutputStream,java.io.OutputStream,java.util.Map)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.InputStream%5B%5D,java.lang.String%5B%5D,java.io.OutputStream,java.io.OutputStream,java.util.Map)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>[]&nbsp;inputs,
+     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;inputNames,
      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditStream,
      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportStream,
      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;&gt;&nbsp;headerSystemMap)</code></th>
 <td class="colLast">
-<div class="block">Parses an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
+<div class="block">Parses <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a>s corresponding to one election and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>(package private) static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwParseException(java.lang.String,int)">throwParseException</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#throwParseException(java.lang.String,java.lang.String,int)">throwParseException</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message,
+                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;inputIdentifier,
                    int&nbsp;lineNumber)</code></th>
 <td class="colLast">
 <div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink"><code>ParseException</code></a> with the message in the form "Error on line [lineNumber]: [message]", replacing [lineNumber] and [message]
@@ -195,13 +197,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="throwParseException(java.lang.String,int)">
+<a id="throwParseException(java.lang.String,java.lang.String,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>throwParseException</h4>
 <pre class="methodSignature">static&nbsp;void&nbsp;throwParseException&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message,
+                                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;inputIdentifier,
                                 int&nbsp;lineNumber)
                          throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></pre>
 <div class="block">Throws a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink"><code>ParseException</code></a> with the message in the form "Error on line [lineNumber]: [message]", replacing [lineNumber] and [message]
@@ -209,28 +212,32 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>message</code> - The message explaining why this exception was thrown</dd>
-<dd><code>lineNumber</code> - The line number in the file at which the parsing error occurred</dd>
+<dd><code>inputIdentifier</code> - The identifier for the current input source</dd>
+<dd><code>lineNumber</code> - The line number in the input at which the parsing error occurred</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></code> - Thrown always</dd>
 </dl>
 </li>
 </ul>
-<a id="parse(java.io.InputStream,java.io.OutputStream,java.io.OutputStream,java.util.Map)">
+<a id="parse(java.io.InputStream[],java.lang.String[],java.io.OutputStream,java.io.OutputStream,java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>parse</h4>
-<pre class="methodSignature">public static&nbsp;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&nbsp;parse&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>&nbsp;input,
+<pre class="methodSignature">public static&nbsp;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&nbsp;parse&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">InputStream</a>[]&nbsp;inputs,
+                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;inputNames,
                                  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;auditStream,
                                  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a>&nbsp;reportStream,
                                  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends <a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;&gt;&nbsp;headerSystemMap)
                           throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a>,
-                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></pre>
-<div class="block">Parses an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
+                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a>,
+                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></pre>
+<div class="block">Parses <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a>s corresponding to one election and returns a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> constructed from the given stream</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>input</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a> to parse</dd>
+<dd><code>inputs</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a>s to parse as a single election</dd>
+<dd><code>inputNames</code> - The names corresponding to each of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a>s</dd>
 <dd><code>auditStream</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write detailed information about the running of the election</dd>
 <dd><code>reportStream</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>OutputStream</code></a> to write a summary about the running of the election</dd>
 <dd><code>headerSystemMap</code> - The mapping between header strings and their corresponding <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> classes</dd>
@@ -238,6 +245,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dd>The parsed <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - Thrown if any of the given streams or if the headerSystemMap is null</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - Thrown if the number of <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a>s is not at least 1</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/text/ParseException.html?is-external=true" title="class or interface in java.text" class="externalLink">ParseException</a></code> - Thrown if there is an issue in parsing the provided <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/InputStream.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>InputStream</code></a></dd>
 </dl>
 </li>

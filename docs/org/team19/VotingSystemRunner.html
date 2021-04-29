@@ -131,9 +131,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">VotingSystemRunner</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given a path to a file, which can be absolute or relative to the current working directory
+<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given paths to election files that can be absolute or relative to the current working directory and
+ compose a single election
  <p></p>
- If no file is given, then standard input will be used as the source
+ If no command-line arguments are given, then standard input will be used as the source
  <p></p>
  Creates an audit files that shows the steps, process, computations, etc., along with various statistics pertaining to the election
  <p></p>
@@ -162,14 +163,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>(package private) static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#auditOutputPotentialSource">auditOutputPotentialSource</a></span></code></th>
 <td class="colLast">
-<div class="block">The potential source for the audit output set by classes in this package to specify an alternative output location for the audit contents</div>
+<div class="block">The potential source for the audit output set by test classes in this package to specify an alternative output location for the audit contents</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>(package private) static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reportOutputPotentialSource">reportOutputPotentialSource</a></span></code></th>
 <td class="colLast">
-<div class="block">The potential source for the audit output set by classes in this package to specify an alternative output location for the report contents</div>
+<div class="block">The potential source for the audit output set by test classes in this package to specify an alternative output location for the report contents</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#votingSystemModifierBeforeElection">votingSystemModifierBeforeElection</a></span></code></th>
+<td class="colLast">
+<div class="block">The potential consumer set by test classes in this package used to modify the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> before the election</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#votingSystemModifierBeforeParsing">votingSystemModifierBeforeParsing</a></span></code></th>
+<td class="colLast">
+<div class="block">The potential consumer set by test classes in this package used to modify the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> before parsing</div>
 </td>
 </tr>
 </table>
@@ -194,7 +209,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#main(java.lang.String...)">main</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>...&nbsp;args)</code></th>
 <td class="colLast">
-<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given a filepath relative to the workspace, using standard input if no file is provided</div>
+<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given paths to election files that can be absolute or relative to the current working directory
+ and compose a single election, using standard input if none are given</div>
 </td>
 </tr>
 </table>
@@ -228,17 +244,37 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>auditOutputPotentialSource</h4>
 <pre>static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a> auditOutputPotentialSource</pre>
-<div class="block">The potential source for the audit output set by classes in this package to specify an alternative output location for the audit contents</div>
+<div class="block">The potential source for the audit output set by test classes in this package to specify an alternative output location for the audit contents</div>
 </li>
 </ul>
 <a id="reportOutputPotentialSource">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>reportOutputPotentialSource</h4>
 <pre>static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/OutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">OutputStream</a> reportOutputPotentialSource</pre>
-<div class="block">The potential source for the audit output set by classes in this package to specify an alternative output location for the report contents</div>
+<div class="block">The potential source for the audit output set by test classes in this package to specify an alternative output location for the report contents</div>
+</li>
+</ul>
+<a id="votingSystemModifierBeforeParsing">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>votingSystemModifierBeforeParsing</h4>
+<pre>static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt; votingSystemModifierBeforeParsing</pre>
+<div class="block">The potential consumer set by test classes in this package used to modify the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> before parsing</div>
+</li>
+</ul>
+<a id="votingSystemModifierBeforeElection">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>votingSystemModifierBeforeElection</h4>
+<pre>static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="VotingSystem.html" title="class in org.team19">VotingSystem</a>&gt; votingSystemModifierBeforeElection</pre>
+<div class="block">The potential consumer set by test classes in this package used to modify the <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> before the election</div>
 </li>
 </ul>
 </li>
@@ -258,11 +294,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>main</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;main&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>...&nbsp;args)</pre>
-<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given a filepath relative to the workspace, using standard input if no file is provided</div>
+<div class="block">Runs the election for a <a href="VotingSystem.html" title="class in org.team19"><code>VotingSystem</code></a> given paths to election files that can be absolute or relative to the current working directory
+ and compose a single election, using standard input if none are given</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>args</code> - The command-line arguments to the program, which should only consist of at most one command-line argument: a path to a file, which
-             can be absolute or relative to the current working directory</dd>
+<dd><code>args</code> - The command-line arguments to the program, which should only consist of paths to election files that can be absolute or relative
+             to the current working directory and compose a single election</dd>
 </dl>
 </li>
 </ul>
