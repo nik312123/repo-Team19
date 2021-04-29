@@ -12,16 +12,32 @@
 package org.team19;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * A utility class that contains method to compare the contents of {@link InputStream}s
+ * A utility class that contains method to compare the contents of {@link InputStream}s, replacing Project2 path file separators accordingly
  */
-public class CompareInputStreams {
+public final class CompareInputStreams {
+    
+    /**
+     * The compiled regex for a path in the Project2 directory, excluding the file
+     */
+    @SuppressWarnings("RegExpRedundantEscape")
+    private static final Pattern PROJECT_2_PATH = Pattern.compile("(Project2\\/([\\w\\-]+\\/)+)");
+    
+    /**
+     * The file separator but with double the backslashes (if any) for use with {@link Matcher#replaceAll(Function)} since backslashes used with
+     * {@link Matcher#replaceAll(Function)} are considered escape characters, making two backslashes a normal backslash
+     */
+    private static final String FILE_SEP_DOUBLE_BACKSLASH = File.separator.replace("\\", "\\\\");
     
     /**
      * A private constructor for the utility class {@link CompareInputStreams} to prevent instantiation
@@ -41,34 +57,61 @@ public class CompareInputStreams {
     }
     
     /**
+     * Returns the result of replacing any forward slashes in Project2 paths in the provided string with the file separator character
+     *
+     * @param str The string to replace any forward slashes in Project2 paths with the file separator character
+     * @return The result of replacing any forward slashes in Project2 paths in the provided string with the file separator character
+     */
+    private static String replaceStringFileSeparator(final String str) {
+        if(str != null) {
+            final Matcher matcher = PROJECT_2_PATH.matcher(str);
+            
+            //If any Project2 paths have been found
+            if(matcher.find()) {
+                /*
+                 * Replace all forward slashes with the file separator, doubling any backslashes in the file separator that exists since
+                 * backslashes are taken as escape characters
+                 */
+                return matcher.replaceAll(
+                    matchResult -> matchResult.group().replace(
+                        "/",
+                        FILE_SEP_DOUBLE_BACKSLASH
+                    )
+                );
+            }
+        }
+        return str;
+    }
+    
+    /**
      * Compares two {@link InputStream}s
      *
-     * @param inputStream1 an {@link InputStream} to compare
-     * @param inputStream2 another {@link InputStream} to compare
+     * @param expected The expected {@link InputStream} to compare
+     * @param actual   another {@link InputStream} to compare
      * @throws ParseException thrown when there is an error on a line
      */
-    public static void compareFiles(final InputStream inputStream1, final InputStream inputStream2) throws ParseException {
-        final BufferedReader reader1 = new BufferedReader(new InputStreamReader(inputStream1));
-        final BufferedReader reader2 = new BufferedReader(new InputStreamReader(inputStream2));
+    public static void compareFiles(final InputStream expected, final InputStream actual) throws ParseException {
+        final BufferedReader expectedReader = new BufferedReader(new InputStreamReader(expected));
+        final BufferedReader actualReader = new BufferedReader(new InputStreamReader(actual));
         
         int lineNumber = 1;
         
         try {
-            String curLine1 = reader1.readLine();
-            String curLine2 = reader2.readLine();
+            String curExpectedLine = replaceStringFileSeparator(expectedReader.readLine());
+            String curActualLine = actualReader.readLine();
             
-            while(curLine1 != null && curLine2 != null) {
-                if(!Objects.equals(curLine1, curLine2)) {
+            while(curExpectedLine != null && curActualLine != null) {
+                if(!Objects.equals(curExpectedLine, curActualLine)) {
                     throwParseException(String.format(
                         "Mismatch between lines:\n"
-                            + "    Input Stream 1: %s\n"
-                            + "    Input Stream 2: %s",
-                        curLine1,
-                        curLine2
+                            + "    Expected: %s\n"
+                            + "      Actual: %s",
+                        curExpectedLine,
+                        curActualLine
                     ), lineNumber);
                 }
-                curLine1 = reader1.readLine();
-                curLine2 = reader2.readLine();
+                curExpectedLine = replaceStringFileSeparator(expectedReader.readLine());
+                curActualLine = actualReader.readLine();
                 lineNumber++;
             }
         }
