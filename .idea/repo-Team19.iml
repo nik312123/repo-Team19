@@ -11,7 +11,6 @@
       <sourceFolder url="file://$MODULE_DIR$/Project1/testing/test-resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/Project2/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Project2/src/test" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/Project2/testing/test-resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/docs" />
       <excludeFolder url="file://$MODULE_DIR$/Project1/audits" />
@@ -25,10 +24,10 @@
       <excludeFolder url="file://$MODULE_DIR$/Project1/misc" />
       <excludeFolder url="file://$MODULE_DIR$/Project2/misc" />
       <excludeFolder url="file://$MODULE_DIR$/Project2/reports" />
-      <excludeFolder url="file://$MODULE_DIR$/Project2/testing" />
       <excludeFolder url="file://$MODULE_DIR$/Project1/src" />
       <excludeFolder url="file://$MODULE_DIR$/Project2/product_backlogs" />
       <excludeFolder url="file://$MODULE_DIR$/Project2/sprint_backlogs" />
+      <excludeFolder url="file://$MODULE_DIR$/Project2/testing/test-logs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
