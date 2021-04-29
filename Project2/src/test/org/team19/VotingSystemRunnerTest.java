@@ -684,7 +684,7 @@ final class VotingSystemRunnerTest {
             VotingSystemRunner.reportOutputPotentialSource = NULL_OUTPUT;
             
             //Set the consumer used to modify the voting system
-            VotingSystemRunner.votingSystemModifierBeforeElection = votingSystemModifier;
+            VotingSystemRunner.votingSystemModifierBeforeParsing = votingSystemModifier;
             
             try {
                 //Time the running of CompuVote with the current file
@@ -709,7 +709,7 @@ final class VotingSystemRunnerTest {
                 VotingSystemRunner.reportOutputPotentialSource = null;
                 
                 //Set the consumer used to modify the voting system back to null so they are not changed for other tests
-                VotingSystemRunner.votingSystemModifierBeforeElection = null;
+                VotingSystemRunner.votingSystemModifierBeforeParsing = null;
             }
         }
         catch(FileNotFoundException e) {
