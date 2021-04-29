@@ -10,7 +10,7 @@ Test case list (Note: Table filters do not work properly. Do not use them.): <a 
 
 Note: The timed tests must be enabled by setting `RUN_TIME_TESTS` in `VotingSystemRunnerTest.java` to `true`. These tests generate large file (approx 10 GB per test), which are deleted after each test.
 
-Test case logs: <a href="../testing/test-logs" target="_blank">Link</a>
+Test case logs (Waterfall test logs are in the test-logs directory and agile ones are in testinglogs.pdf): <a href="../testing/" target="_blank">Link</a>
 
 Java style formatting guide: <a href="https://github.umn.edu/chawl025/nikunjJavaFormattingFiles/wiki" target="_blank">Link</a>
 

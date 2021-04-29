@@ -5,7 +5,7 @@ Number of Candidates: 1
 Candidates:
 Rosen (D)
 
-Number of Ballots: 3
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_testSingleCandidate.csv: 3
 
 Ballot 1's rankings are as follows:
     1 – Rosen (D)
@@ -18,6 +18,8 @@ Therefore, ballot 2 goes to Rosen (D)
 Ballot 3's rankings are as follows:
     1 – Rosen (D)
 Therefore, ballot 3 goes to Rosen (D)
+
+Number of Ballots: 3
 
 First-choice ballots (excluding candidates with 0 ballots):
 Rosen (D): 3 ballots

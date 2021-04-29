@@ -88,15 +88,15 @@ final class OpenPartyListSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a non-positive candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"0"}, 2)),
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"-2"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"0"}, "1", 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"-2"}, "1", 2)),
                 //Test that a nonnumerical candidate header results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"a"}, 2)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importCandidatesHeader(new String[] {"a"}, "1", 2)),
                 /*
                  * Try executing importCandidatesHeader with a positive integer, failing if it is unable to run without exception and ensure that
                  * the number of candidates was properly imported from the candidates header
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importCandidatesHeader(new String[] {"2"}, 2)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importCandidatesHeader(new String[] {"2"}, "1", 2)),
                 () -> Assertions.assertEquals(2, openPartyListSystem.getNumCandidates())
             );
         }
@@ -121,14 +121,14 @@ final class OpenPartyListSystemTest {
             
             Assertions.assertAll(
                 //Tests issue in candidates format from lack of brackets
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0], C1 P1", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0], C1 P1", "1", 3)),
                 //Tests issue in candidates format due to extra text
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0]a, [C1, P1]", 3)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addCandidates("[C0, P0]a, [C1, P1]", "1", 3)),
                 //Tests valid typical candidates string is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("[C0, P0], [C1, P1]", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("[C0, P0], [C1, P1]", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), openPartyListSystem.getCandidates()),
                 //Tests valid candidates string with excess whitespace is valid and properly parsed
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("    [    C0   ,   P0  ]  , [   C1  , P1  ]   ", 3)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.addCandidates("    [    C0   ,   P0  ]  , [   C1  , P1  ]   ", "1", 3)),
                 () -> Assertions.assertEquals(List.of(c0c1), openPartyListSystem.getCandidates())
             );
         }
@@ -150,27 +150,57 @@ final class OpenPartyListSystemTest {
         try {
             Assertions.assertAll(
                 //Test that a negative number of ballots results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "-2"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "-2"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a nonnumerical number of ballots results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "a"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"1", "a"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a negative number of seats results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"-2", "1"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"-2", "1"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 //Test that a nonnumerical number of seats results in an exception being thrown
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"a", "1"}, 4)),
+                () -> {
+                    Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.importBallotsHeader(new String[] {"a", "1"}, "1", 4));
+                    openPartyListSystem.numBallots = 0;
+                },
                 /*
                  * Try executing importBallotsHeader with an input of 0 ballots and seats, failing if it is unable to run without exception; then,
                  * ensure that the numbers were properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"0", "0"}, 4)),
-                () -> Assertions.assertEquals(0, openPartyListSystem.getNumBallots()),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"0", "0"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(0, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
                 () -> Assertions.assertEquals(0, openPartyListSystem.getNumSeats()),
                 /*
                  * Try executing importBallotsHeader with a positive integer of ballots and seats, failing if it is unable to run without exception;
                  * then, ensure that the numbers were properly imported
                  */
-                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"2", "3"}, 4)),
-                () -> Assertions.assertEquals(3, openPartyListSystem.getNumBallots()),
-                () -> Assertions.assertEquals(2, openPartyListSystem.getNumSeats())
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"2", "3"}, "1", 4)),
+                () -> {
+                    Assertions.assertEquals(3, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
+                () -> Assertions.assertEquals(2, openPartyListSystem.getNumSeats()),
+                /*
+                 * Test that executing importBallotsHeader multiple times results in all of the ballot counts from the ballot header being added up
+                 *  and results in the last number of seats provided to be used
+                 */
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"4", "2"}, "1", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"3", "0"}, "2", 4)),
+                () -> Assertions.assertDoesNotThrow(() -> openPartyListSystem.importBallotsHeader(new String[] {"5", "6"}, "3", 4)),
+                () -> {
+                    Assertions.assertEquals(8, openPartyListSystem.getNumBallots());
+                    openPartyListSystem.numBallots = 0;
+                },
+                () -> Assertions.assertEquals(5, openPartyListSystem.getNumSeats())
             );
         }
         finally {
@@ -188,9 +218,10 @@ final class OpenPartyListSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         try {
+            //Retrieve the ballot parsing method for the voting system
             Method parseBallotTmp = null;
             try {
-                parseBallotTmp = OpenPartyListSystem.class.getDeclaredMethod("parseBallot", String.class, int.class);
+                parseBallotTmp = OpenPartyListSystem.class.getDeclaredMethod("parseBallot", String.class, String.class, int.class);
                 parseBallotTmp.setAccessible(true);
             }
             catch(NoSuchMethodException e) {
@@ -198,9 +229,10 @@ final class OpenPartyListSystemTest {
             }
             final Method parseBallot = parseBallotTmp;
             
+            //Set up the voting system with the following candidate header information and candidates
             try {
-                openPartyListSystem.importCandidatesHeader(new String[] {"5"}, 2);
-                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", 3);
+                openPartyListSystem.importCandidatesHeader(new String[] {"5"}, "1", 2);
+                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", "1", 3);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
@@ -208,21 +240,21 @@ final class OpenPartyListSystemTest {
             
             Assertions.assertAll(
                 //Test the case where there are not enough values provided
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",1,,", "1", 5)),
                 //Test the case where no ballot is ranked
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,,", "1", 5)),
                 //Test the case where there is a rank that is not one
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,2,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,,2,", "1", 5)),
                 //Test the case where there is a rank that is not an integer
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,a,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",,a,,", "1", 5)),
                 //Test the case where there are multiple rankings
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",2,1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, ",2,1,,", "1", 5)),
                 //Test the case where there are multiple 1s
-                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, "1,,1,,", 5)),
+                () -> Assertions.assertThrows(ParseException.class, () -> openPartyListSystem.addBallot(1, "1,,1,,", "1", 5)),
                 //Testing a valid ballot
                 () -> Assertions.assertEquals(
                     new Candidate("C3", "P3"),
-                    parseBallot.invoke(openPartyListSystem, ",,,1,", 5)
+                    parseBallot.invoke(openPartyListSystem, ",,,1,", "1", 5)
                 )
             );
         }
@@ -255,8 +287,8 @@ final class OpenPartyListSystemTest {
         try {
             //Put required sample data
             try {
-                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", 3);
-                openPartyListSystem.importBallotsHeader(new String[] {"2", "143"}, 4);
+                openPartyListSystem.addCandidates("[C0, P0], [C1, P1], [C2, P2], [C3, P3], [C4, P4]", "1", 3);
+                openPartyListSystem.importBallotsHeader(new String[] {"2", "143"}, "1", 4);
             }
             catch(ParseException e) {
                 Assertions.fail("Unable to properly set up the candidates for the test");
@@ -417,7 +449,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots = new ArrayList<>();
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_actual.txt"
             .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -459,7 +491,7 @@ final class OpenPartyListSystemTest {
         
         try {
             FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -599,7 +631,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 100));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -641,7 +673,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_single_candidate_has_all_votes_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -700,7 +732,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 5));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -742,7 +774,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                ("Project1/testing/test-resources/openPartyListSystemTest"
+                ("Project2/testing/test-resources/openPartyListSystemTest"
                     + "/allocate_initial_seats_ballots_not_evenly_divisible_by_quota_audit_expected.txt")
                     .replace('/', FILE_SEP));
             
@@ -801,7 +833,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -846,7 +878,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1068,7 +1100,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_output_audit_actual.txt"
                 .replace('/', FILE_SEP);
         
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1114,7 +1146,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/allocate_remaining_seats_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1183,7 +1215,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/distribute_seats_to_candidates_typical_audit_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1229,7 +1261,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_distribute_seats_to_candidates_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1384,7 +1416,7 @@ final class OpenPartyListSystemTest {
         partyI.orderedCandidateBallots.add(new AbstractMap.SimpleEntry<>(smithI, 1));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         final OpenPartyListSystem opl = createOplNullStreams();
@@ -1437,7 +1469,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_print_summary_table_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1467,9 +1499,9 @@ final class OpenPartyListSystemTest {
         System.setOut(new PrintStream(NULL_OUTPUT));
         
         final String auditOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_actual.txt".replace('/', FILE_SEP);
         final String reportOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_typical_report_actual.txt".replace('/', FILE_SEP);
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_actual.txt".replace('/', FILE_SEP);
         
         //Creates OPL system
         OpenPartyListSystem opl = null;
@@ -1477,7 +1509,7 @@ final class OpenPartyListSystemTest {
             opl = new OpenPartyListSystem(new FileOutputStream(auditOutput), new FileOutputStream(reportOutput));
         }
         catch(FileNotFoundException e) {
-            Assertions.fail("Unable to create run_election_typical_audit_actual.txt or run_election_typical_report_actual.txt");
+            Assertions.fail("Unable to create test_run_election_typical_audit_actual.txt or test_run_election_typical_report_actual.txt");
         }
         
         //Creates parties
@@ -1542,7 +1574,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1551,7 +1583,7 @@ final class OpenPartyListSystemTest {
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
             
             final FileInputStream reportExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_typical_report_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream reportActual = new FileInputStream(reportOutput);
@@ -1581,10 +1613,11 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_audit_actual.txt"
-            .replace('/', FILE_SEP);
+        final String auditOutput =
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_actual.txt"
+                .replace('/', FILE_SEP);
         final String reportOutput =
-            "Project1/testing/test-resources/openPartyListSystemTest/run_election_more_seats_than_candidates_report_actual.txt"
+            "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_actual.txt"
                 .replace('/', FILE_SEP);
         
         //Creates OPL system
@@ -1597,8 +1630,9 @@ final class OpenPartyListSystemTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to create run_election_more_seats_than_candidates_audit_actual.txt or run_election_more_seats_than_candidates_report_actual"
-                    + ".txt");
+                "Unable to create test_run_election_more_seats_than_candidates_audit_actual.txt or "
+                    + "test_run_election_more_seats_than_candidates_report_actual.txt"
+            );
         }
         
         //Creates parties
@@ -1663,7 +1697,7 @@ final class OpenPartyListSystemTest {
         
         try {
             final FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream auditActual = new FileInputStream(auditOutput);
@@ -1672,7 +1706,7 @@ final class OpenPartyListSystemTest {
             assertDoesNotThrow(() -> CompareInputStreams.compareFiles(auditExpected, auditActual));
             
             final FileInputStream reportExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_election_more_seats_than_candidates_report_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_more_seats_than_candidates_report_expected.txt"
                     .replace('/', FILE_SEP));
             
             final FileInputStream reportActual = new FileInputStream(reportOutput);
@@ -1682,8 +1716,8 @@ final class OpenPartyListSystemTest {
         }
         catch(FileNotFoundException e) {
             Assertions.fail(
-                "Unable to open test_election_more_seats_than_candidates_audit_expected.txt or "
-                    + "test_election_more_seats_than_candidates_report_expected.txt");
+                "Unable to open test_run_election_more_seats_than_candidates_audit_expected.txt or "
+                    + "test_run_election_more_seats_than_candidates_report_expected.txt");
         }
         
         //Run garbage collector manually to properly allow deletion of the file on Windows due to Java bug
@@ -1703,7 +1737,7 @@ final class OpenPartyListSystemTest {
         final PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(NULL_OUTPUT));
         
-        final String auditOutput = "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
+        final String auditOutput = "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_actual.txt"
             .replace('/', FILE_SEP);
         
         //Creates parties
@@ -1785,7 +1819,7 @@ final class OpenPartyListSystemTest {
         
         try {
             FileInputStream auditExpected = new FileInputStream(
-                "Project1/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
+                "Project2/testing/test-resources/openPartyListSystemTest/test_run_election_tie_breaks_output_audit_expected.txt"
                     .replace('/', FILE_SEP));
             
             FileInputStream auditActual = new FileInputStream(auditOutput);

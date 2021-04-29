@@ -48,7 +48,7 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * The number of ballots provided in this election
      */
-    protected int numBallots;
+    protected int numBallots = 0;
     
     /**
      * The number of seats in this election
@@ -176,19 +176,20 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Parses the lines corresponding to the header for the candidates
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
     @Override
-    public void importCandidatesHeader(final String[] header, final int line) throws ParseException {
+    public void importCandidatesHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException {
         try {
             //Parses the number of candidates as the first (and only) line
             numCandidates = Integer.parseInt(header[0].strip());
             if(numCandidates <= 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of candidates provided in the candidates header was %d but must be at least 1", numCandidates
-                ), line);
+                ), inputIdentifier, line);
             }
             
             //Output the number of candidates to the audit, report, and summary
@@ -200,25 +201,26 @@ public class OpenPartyListSystem extends VotingSystem {
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of candidates provided in the candidates header \"%s\" was not a valid integer", header[0].strip()
-            ), line);
+            ), inputIdentifier, line);
         }
     }
     
     /**
      * Parses the candidates line from the election file and returns the resultant array
      *
-     * @param candidatesLine The {@link String} representing the list of candidates and their parties
-     * @param line           The line number associated with the candidates {@link String}
+     * @param candidatesLine  The {@link String} representing the list of candidates and their parties
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the candidates {@link String}
      * @return The parsed candidates array
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
-    private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
+    private Candidate[] parseCandidates(final String candidatesLine, final String inputIdentifier, final int line) throws ParseException {
         //If the candidates line does not consist of any candidates
         if(candidatesLine.isBlank()) {
             VotingStreamParser.throwParseException(String.format(
                 "The given candidates line \"%s\" must consist of at least one candidate",
                 candidatesLine
-            ), line);
+            ), inputIdentifier, line);
         }
         
         //Split the candidates line by bracket and comma delimiter (with potential whitespace in between) and add each candidate to an array
@@ -232,7 +234,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
                     candidatesLine
-                ), line);
+                ), inputIdentifier, line);
             }
             
             //Substring starting on 1 before splitting to get rid of the left bracket
@@ -242,7 +244,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[[candidate1], [party1]],[[candidate2], [party2]], ...\"",
                     candidatesLine
-                ), line);
+                ), inputIdentifier, line);
             }
             
             //Removes the right bracket if the last candidate's party
@@ -264,18 +266,19 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
-     * @param candidatesLine The {@link String} representing the list of candidates and their parties
-     * @param line           The line number associated with the candidates {@link String}
+     * @param candidatesLine  The {@link String} representing the list of candidates and their parties
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the candidates {@link String}
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
     @Override
-    public void addCandidates(final String candidatesLine, final int line) throws ParseException {
+    public void addCandidates(final String candidatesLine, final String inputIdentifier, final int line) throws ParseException {
         //Print the output corresponding to the candidates
         auditWriter.println("Candidates:");
         reportWriter.println("Candidates:");
         System.out.println("Candidates:");
         
-        candidates = parseCandidates(candidatesLine, line);
+        candidates = parseCandidates(candidatesLine, inputIdentifier, line);
         
         auditWriter.println();
         reportWriter.println();
@@ -295,63 +298,59 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Parses the lines corresponding to the header for the ballots
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
     @Override
-    public void importBallotsHeader(final String[] header, final int line) throws ParseException {
+    public void importBallotsHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException {
         try {
             //Parses the number of seats as the first line
             numSeats = Integer.parseInt(header[0].strip());
             if(numSeats < 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of seats provided in the ballots header was %d but must be nonnegative", numBallots
-                ), line);
+                ), inputIdentifier, line);
             }
-            
-            //Output the number of seats to the audit, report, and summary
-            final String numBallotsOutput = String.format("Number of Seats: %d\n", numSeats);
-            auditWriter.println(numBallotsOutput);
-            reportWriter.println(numBallotsOutput);
-            System.out.println(numBallotsOutput);
         }
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of seats provided in the ballots header \"%s\" was not a valid integer", header[0].strip()
-            ), line);
+            ), inputIdentifier, line);
         }
         try {
             //Parses the number of ballots as the second line
-            numBallots = Integer.parseInt(header[1].strip());
+            final int originalNumBallots = numBallots;
+            numBallots += Integer.parseInt(header[1].strip());
             if(numBallots < 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of ballots provided in the ballots header was %d but must be nonnegative", numBallots
-                ), line + 1);
+                ), inputIdentifier, line + 1);
             }
             
-            //Output the number of ballots to the audit, report, and summary
-            final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
-            auditWriter.println(numBallotsOutput);
-            reportWriter.println(numBallotsOutput);
-            System.out.println(numBallotsOutput);
+            //Output the number of ballots to the audit
+            auditWriter.printf(
+                "\nNumber of ballots in input source %s: %d\n\n", inputIdentifier, numBallots - originalNumBallots
+            );
         }
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of ballots provided in the ballots header \"%s\" was not a valid integer", header[1].strip()
-            ), line + 1);
+            ), inputIdentifier, line + 1);
         }
     }
     
     /**
      * Parses the ballot line from the election file and returns the resultant {@link Candidate}
      *
-     * @param ballotLine The {@link String} corresponding to a ballot
-     * @param line       The line number associated with the current ballot line being read
+     * @param ballotLine      The {@link String} corresponding to a ballot
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the current ballot line being read
      * @return The {@link Candidate} from parsing the ballot line
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
-    private Candidate parseBallot(final String ballotLine, final int line) throws ParseException {
+    private Candidate parseBallot(final String ballotLine, final String inputIdentifier, final int line) throws ParseException {
         //The location of the 1 in the ballot line (a.k.a. the candidate position at which 1 is stored)
         Integer oneLocationZeroBased = null;
         
@@ -368,7 +367,7 @@ public class OpenPartyListSystem extends VotingSystem {
                 case '1':
                     //If the position of 1 has already been set, then there is more than one 1 in the ballot line, so throw an exception
                     if(oneLocationZeroBased != null) {
-                        VotingStreamParser.throwParseException("There can only be one choice for the OPL ballots", line);
+                        VotingStreamParser.throwParseException("There can only be one choice for the OPL ballots", inputIdentifier, line);
                     }
                     //Otherwise, assigned the position of 1
                     else {
@@ -381,7 +380,7 @@ public class OpenPartyListSystem extends VotingSystem {
                         VotingStreamParser.throwParseException(String.format(
                             "Ballot lines can only consist of commas, 1, and whitespace for OPL, but character %c was found",
                             curChar
-                        ), line);
+                        ), inputIdentifier, line);
                     }
                     break;
             }
@@ -391,12 +390,12 @@ public class OpenPartyListSystem extends VotingSystem {
         if(numCommas + 1 != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
-            ), line);
+            ), inputIdentifier, line);
         }
         
         //If there are no 1s for the ballot, then throw an exception
         if(oneLocationZeroBased == null) {
-            VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", line);
+            VotingStreamParser.throwParseException("There must be a choice selected for the OPL ballots", inputIdentifier, line);
         }
         
         return candidates[oneLocationZeroBased];
@@ -405,15 +404,16 @@ public class OpenPartyListSystem extends VotingSystem {
     /**
      * Parses a line corresponding to a ballot and adds it internally
      *
-     * @param ballotNumber The number corresponding to the current ballot
-     * @param ballotLine   The {@link String} corresponding to a ballot
-     * @param line         The line number associated with the current ballot line being read
+     * @param ballotNumber    The number corresponding to the current ballot
+     * @param ballotLine      The {@link String} corresponding to a ballot
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the current ballot line being read
      * @throws ParseException Thrown if there is an issue in parsing the current ballot
      */
     @Override
-    public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+    public void addBallot(final int ballotNumber, final String ballotLine, final String inputIdentifier, final int line) throws ParseException {
         //Get the candidate and party associated with the ballot
-        final Candidate candidate = parseBallot(ballotLine, line);
+        final Candidate candidate = parseBallot(ballotLine, inputIdentifier, line);
         final String party = candidate.getParty();
         
         //Increment the ballot count for the party-candidate pair
@@ -450,7 +450,7 @@ public class OpenPartyListSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importCandidatesHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of candidates that the {@link OpenPartyListSystem} contains
      *
@@ -462,7 +462,7 @@ public class OpenPartyListSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #addCandidates(String, int)} has been executed successfully
+     * Precondition: {@link #addCandidates(String, String, int)} has been executed successfully
      * <p></p>
      * Returns the {@link Collection} of {@link Candidate}s for this {@link OpenPartyListSystem}
      *
@@ -474,7 +474,7 @@ public class OpenPartyListSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importCandidatesHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of ballots that the {@link OpenPartyListSystem} contains
      *
@@ -486,7 +486,7 @@ public class OpenPartyListSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importBallotsHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of seats that the {@link OpenPartyListSystem} contains
      *
@@ -614,7 +614,7 @@ public class OpenPartyListSystem extends VotingSystem {
         );
         
         //Gets the string format of the quota (parenthesized if it is a fraction)
-        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota.toString());
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("(%s)", quota);
         
         //Allocate initial votes for each party
         for(final String party : partyToPartyInformation.keySet()) {
@@ -800,7 +800,7 @@ public class OpenPartyListSystem extends VotingSystem {
             if(indexAfterCurrentGroup - curIdx > 1) {
                 /*
                  * Get the index of the first comma in the party group string, and then replace curGroupStr with the parties after the comma space
-                 * if the comma index ex ists to get the remaining parties after the previous allocation
+                 * if the comma index exists to get the remaining parties after the previous allocation
                  */
                 final int firstCommaIndex = curGroupStr.indexOf(',');
                 curGroupStr = firstCommaIndex == -1 ? curGroupStr : curGroupStr.substring(firstCommaIndex + 2);
@@ -960,7 +960,7 @@ public class OpenPartyListSystem extends VotingSystem {
      * @param quota The total number of votes/candidates to calculate the initial seat allocations per party
      */
     private void printQuotaInformation(final Fraction quota) {
-        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("%s", quota.toString());
+        final String stringQuota = quota.denominator == 1 ? Long.toString(quota.numerator) : String.format("%s", quota);
         final String ballotsPerSeat = stringQuota + " ballots per seat";
         
         auditWriter.printf("Quota: %d / %d = %s\n\n",
@@ -1092,6 +1092,18 @@ public class OpenPartyListSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
+        //Output the number of ballots to the audit, report, and summary
+        final String numBallotsOutput = String.format("\nNumber of Ballots: %d\n", numBallots);
+        auditWriter.println(numBallotsOutput);
+        reportWriter.println(numBallotsOutput);
+        System.out.println(numBallotsOutput);
+        
+        //Output the number of seats to the audit, report, and summary
+        final String numSeatsOutput = String.format("Number of Seats: %d\n", numSeats);
+        auditWriter.println(numSeatsOutput);
+        reportWriter.println(numSeatsOutput);
+        System.out.println(numSeatsOutput);
+        
         //For each party, add to its respective party information the candidates and their respective ballot counts sorted by ballot count
         for(final String party : partyToCandidateCounts.keySet()) {
             final PartyInformation partyInformation = partyToPartyInformation.get(party);

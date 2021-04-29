@@ -1,0 +1,94 @@
+Election type: IR
+
+Number of Candidates: 4
+
+Candidates:
+Rosen (D)
+Kleinberg (R)
+Chou (I)
+Royce (L)
+
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_1.csv: 2
+
+Ballot 1's rankings are as follows:
+    1 – Rosen (D)
+    2 – Chou (I)
+    3 – Kleinberg (R)
+    4 – Royce (L)
+Therefore, ballot 1 goes to Rosen (D)
+
+Ballot 2's rankings are as follows:
+    1 – Rosen (D)
+    2 – Royce (L)
+    3 – Kleinberg (R)
+Therefore, ballot 2 goes to Rosen (D)
+
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_2.csv: 4
+
+Ballot 3's rankings are as follows:
+    1 – Kleinberg (R)
+    2 – Rosen (D)
+    3 – Chou (I)
+Therefore, ballot 3 goes to Kleinberg (R)
+
+Ballot 4's rankings are as follows:
+    1 – Chou (I)
+    2 – Royce (L)
+Therefore, ballot 4 goes to Chou (I)
+
+Ballot 5's rankings are as follows:
+    1 – Royce (L)
+    2 – Kleinberg (R)
+Therefore, ballot 5 goes to Royce (L)
+
+Ballot 6's rankings are as follows:
+    1 – Rosen (D)
+    2 – Kleinberg (R)
+    3 – Chou (I)
+Therefore, ballot 6 goes to Rosen (D)
+
+Number of ballots in input source Project2/testing/test-resources/votingSystemRunnerTest/ir_multi_part_3.csv: 3
+
+Ballot 7's rankings are as follows:
+    1 – Royce (L)
+    2 – Rosen (D)
+Therefore, ballot 7 goes to Royce (L)
+
+Ballot 8's rankings are as follows:
+    1 – Kleinberg (R)
+    2 – Rosen (D)
+Therefore, ballot 8 goes to Kleinberg (R)
+
+Ballot 9's rankings are as follows:
+    1 – Rosen (D)
+    2 – Kleinberg (R)
+Therefore, ballot 9 goes to Rosen (D)
+
+Number of Ballots: 9
+
+First-choice ballots (excluding candidates with 0 ballots):
+Rosen (D): 4 ballots
+Kleinberg (R): 2 ballots
+Chou (I): 1 ballots
+Royce (L): 2 ballots
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Chou (I)
+
+Ballot 4 has their next choice as candidate Royce (L). The ballot will be distributed to Royce (L).
+
+Ballots after Chou (I) was eliminated:
+Rosen (D): 4 ballots
+Kleinberg (R): 2 ballots
+Royce (L): 3 ballots
+
+No candidate has a majority. Eliminating the candidate with the lowest ballots: Kleinberg (R)
+
+Ballot 3 has their next choice as candidate Rosen (D). The ballot will be distributed to Rosen (D).
+
+Ballot 8 has their next choice as candidate Rosen (D). The ballot will be distributed to Rosen (D).
+
+Ballots after Kleinberg (R) was eliminated:
+Rosen (D): 6 ballots
+Royce (L): 3 ballots
+
+Rosen (D) has received 6/9 ballots, giving them the majority with 66.67% of the ballots

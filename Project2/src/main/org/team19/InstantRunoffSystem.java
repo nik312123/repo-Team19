@@ -35,6 +35,11 @@ import java.util.regex.Pattern;
 public class InstantRunoffSystem extends VotingSystem {
     
     /**
+     * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
+     */
+    protected boolean invalidateBallots = true;
+    
+    /**
      * Used for randomization for breaking ties
      */
     protected static Random rand = new SecureRandom();
@@ -47,7 +52,7 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * The number of ballots provided in this election
      */
-    protected int numBallots;
+    protected int numBallots = 0;
     
     /**
      * Half of the number of ballots provided in this election
@@ -158,8 +163,14 @@ public class InstantRunoffSystem extends VotingSystem {
          *
          * @return The {@link String} form of this {@link Ballot}
          */
+        @Override
         public String toString() {
-            return String.format("Ballot %d: %s", ballotNumber, Arrays.toString(rankedCandidates));
+            return String.format(
+                "Ballot{ballotNumber=%d, candidateIndex=%d, rankedCandidates=%s}",
+                ballotNumber,
+                candidateIndex,
+                Arrays.toString(rankedCandidates)
+            );
         }
         
         /**
@@ -235,19 +246,20 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Parses the lines corresponding to the header for the candidates
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
     @Override
-    public void importCandidatesHeader(final String[] header, final int line) throws ParseException {
+    public void importCandidatesHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException {
         try {
             //Parses the number of candidates as the first (and only) line
             numCandidates = Integer.parseInt(header[0].strip());
             if(numCandidates <= 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of candidates provided in the candidates header was %d but must be at least 1", numCandidates
-                ), line);
+                ), inputIdentifier, line);
             }
             
             //Output the number of candidates to the audit, report, and summary
@@ -259,25 +271,26 @@ public class InstantRunoffSystem extends VotingSystem {
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of candidates provided in the candidates header \"%s\" was not a valid integer", header[0].strip()
-            ), line);
+            ), inputIdentifier, line);
         }
     }
     
     /**
      * Parses the candidates line from the election file and returns the resultant array
      *
-     * @param candidatesLine The {@link String} representing the list of candidates and their parties
-     * @param line           The line number associated with the candidates {@link String}
+     * @param candidatesLine  The {@link String} representing the list of candidates and their parties
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the candidates {@link String}
      * @return The parsed candidates array
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
-    private Candidate[] parseCandidates(final String candidatesLine, final int line) throws ParseException {
+    private Candidate[] parseCandidates(final String candidatesLine, final String inputIdentifier, final int line) throws ParseException {
         //If the candidates line does not consist of any candidates
         if(candidatesLine.isBlank()) {
             VotingStreamParser.throwParseException(String.format(
                 "The given candidates line \"%s\" must consist of at least one candidate",
                 candidatesLine
-            ), line);
+            ), inputIdentifier, line);
         }
         
         //Split the candidates line by comma delimiter and add each candidate to an array
@@ -304,7 +317,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 VotingStreamParser.throwParseException(String.format(
                     "The given candidates line \"%s\" does not match the format \"[candidate1] ([party1]),[candidate2] ([party2]), ...\"",
                     candidatesLine
-                ), line);
+                ), inputIdentifier, line);
             }
         }
         return candidatesArr;
@@ -313,18 +326,19 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Parses a {@link String} corresponding to candidates and party and adds them internally
      *
-     * @param candidatesLine The {@link String} representing the list of candidates and their parties
-     * @param line           The line number associated with the candidates {@link String}
+     * @param candidatesLine  The {@link String} representing the list of candidates and their parties
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the candidates {@link String}
      * @throws ParseException Thrown if there is an issue in parsing the candidates {@link String}
      */
     @Override
-    public void addCandidates(final String candidatesLine, final int line) throws ParseException {
+    public void addCandidates(final String candidatesLine, final String inputIdentifier, final int line) throws ParseException {
         //Print the output corresponding to the candidates
         auditWriter.println("Candidates:");
         reportWriter.println("Candidates:");
         System.out.println("Candidates:");
         
-        candidates = parseCandidates(candidatesLine, line);
+        candidates = parseCandidates(candidatesLine, inputIdentifier, line);
         
         auditWriter.println();
         reportWriter.println();
@@ -334,32 +348,32 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Parses the lines corresponding to the header for the ballots
      *
-     * @param header The lines corresponding to the header
-     * @param line   The line number associated with the first line of the header
+     * @param header          The lines corresponding to the header
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the first line of the header
      * @throws ParseException Thrown if there is an issue in parsing the header
      */
     @Override
-    public void importBallotsHeader(final String[] header, final int line) throws ParseException {
+    public void importBallotsHeader(final String[] header, final String inputIdentifier, final int line) throws ParseException {
         try {
             //Parses the number of ballots as the first (and only) line
-            numBallots = Integer.parseInt(header[0].strip());
+            final int originalNumBallots = numBallots;
+            numBallots += Integer.parseInt(header[0].strip());
             if(numBallots < 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of ballots provided in the ballots header was %d but must be nonnegative", numBallots
-                ), line);
+                ), inputIdentifier, line);
             }
-            halfNumBallots = numBallots / 2;
             
             //Output the number of ballots to the audit, report, and summary
-            final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
-            auditWriter.println(numBallotsOutput);
-            reportWriter.println(numBallotsOutput);
-            System.out.println(numBallotsOutput);
+            auditWriter.printf(
+                "Number of ballots in input source %s: %d\n\n", inputIdentifier, numBallots - originalNumBallots
+            );
         }
         catch(NumberFormatException e) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of ballots provided in the ballots header \"%s\" was not a valid integer", header[0].strip()
-            ), line);
+            ), inputIdentifier, line);
         }
     }
     
@@ -387,13 +401,14 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Parses the ballot line from the election file and returns the resultant {@link Ballot}
      *
-     * @param ballotNumber The number corresponding to the current ballot
-     * @param ballotLine   The {@link String} corresponding to a ballot
-     * @param line         The line number associated with the current ballot line being read
+     * @param ballotNumber    The number corresponding to the current ballot
+     * @param ballotLine      The {@link String} corresponding to a ballot
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the current ballot line being read
      * @return The {@link Ballot} from parsing the ballot line
      * @throws ParseException Thrown if the format or contents of the ballot line are invalid
      */
-    private Ballot parseBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+    private Ballot parseBallot(final int ballotNumber, final String ballotLine, final String inputIdentifier, final int line) throws ParseException {
         int numCommas = 0;
         
         //Store the minimum and maximum rank found in the rankings
@@ -422,7 +437,7 @@ public class InstantRunoffSystem extends VotingSystem {
                     VotingStreamParser.throwParseException(String.format(
                         "The provided rank %d is out of the range %d to %d for %d candidates",
                         rank, 1, numCandidates, numCandidates
-                    ), line);
+                    ), inputIdentifier, line);
                 }
                 
                 //Update the minimum, maximum, and ranked candidates map
@@ -437,7 +452,7 @@ public class InstantRunoffSystem extends VotingSystem {
                 VotingStreamParser.throwParseException(String.format(
                     "Ballot lines can only consist of commas, digits, and whitespace for IR, but character %c was found",
                     curChar
-                ), line);
+                ), inputIdentifier, line);
             }
         }
         
@@ -445,16 +460,16 @@ public class InstantRunoffSystem extends VotingSystem {
         if(numCommas + 1 != numCandidates) {
             VotingStreamParser.throwParseException(String.format(
                 "The number of values %d for this ballot is not equivalent to the number of candidates %d", numCommas + 1, numCandidates
-            ), line);
+            ), inputIdentifier, line);
         }
         
         //If the ballot has not ranked a single candidate, then throw an exception
         if(minRank == Integer.MAX_VALUE) {
-            VotingStreamParser.throwParseException("A ballot must rank at least one candidate", line);
+            VotingStreamParser.throwParseException("A ballot must rank at least one candidate", inputIdentifier, line);
         }
         //If the ballot numbering does not start with 1, then throw an exception for skipping rankings
         else if(minRank != 1) {
-            VotingStreamParser.throwParseException("A ballot must start ranking at 1", line);
+            VotingStreamParser.throwParseException("A ballot must start ranking at 1", inputIdentifier, line);
         }
         
         //For each of the ranked candidates, add it to an array, throwing an exception if there are any skipped ranks
@@ -463,7 +478,7 @@ public class InstantRunoffSystem extends VotingSystem {
             if(!rankedCandidateMap.containsKey(i)) {
                 VotingStreamParser.throwParseException(String.format(
                     "A ballot must not skip rankings, but a ranking was not found for %d when there is a rank for %d", i, maxRank
-                ), line);
+                ), inputIdentifier, line);
             }
             rankedCandidates[i - 1] = rankedCandidateMap.get(i);
             auditWriter.printf("    %d – %s\n", i, rankedCandidates[i - 1]);
@@ -475,30 +490,36 @@ public class InstantRunoffSystem extends VotingSystem {
     /**
      * Parses a line corresponding to a ballot and adds it internally
      *
-     * @param ballotNumber The number corresponding to the current ballot
-     * @param ballotLine   The {@link String} corresponding to a ballot
-     * @param line         The line number associated with the current ballot line being read
+     * @param ballotNumber    The number corresponding to the current ballot
+     * @param ballotLine      The {@link String} corresponding to a ballot
+     * @param inputIdentifier The identifier associated with the current input source
+     * @param line            The line number associated with the current ballot line being read
      * @throws ParseException Thrown if there is an issue in parsing the current ballot
      */
     @Override
-    public void addBallot(final int ballotNumber, final String ballotLine, final int line) throws ParseException {
+    public void addBallot(final int ballotNumber, final String ballotLine, final String inputIdentifier, final int line) throws ParseException {
         //Writes the output for this ballot to the audit output
         auditWriter.printf("Ballot %d's rankings are as follows:\n", ballotNumber);
         
-        final Ballot ballot = parseBallot(ballotNumber, ballotLine, line);
+        final Ballot ballot = parseBallot(ballotNumber, ballotLine, inputIdentifier, line);
         
         //Get the candidate associated with the first ranking of the ballot
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
-        auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
-        
-        //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
-        if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
-            candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
+        //If invalidation is enabled and the ballot does not rank at least half the candidates, print an invalidation message to the audit file
+        if(invalidateBallots && ballot.getRankedCandidates().length < numCandidates / 2.0) {
+            auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
+            numBallots--;
         }
-        
-        //Add the ballot to its first ranked candidate list of ballots
-        candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+        //Otherwise, add the ballot to its first ranked candidate's collection of ballots
+        else {
+            //If the candidate is not in the candidatesBallotsMap, create an empty ArrayDeque for the candidate's ballots
+            if(!candidateBallotsMap.containsKey(firstRankedCandidate)) {
+                candidateBallotsMap.put(firstRankedCandidate, new ArrayDeque<>());
+            }
+            candidateBallotsMap.get(firstRankedCandidate).add(ballot);
+            auditWriter.printf("Therefore, ballot %d goes to %s\n\n", ballotNumber, firstRankedCandidate);
+        }
     }
     
     /**
@@ -522,7 +543,7 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #importCandidatesHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importCandidatesHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of candidates that the {@link InstantRunoffSystem} contains
      *
@@ -534,7 +555,7 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #addCandidates(String, int)} has been executed successfully
+     * Precondition: {@link #addCandidates(String, String, int)} has been executed successfully
      * <p></p>
      * Returns the {@link Collection} of {@link Candidate}s for this {@link InstantRunoffSystem}
      *
@@ -546,7 +567,7 @@ public class InstantRunoffSystem extends VotingSystem {
     }
     
     /**
-     * Precondition: {@link #importBallotsHeader(String[], int)} has been executed successfully
+     * Precondition: {@link #importBallotsHeader(String[], String, int)} has been executed successfully
      * <p></p>
      * Returns the number of ballots that the {@link InstantRunoffSystem} contains
      *
@@ -672,6 +693,12 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
+        //Output the number of ballots to the audit, report, and summary
+        final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
+        auditWriter.println(numBallotsOutput);
+        reportWriter.println(numBallotsOutput);
+        System.out.println(numBallotsOutput);
+        
         //Write the first choice ballot counts for each candidate
         String strToWriteToAll = "First-choice ballots (excluding candidates with 0 ballots):";
         auditWriter.println(strToWriteToAll);
@@ -682,6 +709,8 @@ public class InstantRunoffSystem extends VotingSystem {
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
+        
+        halfNumBallots = numBallots / 2;
         
         //If there is only 1 candidate, they are automatically declared the winner
         if(candidateBallotsMap.size() == 1) {
