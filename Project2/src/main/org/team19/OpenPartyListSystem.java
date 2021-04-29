@@ -256,9 +256,14 @@ public class OpenPartyListSystem extends VotingSystem {
             candidatesArr[i] = new Candidate(candidate[0].strip(), candidate[1].strip());
             
             final String candidateToStr = candidatesArr[i].toString();
-            auditWriter.println(candidateToStr);
-            reportWriter.println(candidateToStr);
-            System.out.println(candidateToStr);
+            auditWriter.print(candidateToStr);
+            reportWriter.print(candidateToStr);
+            System.out.print(candidateToStr);
+            if(i != candidatesArr.length - 1) {
+                auditWriter.println();
+                reportWriter.println();
+                System.out.println();
+            }
         }
         return candidatesArr;
     }
