@@ -35,19 +35,24 @@ import java.util.regex.Pattern;
 public class InstantRunoffSystem extends VotingSystem {
     
     /**
+     * Used for randomization for breaking ties
+     */
+    protected Random rand = new SecureRandom();
+    
+    /**
      * Determines if ballot invalidation is activated. If set to true, ballots that rank less than half the candidates will be invalidated.
      */
     protected boolean invalidateBallots = true;
     
     /**
-     * Used for randomization for breaking ties
-     */
-    protected static Random rand = new SecureRandom();
-    
-    /**
      * The number of candidates in this election
      */
     protected int numCandidates;
+    
+    /**
+     * Half of the number of candidates in this election
+     */
+    protected double halfNumCandidates;
     
     /**
      * The number of ballots provided in this election
@@ -256,6 +261,7 @@ public class InstantRunoffSystem extends VotingSystem {
         try {
             //Parses the number of candidates as the first (and only) line
             numCandidates = Integer.parseInt(header[0].strip());
+            halfNumCandidates = numCandidates / 2.0;
             if(numCandidates <= 0) {
                 VotingStreamParser.throwParseException(String.format(
                     "The number of candidates provided in the candidates header was %d but must be at least 1", numCandidates
@@ -507,7 +513,7 @@ public class InstantRunoffSystem extends VotingSystem {
         final Candidate firstRankedCandidate = ballot.getNextCandidate();
         
         //If invalidation is enabled and the ballot does not rank at least half the candidates, print an invalidation message to the audit file
-        if(invalidateBallots && ballot.getRankedCandidates().length < numCandidates / 2.0) {
+        if(invalidateBallots && ballot.getRankedCandidates().length < halfNumCandidates) {
             auditWriter.printf("Ballot %d has been invalidated because it does not rank at least half of the candidates\n\n", ballotNumber);
             numBallots--;
         }
@@ -693,6 +699,8 @@ public class InstantRunoffSystem extends VotingSystem {
      */
     @Override
     public void runElection() {
+        halfNumBallots = numBallots / 2;
+        
         //Output the number of ballots to the audit, report, and summary
         final String numBallotsOutput = String.format("Number of Ballots: %d\n", numBallots);
         auditWriter.println(numBallotsOutput);
@@ -709,8 +717,6 @@ public class InstantRunoffSystem extends VotingSystem {
         auditWriter.println(strToWriteToAll);
         reportWriter.println(strToWriteToAll);
         System.out.println(strToWriteToAll);
-        
-        halfNumBallots = numBallots / 2;
         
         //If there is only 1 candidate, they are automatically declared the winner
         if(candidateBallotsMap.size() == 1) {
