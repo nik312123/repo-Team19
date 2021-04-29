@@ -248,7 +248,7 @@ final class VotingSystemRunnerTest {
      * @param expectedAuditPath     The path to the file with the expected audit output
      * @param expectedReportPath    The path to the file with the expected report output
      * @param inputPaths            The paths to the input CSV files on which to run an election
-     * @param beforeParsingModifier The way in which the {@link VotingSystem} should be modified before parsing, which can be null if
+     * @param beforeParsingModifier The way in which the {@link VotingSystem} should be modified before parsing, which can be null if not used
      */
     private static void runAuditReportSystemTest(final String auditOutputPath, final String reportOutputPath, final String expectedAuditPath,
         final String expectedReportPath, final String[] inputPaths, final Consumer<VotingSystem> beforeParsingModifier) {
