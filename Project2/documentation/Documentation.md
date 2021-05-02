@@ -12,6 +12,6 @@ Note: The timed tests must be enabled by setting `RUN_TIME_TESTS` in `VotingSyst
 
 Test case logs (Waterfall test logs are in the test-logs directory and agile ones are in testinglogs.pdf): <a href="../testing/" target="_blank">Link</a>
 
-Java style formatting guide: <a href="https://github.umn.edu/chawl025/nikunjJavaFormattingFiles/wiki" target="_blank">Link</a>
+Java style formatting guide: <a href="https://github.com/nik312123/nikunjJavaFormatting/wiki" target="_blank">Link</a>
 
 Note: JUnit Jupiter 5.7.0 was used in this project
